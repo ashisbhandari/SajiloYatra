@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% comment %} <title>footer</title> {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Ensure the html and body take up full height of the screen */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Make the main content take up the remaining space */
+        .content {
+            flex-grow: 1;
+        }
+
+        /* Footer styles */
+        footer {
+            background: linear-gradient(135deg,rgb(42, 48, 49),rgb(61, 60, 61));
+            color: white;
+            padding-top: 20px; /* Reduced padding for a smaller footer */
+            
+        }
+
+        footer .social-links img {
+            transition: transform 0.3s ease;
+        }
+
+        footer .social-links img:hover {
+            transform: scale(1.5); /* Hover effect for icons */
+        }
+
+        footer a {
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #ff6347; /* Tomato color for hover */
+        }
+
+        /* Optional: Smaller font sizes for footer text */
+        footer .h5, footer .small {
+            font-size: 1rem; /* Smaller text */
+        }
+       
+    </style>
+</head>
+<body>
+
+    <!-- Main Content Section -->
+    <div class="content">
+        {% comment %} Uncomment and include your content here {% endcomment %}
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white text-center py-2">
+        <div class="container">
+            <div class="row" style="padding-top:20px">
+                <!-- About site data -->
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <p class="h5 mb-2"><a href="" class="text-white"> @SajiloYatra </a></p>
+
+
+                    <br>
+                    <div class="mt-3">
+                        <p class="small text-muted mb-0">&copy; {{ year }} Fastbtm. All Rights Reserved.</p>
+                    </div>
+                </div>
+
+                {% comment %} Contact information {% endcomment %}
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <p class="h6 mb-2">Contact Us</p>
+                    <p class="mb-1"><a href="tel:+9779801445777" class="text-white">+977 9801445777</a></p>
+                    <p class="mb-1"><a href="tel:+9779824915826" class="text-white">+977 9824915826</a></p>
+                </div>
+
+                <!-- Social Links -->
+                <div class="col-md-4">
+                    <p class="h6 mb-2">Follow Us</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/people/Ashish-Bhandari/pfbid0RuUtjNH1vjRaQwmpVBaAfuDxFehiKpbCb5oRReYE7GUtxWCiaks7exzCUNP1ERKul/" class="text-white me-3" target="_blank">
+                            <img src="{% static 'ticket/image/fblogo.jpg' %}" alt="Ashish Bhandari" width="20" height="20"> Ashish Bhandari
+                        </a>
+                        <br>
+                        <a href="https://www.facebook.com/adee.tya.39" class="text-white" target="_blank">
+                            <img src="{% static 'ticket/image/fblogo.jpg' %}" alt="Aditya Shah(Rauniyar)" width="20" height="20"> Aditya Shah (Rauniyar)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+           
+        </div>
+    </footer>
+
+</body>
+</html>
