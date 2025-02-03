@@ -22,59 +22,7 @@
     <nav>
         {% include "ticket/navbar.html" %}
     </nav>
-
-    <div class="hero-section">
-        <h1 class="display-4 text-success">Bus Tickets</h1>
-        <p class="lead text-secondary">Easy & Affordable</p>
-        <button onclick="redirectToLogin()" class="btn btn-success btn-lg">BOOK NOW</button>
-    </div>
-
-    <div class="container my-5">
-        <div class="card p-4 shadow-sm">
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <label class="form-label">FROM</label>
-                    <input type="text" class="form-control" placeholder="City or Bus stop">
-                </div>
-                <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
-                    <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">TO</label>
-                    <input type="text" class="form-control" placeholder="City or Bus stop">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Depart</label>
-                    <input type="date" class="form-control">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Return</label>
-                    <input type="date" class="form-control">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Travellers</label>
-                    <input type="text" class="form-control" placeholder="1, 2, 3 or more">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Nationality</label>
-                    <input type="text" class="form-control" placeholder="Nepalese">
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-success w-100">SEARCH</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function redirectToLogin() {
-            window.location.href = "login"; 
-        }
-    </script>
-    
+    {% include "ticket/main.html" %}
     {% include "ticket/footer.html" %}
 
     <!-- Bootstrap JS -->

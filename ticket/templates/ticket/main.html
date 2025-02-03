@@ -1,11 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>hello</h1>
-</body>
-</html>
+{% load static %}
+
+<div class="hero-section">
+    <h1 class="display-4 text-success">Bus Tickets</h1>
+    <p class="lead text-secondary">SajiloYatra – Where Comfort Meets the Road.</p>
+    <button onclick="redirectToLogin()" class="btn btn-success btn-lg">BOOK NOW</button>
+</div>
+
+<div class="container my-5">
+    <div class="card p-4 shadow-sm">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label class="form-label">FROM</label>
+                <input type="text" class="form-control" placeholder="City or Bus stop">
+            </div>
+            <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
+                <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">TO</label>
+                <input type="text" class="form-control" placeholder="City or Bus stop">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Depart</label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Return</label>
+                <input type="date" class="form-control">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <label class="form-label">Travellers</label>
+                <input type="text" class="form-control" placeholder="1, 2, 3 or more">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Nationality</label>
+                <select class="form-control">
+                    <option value="nepalese">Nepalese</option>
+                    <option value="indian">Indian</option>
+                    <option value="chinese">Chinese</option>
+                    <option value="american">American</option>
+                    <option value="british">British</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-success w-100">SEARCH</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectToLogin() {
+        window.location.href = "login"; 
+    }
+</script>
+<div class="about">
+hello its about page
+</div>
+
+<div class="services">
+hello its services page
+</div>
+
+<div class="contact">
+hello its contact page
+</div>
