@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="image/fastlogo.png">
-    <title>SajiloYatra Registration</title>
+    <title>Fast Courier Registration</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -20,21 +20,30 @@
         }
 
         .container {
-            background: #ffffff;
-            width: 550px;
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            transition: transform 0.3s ease;
+           background: #ffffff;
+        width: 550px;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        transition: transform 0.3s ease;
+        max-height: 90vh;  /* Limits excessive height */
+        overflow-y: auto;  /* Adds scroll if content overflows */
+   
         }
 
         .container:hover {
-            transform: scale(1.02);
+            transform: scale(0.97);
         }
 
         h1 {
             color: #6a1b9a;
+            font-size: 22px;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-bottom: 1.5rem;
         }
 
         .form-label {
@@ -56,14 +65,7 @@
             box-shadow: 0 0 5px rgba(106, 27, 154, 0.5);
             outline: none;
         }
-         h1 {
-                font-size: 22px;
-            }
 
-        h2 {
-            font-size: 16px;
-            margin-bottom: 1.5rem;
-        }
         .btn-custom {
             background-color: #6a1b9a;
             color: white;
@@ -95,6 +97,13 @@
             text-decoration: underline;
         }
 
+        .home-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 width: 90%;
@@ -103,12 +112,10 @@
         }
 
         @media (max-width: 480px) {
-            .btn-custom {
-                font-size: 16px;
-                padding: 10px;
+            .container {
+                padding: 1.5rem;
             }
-        }
-         @media (max-width: 480px) {
+
             h1 {
                 font-size: 20px;
             }
@@ -118,47 +125,57 @@
                 margin-bottom: 1rem;
             }
 
-            .btn-login {
-                font-size: 14px;
-                padding: 8px;
+            .btn-custom {
+                font-size: 16px;
+                padding: 10px;
             }
         }
-        .home-btn-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        .error-message {
+            color: red;
+            font-size: 20px;
+            margin-top: 5px;
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="home-btn-container">
-            <a href="/">
-                <button type="button" class="btn btn-outline-success">Return to home</button>
-            </a>
-        </div>
+        <a href="/">
+            <button type="button" class="btn btn-outline-success">Return to home</button>
+        </a>
+    </div>
+    
     <div class="container">
         <h1><b>SajiloYatra</b></h1>
         <h2><b>Register Into SajiloYatra as a Company</b></h2>
-        <a href="register_user"><button type="button" class="btn btn-outline-success">Register as user</button></a><br>
-        <form>
-            <div class="mb-3">
+        <a href="register_user">
+            <button type="button" class="btn btn-outline-success">Register as user</button>
+        </a><br><br>
+
+        <form id="registrationForm">
+            {% comment %} <div class="mb-3">
                 <label for="company-name" class="form-label">Company Name</label>
                 <input type="text" class="form-control" id="company-name" placeholder="Enter your company name" required>
+            </div> {% endcomment %}
+            <div class="mb-3">
+                <label for="owner-name" class="form-label">Owner Name</label>
+                <input type="text" class="form-control" id="owner-name" placeholder="Enter owner's name" required>
             </div>
-
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
                 <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
             </div>
 
             <div class="mb-3">
-                <label for="owner-name" class="form-label">Owner Name</label>
-                <input type="text" class="form-control" id="owner-name" placeholder="Enter owner's name" required>
+                <label for="contact" class="form-label">Contact Number</label>
+                <input type="number" class="form-control" id="contact" placeholder="Enter Contact number" required>
             </div>
+
             <div class="mb-3">
-                <label for="vech_number" class="form-label">Vehicle Number</label>
-                <input type="text" class="form-control" id="vech_number" placeholder="Enter your Vehicle Number" required>
+                <label for="vehicle-number" class="form-label">Vehicle Number</label>
+                <input type="text" class="form-control" id="vehicle-number" placeholder="Enter your Vehicle Number" required>
             </div>
+
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Create a password" required>
@@ -167,16 +184,30 @@
             <div class="mb-3">
                 <label for="confirm-password" class="form-label">Confirm Password</label>
                 <input type="password" class="form-control" id="confirm-password" placeholder="Re-enter your password" required>
+                <div id="password-error" class="error-message"><b>Passwords do not match!</b></div>
             </div>
 
             <button type="submit" class="btn btn-custom w-100">Register</button>
         </form>
 
         <div class="login-link">
-             <a href="login"><span style="color:black">Already have an account?</span><b>Login</b></a>
+            <a href="login"><span style="color:black">Already have an account?</span> <b>Login</b></a>
         </div>
     </div>
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirm-password").value;
+            let errorMessage = document.getElementById("password-error");
 
+            if (password !== confirmPassword) {
+                errorMessage.style.display = "block"; // Show error
+                event.preventDefault(); // Stop form submission
+            } else {
+                errorMessage.style.display = "none"; // Hide error if valid
+            }
+        });
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
