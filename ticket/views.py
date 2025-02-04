@@ -8,6 +8,9 @@ def home(request):
 def login(request):
     return render(request, 'ticket/login.html')
 
-def register(request):
-    return render(request, 'ticket/signup.html')
+def user_register(request):
+    return render(request, 'ticket/user_signup.html')
+
+def company_register(request):
+    return render(request, 'ticket/company_signup.html')
 

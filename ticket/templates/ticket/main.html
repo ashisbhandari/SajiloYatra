@@ -2,7 +2,7 @@
 
 <div class="hero-section">
     <h1 class="display-4 text-success">Bus Tickets</h1>
-    <p class="lead text-secondary">SajiloYatra – Where Comfort Meets the Road.</p>
+    <p class="lead text-secondary">Easy & Affordable</p>
     <button onclick="redirectToLogin()" class="btn btn-success btn-lg">BOOK NOW</button>
 </div>
 
@@ -58,14 +58,90 @@
         window.location.href = "login"; 
     }
 </script>
-<div class="about">
-hello its about page
-</div>
 
-<div class="services">
-hello its services page
-</div>
 
-<div class="contact">
-hello its contact page
-</div>
+<!-- About Us Section -->
+<section class="my-5">
+    <div class="py-5 position-relative" id="abt">
+        <h1 class="background-text">About Us</h1>
+        <h3 class="text-center">About Us</h3>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-12">
+                <img src="image/c5.jpg" class="img-fluid aboutimg" alt="About SajiloYatra">
+                <div class="d-flex justify-content-end">
+                    <a href="/" class="btn btn-success mt-3">Check More</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <p class="py-3">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ab quos eligendi neque tempora, voluptatibus incidunt assumenda libero magni, commodi odit quia? Autem maiores blanditiis reiciendis cum veniam rerum debitis.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Services Section -->
+<section class="my-5">
+    <div class="py-5 position-relative" id="service">
+        <h1 class="background-text">Our Services</h1>
+        <h3 class="text-center">Our Services</h3>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-12 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'ticket/image/sajha.jpg' %}" alt="local bus">
+                    <div class="card-body">
+                        <h4 class="card-title">Short Route(local) Bus</h4>
+                        <a href="#" class="btn btn-primary">See Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'ticket/image/night vech.jpg' %}" alt="night bus" >
+                    <div class="card-body">
+                        <h4 class="card-title">Long Routes(Night) Bus</h4>
+                        <a href="#" class="btn btn-primary">See Profile</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 mb-4">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'ticket/image/family vech.png' %}" alt="family bus">
+                    <div class="card-body">
+                        <h4 class="card-title">Family Reservation</h4>
+                        <a href="#" class="btn btn-primary">See Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Contact Section -->
+<section class="my-5">
+    <div class="py-5 position-relative" id="contact">
+        <h1 class="background-text">Contact Us</h1>
+        <h3 class="text-center">Contact Us</h3>
+    </div>
+</section>
+
+
+<!-- css-->
+ <style>
+    .background-text {
+        font-size: 4rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(0, 0, 0, 0.1);
+        z-index: -1;
+    }
+
+ </style>

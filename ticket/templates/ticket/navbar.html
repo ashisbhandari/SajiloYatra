@@ -87,13 +87,13 @@
                         <a class="nav-link" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#" onclick="scrollToSection('abt')">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+                        <a class="nav-link" href="#" onclick="scrollToSection('service')">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="#" onclick="scrollToSection('contact')">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="login">
@@ -106,5 +106,13 @@
 
     <!-- Bootstrap JS (for responsiveness) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function scrollToSection(sectionId) {
+          var section = document.getElementById(sectionId);
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      </script>
 </body>
 </html>
