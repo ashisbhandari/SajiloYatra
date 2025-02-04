@@ -172,10 +172,19 @@
             </div>
 
             <div class="mb-3">
-                <label for="vehicle-number" class="form-label">Vehicle Number</label>
-                <input type="text" class="form-control" id="vehicle-number" placeholder="Enter your Vehicle Number" required>
+                <label for="vehicle_Number" class="form-label">Vehicle Number</label>
+                <input type="text" class="form-control" id="vehicle_number" placeholder="Enter your Vehicle Number" required>
             </div>
-
+            <div class="mb-3">
+                <label for="vehicle_type" class="form-label">Vehicle Types</label>
+                <select class="form-control" id="vehicle_type" required>
+                    <option value="" disabled selected>Please select your vehicle type</option>
+                    <option value="long Routes(Night bus)">Long Routes (Night Bus)</option>
+                    <option value="Short Route(Local bus)">Short Route (Local Bus)</option>
+                    <option value="Small(Reservation) vehicle">Small (Reservation) Vehicle</option>
+                </select>
+            </div>
+            
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Create a password" required>
