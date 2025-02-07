@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SajiloYatra</title>
+    
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .hero-section {
+            background-color: #d4edda;
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .hero-text {
+            font-size: 4rem;
+            color: #28a745;
+            opacity: 0;
+            white-space: nowrap;
+            display: inline-block;
+            animation: fadeInText 3s forwards;
+        }
+
+        .sub-text {
+            font-size: 1.5rem;
+            color: #6c757d;
+            opacity: 0;
+            display: inline-block;
+            animation: fadeInText 3s forwards;
+            animation-delay: 3s; /* Delay after main text */
+        }
+
+        /* Fade In Animation for Text */
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .hero-button {
+            opacity: 0;
+            animation: fadeInButton 2s forwards;
+            animation-delay: 6s; /* Delay after text animation */
+        }
+
+        /* Fade In Animation for Button */
+        @keyframes fadeInButton {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        {% include "ticket/dash_nav.html" %}
+    </nav>
+
+    <div class="hero-section">
+        <!-- Main Text Animated -->
+        <h1 id="busText" class="hero-text"></h1>
+        <br>
+        <!-- Sub Text Animated -->
+        <p id="subText" class="sub-text"></p>
+        <br>
+        <!-- Button Animated -->
+        <button onclick="redirectToLogin()" class="btn btn-success btn-lg hero-button">BOOK NOW</button>
+    </div>
+
+    <script>
+        // Function to animate text letter by letter
+        function animateText(elementId, text, delay) {
+            let i = 0;
+            const element = document.getElementById(elementId);
+            element.textContent = '';
+            const interval = setInterval(() => {
+                element.textContent += text[i];
+                i++;
+                if (i === text.length) {
+                    clearInterval(interval);
+                }
+            }, delay);
+        }
+
+        // Animate both text elements and button on page load
+        window.onload = function() {
+            animateText("busText", "SajiloYatra", 150); // Display letters of "SajiloYatra"
+            setTimeout(() => {
+                animateText("subText", "Easy & Affordable", 150); // Display letters of "Easy & Affordable" after "SajiloYatra"
+            }, 2000); // 3 seconds delay to start animating "Easy & Affordable"
+        };
+
+        // Redirect to login page
+        function redirectToLogin() {
+            window.location.href = "/login";
+        }
+    </script>
+
+    <div class="container my-5">
+        <div class="card p-4 shadow-sm">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">FROM</label>
+                    <input type="text" class="form-control" placeholder="City or Bus stop">
+                </div>
+                <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
+                    <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">TO</label>
+                    <input type="text" class="form-control" placeholder="City or Bus stop">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Depart</label>
+                    <input type="date" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Return</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="form-label">Travellers</label>
+                    <input type="text" class="form-control" placeholder="1, 2, 3 or more">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Nationality</label>
+                    <select class="form-control">
+                        <option value="nepalese">Nepalese</option>
+                        <option value="indian">Indian</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="american">American</option>
+                        <option value="british">British</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success w-100">SEARCH</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function redirectToLogin() {
+            window.location.href = "/login";
+        }
+    </script>
+
+    <div class="contact">
+        {% include "ticket/vech_contact.html" %}
+    </div>
+    
+    <div>
+        hii
+    </div>
+
+    {% include "ticket/footer.html" %}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

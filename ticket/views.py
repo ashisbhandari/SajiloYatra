@@ -14,3 +14,7 @@ def user_register(request):
 def company_register(request):
     return render(request, 'ticket/company_signup.html')
 
+
+def dashboard(request):
+    return render(request, 'ticket/dashboard.html')
+
