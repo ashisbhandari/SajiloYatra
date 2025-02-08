@@ -18,3 +18,5 @@ def company_register(request):
 def dashboard(request):
     return render(request, 'ticket/dashboard.html')
 
+def book_ticket(request):
+    return render(request,'ticket/booktkt.html')

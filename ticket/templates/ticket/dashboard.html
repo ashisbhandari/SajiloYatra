@@ -46,21 +46,6 @@
             }
         }
 
-        .hero-button {
-            opacity: 0;
-            animation: fadeInButton 2s forwards;
-            animation-delay: 6s; /* Delay after text animation */
-        }
-
-        /* Fade In Animation for Button */
-        @keyframes fadeInButton {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
@@ -76,7 +61,7 @@
         <p id="subText" class="sub-text"></p>
         <br>
         <!-- Button Animated -->
-        <button onclick="redirectToLogin()" class="btn btn-success btn-lg hero-button">BOOK NOW</button>
+        <a href="#"><button  class="btn btn-success btn-lg hero-button">Book Now</button></a>
     </div>
 
     <script>
@@ -99,13 +84,14 @@
             animateText("busText", "SajiloYatra", 150); // Display letters of "SajiloYatra"
             setTimeout(() => {
                 animateText("subText", "Easy & Affordable", 150); // Display letters of "Easy & Affordable" after "SajiloYatra"
-            }, 2000); // 3 seconds delay to start animating "Easy & Affordable"
+            }, 2000);
         };
 
         // Redirect to login page
-        function redirectToLogin() {
-            window.location.href = "/login";
-        }
+        //function redirectToLogin() {
+          //  window.location.href = "/";
+        //}
+        
     </script>
 
     <div class="container my-5">
@@ -124,50 +110,133 @@
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Depart</label>
-                    <input type="date" class="form-control">
+                    <input type="date" class="form-control" id="dateInput">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Return</label>
-                    <input type="date" class="form-control">
+                    <label class="form-label">Quick Dates</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-success quick-date-btn" id="todayBtn"></button>
+                        <button class="btn btn-outline-success quick-date-btn" id="tomorrowBtn"></button>
+                        <button class="btn btn-outline-success quick-date-btn" id="thirdDayBtn"></button>
+                        <button class="btn btn-outline-success quick-date-btn" id="fourthDayBtn"></button>
+                    </div>
                 </div>
+                
+                <script>
+                    // Function to get only the day (e.g., "20" from "2025-02-20")
+                    function getDayOnly(offsetDays) {
+                        let date = new Date();
+                        date.setDate(date.getDate() + offsetDays);
+                        return date.getDate(); // Returns only the day (1-31)
+                    }
+                
+                    // Function to get full date (YYYY-MM-DD)
+                    function getFullDate(offsetDays) {
+                        let date = new Date();
+                        date.setDate(date.getDate() + offsetDays);
+                        return date.toISOString().split('T')[0]; // Extract YYYY-MM-DD
+                    }
+                
+                    // Set button labels with only the day number
+                    document.getElementById("todayBtn").innerText = getDayOnly(0);
+                    document.getElementById("tomorrowBtn").innerText = getDayOnly(1);
+                    document.getElementById("thirdDayBtn").innerText = getDayOnly(2);
+                    document.getElementById("fourthDayBtn").innerText = getDayOnly(3);
+                
+                    // Add event listeners to buttons
+                    const buttons = document.querySelectorAll(".quick-date-btn");
+                    buttons.forEach((btn, index) => {
+                        btn.addEventListener("click", function () {
+                            // Remove 'btn-success' class from all buttons
+                            buttons.forEach(b => b.classList.remove("btn-success"));
+                            buttons.forEach(b => b.classList.add("btn-outline-success"));
+                
+                            // Add 'btn-success' class to the clicked button
+                            this.classList.remove("btn-outline-success");
+                            this.classList.add("btn-success");
+                
+                            // Update date input value
+                            document.getElementById("dateInput").value = getFullDate(index);
+                        });
+                    });
+                </script>
             </div>
     
-            <div class="row">
-                <div class="col-md-3">
-                    <label class="form-label">Travellers</label>
-                    <input type="text" class="form-control" placeholder="1, 2, 3 or more">
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Nationality</label>
-                    <select class="form-control">
-                        <option value="nepalese">Nepalese</option>
-                        <option value="indian">Indian</option>
-                        <option value="chinese">Chinese</option>
-                        <option value="american">American</option>
-                        <option value="british">British</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+    
                 <div class="col-md-3 d-flex align-items-end">
                     <button class="btn btn-success w-100">SEARCH</button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div class="search_bus">
+        
+        </div>
 
+        </div>
+    </div>
     <script>
         function redirectToLogin() {
             window.location.href = "/login";
         }
     </script>
-
+    <!-- contact view  -->
     <div class="contact">
         {% include "ticket/vech_contact.html" %}
     </div>
-    
-    <div>
-        hii
+
+    <!-- passenger history view -->
+    <div class="history">
+        <div class="container mt-5">
+            <h2 class="mb-4 text-center">Passenger Past History</h2>
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Ammount</th>
+                                <th>Vehicle Type</th>
+                                <th>Vehicle number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-05-05</td>
+                                <td>hld</td>
+                                <td>btm</td>
+                                <td>50</td>
+                                <td>Family Vehicle</td>
+                                <td>3176</td>
+                            </tr>
+                            <tr>
+                                <td>2025-05-09</td>
+                                <td>btm</td>
+                                <td>hld</td>
+                                <td>55</td>
+                                <td>Short Routes (local Bus)</td>
+                                <td>2025</td>
+                            </tr>
+                            <tr>
+                                <td>2025-05-12</td>
+                                <td>bdp</td>
+                                <td>hld</td>
+                                <td>45</td>
+                                <td>Short Routes (local Bus)</td>
+                                <td>3025</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
     </div>
+    
+   
 
     {% include "ticket/footer.html" %}
     
