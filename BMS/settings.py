@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'BMS.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bms_db',  # Your database name
+        'USER': 'root',  # Your MySQL username
+        'PASSWORD': '123456789',  # Your MySQL password
+        'HOST': 'localhost',  # Set this if you're running MySQL locally
+        'PORT': '3306',  # Default MySQL port
     }
 }
 
@@ -122,3 +126,30 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTHENTICATION_BACKENDS = [
+    'ticket.backends.CustomAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    
+    ]
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

@@ -154,19 +154,31 @@
                 <button type="button" class="btn btn-outline-success">Return to home</button>
             </a>
         </div>
+        {% if form.errors %}
+        <div class="errorlist">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
     <div class="container">
         <h1><b>SajiloYatra</b></h1>
         <h2><b>Register Into SajiloYatra as a User</b></h2>
         <a href="register_company"><button type="button" class="btn btn-outline-success">Register as Comapny</button></a>
-        <form id="registrationForm">
+        <form id="registrationForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="mb-3">
-                <label for="company-name" class="form-label">Your Name</label>
-                <input type="text" class="form-control" id="company-name" placeholder="Enter your company name" required>
+                <label for="username" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your company name" required>
             </div>
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             {% comment %} <div class="mb-3">
@@ -175,12 +187,12 @@
             </div> {% endcomment %}
             <div class="mb-3">
                 <label for="contact" class="form-label">Contact Number</label>
-                <input type="number" class="form-control" id="contact" placeholder="Enter Contact number" required>
+                <input type="number" class="form-control" id="contact" name="contact" placeholder="Enter Contact number" required>
             </div>
             
             <div class="mb-3">
-                <label for="passengers_type" class="form-label">Passengers Type</label>
-                <select class="form-control" name="passengers_type" id="passengers_type" required onchange="showImageUpload()">
+                <label for="passenger_type" class="form-label">Passengers Type</label>
+                <select class="form-control" name="passenger_type" id="passengers_type" required onchange="showImageUpload()">
                     <option value="" disabled selected>Please select types listed below:</option>
                     <option value="children">Children (0-10)</option>
                     <option value="adult">Adult</option>
@@ -209,7 +221,7 @@
             <div class="mb-3">
                 <label for="confirm_password" class="form-label">Confirm Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="confirm_password" placeholder="Re-enter your password" required>
+                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Re-enter your password">
                     <span class="input-group-text" onclick="togglePassword('confirm_password')">
                         <i class="bi bi-eye-fill"></i>
                     </span>
