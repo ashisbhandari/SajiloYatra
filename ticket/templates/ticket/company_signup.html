@@ -156,7 +156,17 @@
             <button type="button" class="btn btn-outline-success">Return to home</button>
         </a>
     </div>
-    
+    {% if form.errors %}
+        <div class="errorlist">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
     <div class="container">
         <h1><b>SajiloYatra</b></h1>
         <h2><b>Register Into SajiloYatra as a Company</b></h2>
@@ -164,47 +174,47 @@
             <button type="button" class="btn btn-outline-success">Register as user</button>
         </a><br><br>
 
-        <form id="registrationForm" method="post">
+        <form id="registrationForm" method="POST">
             {% csrf_token %}
             {% comment %} <div class="mb-3">
                 <label for="company-name" class="form-label">Company Name</label>
                 <input type="text" class="form-control" id="company-name" placeholder="Enter your company name" required>
             </div> {% endcomment %}
             <div class="mb-3">
-                <label for="owner-name" class="form-label">Owner Name</label>
-                <input type="text" class="form-control" id="owner-name" placeholder="Enter owner's name" required>
+                <label for="username" class="form-label">Owner Name</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter owner's name" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
             </div>
 
             <div class="mb-3">
                 <label for="contact" class="form-label">Contact Number</label>
-                <input type="number" class="form-control" id="contact" placeholder="Enter Contact number" required>
+                <input type="number" class="form-control" name="contact" id="contact" placeholder="Enter Contact number" required>
             </div>
 
             <div class="mb-3">
                 <label for="vehicle_Number" class="form-label">Vehicle Number</label>
-                <input type="text" class="form-control" id="vehicle_number" placeholder="Enter your Vehicle Number" required>
+                <input type="text" class="form-control" id="vehicle_number" name="vehicle_number" placeholder="Enter your Vehicle Number" required>
             </div>
             <div class="mb-3">
                 <label for="vehicle_type" class="form-label">Vehicle Types</label>
-                <select class="form-control" id="vehicle_type" required>
+                <select class="form-control" id="vehicle_type" name="vehicle_type" required>
                     <option value="" disabled selected>Please select your vehicle type</option>
-                    <option value="long Routes(Night bus)">Long Routes (Night Bus)</option>
-                    <option value="Short Route(Local bus)">Short Route (Local Bus)</option>
-                    <option value="Small(Reservation) vehicle">Small (Reservation) Vehicle</option>
+                    <option value="Long Route">Long Routes (Night Bus)</option>
+                    <option value="Short Route">Short Route (Local Bus)</option>
+                    <option value="Reservations">Small (Reservation) Vehicle</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="Passenger_Capacity" class="form-label">Passenger Capacity</label>
-                <input type="number" class="form-control" id="Passenger_Capacity" placeholder="Enter Vehicle Passenger Capacity" required>
+                <input type="number" class="form-control" id="Passenger_Capacity" name="passenger_capacity" placeholder="Enter Vehicle Passenger Capacity" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required>
                     <span class="input-group-text" onclick="togglePassword('password')">
                         <i class="bi bi-eye-fill"></i>
                     </span>
@@ -214,7 +224,7 @@
             <div class="mb-3">
                 <label for="confirm-password" class="form-label">Confirm Password</label>
                 <div class="input-group">
-                    <input type="password" class="form-control" id="confirm-password" placeholder="Re-enter your password" required>
+                    <input type="password" class="form-control" id="confirm-password" name="confirm_password" placeholder="Re-enter your password" required>
                     <span class="input-group-text" onclick="togglePassword('confirm-password')">
                         <i class="bi bi-eye-fill"></i>
                     </span>
