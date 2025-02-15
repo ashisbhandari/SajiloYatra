@@ -14,6 +14,8 @@ from django.core.paginator import Paginator
 
 def home(request):
     return render(request, 'ticket/index.html')
+def test(request):
+    return render(request, 'ticket/hi.html')
 
 
 logger = logging.getLogger(__name__)

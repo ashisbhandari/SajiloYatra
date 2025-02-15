@@ -22,8 +22,8 @@
                 <input type="text" class="form-control" id="company-name" placeholder="Enter your company name" required>
             </div> {% endcomment %}
             <div class="mb-3">
-                <label for="owner-name" class="form-label">Owner Name</label>
-                <input type="text" class="form-control" id="owner-name" placeholder="Enter owner's name" required>
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="owner-name" placeholder="Enter Your name" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email Address</label>
@@ -34,15 +34,15 @@
                 <label for="contact" class="form-label">Contact Number</label>
                 <input type="number" class="form-control" id="contact" placeholder="Enter Contact number" required>
             </div>            
-            <div class="mb-3">
+            {% comment %} <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
                     <input type="password" class="form-control" id="password" placeholder="Create a password" required>
                     <span class="input-group-text" onclick="togglePassword('password')">
                         <i class="bi bi-eye-fill"></i>
                     </span>
-                </div>
-            </div>
+                </div> 
+            </div>{% endcomment %}
         </form>
     </div>
     <script>

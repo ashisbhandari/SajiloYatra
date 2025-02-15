@@ -22,7 +22,11 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Depart</label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" id="dateInput">
+                <script>
+                    // Set the default date to today's date
+                    document.getElementById("dateInput").value = new Date().toISOString().split('T')[0];
+                </script>
             </div>
             <div class="col-md-3 d-flex align-items-end">
                 <button class="btn btn-success w-100" onclick="showDiv()">SEARCH</button>
@@ -51,58 +55,38 @@
             <div id="hiddenDiv">
                 <div class="row">
                     <div class="col-8 pr-5">
-
                         <div class="row py-1">
                             <div class="col-12 text-truncate">
-                                <b class="trip-operator" x-text="trip.busName">Bhandari Yatayat</b>
-                                <b class="trip-operator chips-night" :class="trip.appendClass" x-text="trip.travelTimeShift">Night</b>
+                                <b class="trip-operator">Bhandari Yatayat</b>
+                                <b class="trip-operator chips-night">Night</b>
                             </div>
                         </div>
-                        {% for company in page_obj %}
-                            <tr>
-                                <td>{{ company.vehicle_number }}</td>
-                                <td>{{ company.username }}</td>
-                                <td>{{ company.contact }}</td>
-                                <td>{{ company.origin }}</td>
-                                <td>{{ company.vehicle_type }}</td>
-                                <td>{{ company.destination }}</td>
-                                <td>{{ company.passenger_capacity }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="7" class="text-center">No data available</td>
-                            </tr>
-                            {% endfor %}
-                            
                         <div class="row pb-2">
-                           <!--[if BLOCK]><![endif]--> <div class="col-6 text-left"><span class="trip-fromstationpoint">Jhapa</span>
-                                </div>
-                                <div class="col-6 text-right"><span class="trip-tostationpoint">Kathmandu</span>
-                                </div>
-                            <!--[if ENDBLOCK]><![endif]-->
+                            <div class="col-6 text-left">
+                                <span class="trip-fromstationpoint">Jhapa</span>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span class="trip-tostationpoint">Kathmandu</span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-4 pl-4 border-left">
-                        <div class="">
-                            <div class="col text-nowrap">
-                                <span x-show="trip.showMessage!==null" x-text="trip.showMessage" style="font-size: 13px;color: #ff8a01;font-weight: 600;"></span><br>
-
-                                
-                                <template x-if="!trip.range">
-                                    <div class="" style="display: flex;flex-direction:column">
-                                    <span x-show="trip.showPrice!=null &amp;&amp; trip.showPrice!==''" class="strike-red"><span class="trip-fare-original text-dark" x-text="'Rs.'+trip.showPrice">1400</span></span>
-                                    <span class="trip-fare" x-text="'Rs.'+trip.ticketPrice"></span>
-                                    </div>
-                                </template><div class="" style="display: flex;flex-direction:column">
-                                    <span class="trip-fare" x-text="'Rs.'+trip.ticketPrice">Rs.2100</span>
-                                    </div>
-                            <div class="col text-left text-nowrap">
-
-                                <b class="trip-seatsavail" title="Total undefined Seats" x-text="trip.availableSeat">25</b> <span class="trip-seatsavail-info">Seats Available</span>
+                        <div class="col text-nowrap">
+                            <div style="display: flex; flex-direction: column;">
+                                <span class="trip-fare">Rs.2500</span>
+                                <span class="trip-seatsavail" title="Total undefined Seats">37 
+                                <span class="trip-seatsavail-info">Seats Available</span></span>
+                            </div>
+                            <div>
+                                <button onclick="toggleSeat()" ondblclick="toggleSeat()" class="btn btn-success w-50">View Seats</button>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div id="hiddenSeat">
+                {% include "ticket/seats.html" %}
             </div>
         </div>
     </div>
@@ -114,6 +98,15 @@
     }
     function showDiv() {
         document.getElementById("hiddenDiv").style.display = "block";
+    }
+
+    function toggleSeat() {
+        var seatDiv = document.getElementById("hiddenSeat");
+        if (seatDiv.style.display === "none" || seatDiv.style.display === "") {
+            seatDiv.style.display = "block";
+        } else {
+            seatDiv.style.display = "none";
+        }
     }
 </script>
 
@@ -201,12 +194,10 @@
         color: rgba(0, 0, 0, 0.1);
         z-index: -1;
     }
-    #hiddenDiv {
+    #hiddenDiv, #hiddenSeat {
         display: none;
         padding: 20px;
-        background-color: lightblue;
-        border: 1px solid #000;
-        margin-top: 10px;
+        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
     }
 
  </style>
