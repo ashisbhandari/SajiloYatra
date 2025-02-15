@@ -10,7 +10,7 @@
     <div class="card p-4 shadow-sm">
         <div class="row mb-3">
             <div class="col-md-3">
-                <label class="form-label"></label>
+                <label class="form-label">From</label>
                 <input type="text" class="form-control" placeholder="City or Bus stop">
             </div>
             <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
@@ -24,14 +24,13 @@
                 <label class="form-label">Depart</label>
                 <input type="date" class="form-control">
             </div>
-            <div class="col-md-2">
-                <label class="form-label">Return</label>
-                <input type="date" class="form-control">
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-success w-100" onclick="showDiv()">SEARCH</button>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-3">
+            {% comment %} <div class="col-md-3">
                 <label class="form-label">Travellers</label>
                 <input type="text" class="form-control" placeholder="1, 2, 3 or more">
             </div>
@@ -45,9 +44,65 @@
                     <option value="british">British</option>
                     <option value="other">Other</option>
                 </select>
-            </div>
+            </div> 
             <div class="col-md-3 d-flex align-items-end">
                 <button class="btn btn-success w-100">SEARCH</button>
+            </div>{% endcomment %}
+            <div id="hiddenDiv">
+                <div class="row">
+                    <div class="col-8 pr-5">
+
+                        <div class="row py-1">
+                            <div class="col-12 text-truncate">
+                                <b class="trip-operator" x-text="trip.busName">Bhandari Yatayat</b>
+                                <b class="trip-operator chips-night" :class="trip.appendClass" x-text="trip.travelTimeShift">Night</b>
+                            </div>
+                        </div>
+                        {% for company in page_obj %}
+                            <tr>
+                                <td>{{ company.vehicle_number }}</td>
+                                <td>{{ company.username }}</td>
+                                <td>{{ company.contact }}</td>
+                                <td>{{ company.origin }}</td>
+                                <td>{{ company.vehicle_type }}</td>
+                                <td>{{ company.destination }}</td>
+                                <td>{{ company.passenger_capacity }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">No data available</td>
+                            </tr>
+                            {% endfor %}
+                            
+                        <div class="row pb-2">
+                           <!--[if BLOCK]><![endif]--> <div class="col-6 text-left"><span class="trip-fromstationpoint">Jhapa</span>
+                                </div>
+                                <div class="col-6 text-right"><span class="trip-tostationpoint">Kathmandu</span>
+                                </div>
+                            <!--[if ENDBLOCK]><![endif]-->
+                        </div>
+                    </div>
+                    <div class="col-4 pl-4 border-left">
+                        <div class="">
+                            <div class="col text-nowrap">
+                                <span x-show="trip.showMessage!==null" x-text="trip.showMessage" style="font-size: 13px;color: #ff8a01;font-weight: 600;"></span><br>
+
+                                
+                                <template x-if="!trip.range">
+                                    <div class="" style="display: flex;flex-direction:column">
+                                    <span x-show="trip.showPrice!=null &amp;&amp; trip.showPrice!==''" class="strike-red"><span class="trip-fare-original text-dark" x-text="'Rs.'+trip.showPrice">1400</span></span>
+                                    <span class="trip-fare" x-text="'Rs.'+trip.ticketPrice"></span>
+                                    </div>
+                                </template><div class="" style="display: flex;flex-direction:column">
+                                    <span class="trip-fare" x-text="'Rs.'+trip.ticketPrice">Rs.2100</span>
+                                    </div>
+                            <div class="col text-left text-nowrap">
+
+                                <b class="trip-seatsavail" title="Total undefined Seats" x-text="trip.availableSeat">25</b> <span class="trip-seatsavail-info">Seats Available</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -56,6 +111,9 @@
 <script>
     function redirectToLogin() {
         window.location.href = "login"; 
+    }
+    function showDiv() {
+        document.getElementById("hiddenDiv").style.display = "block";
     }
 </script>
 
@@ -142,6 +200,13 @@
         transform: translate(-50%, -50%);
         color: rgba(0, 0, 0, 0.1);
         z-index: -1;
+    }
+    #hiddenDiv {
+        display: none;
+        padding: 20px;
+        background-color: lightblue;
+        border: 1px solid #000;
+        margin-top: 10px;
     }
 
  </style>

@@ -7,6 +7,7 @@ import logging
 from django.db import connection
 from django.contrib.auth.models import User
 from .models import companyRegistration
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -67,17 +68,32 @@ def company_register(request):
     else:
         form = companyEntry()
     return render(request, 'ticket/company_signup.html', {'form': form})
-@login_required
 def dashboard(request):
-    return render(request, 'ticket/dashboard.html')
+    # Get all records from companyRegistration
+    company_data = companyRegistration.objects.all()
 
+    # Pagination: Show 10 records per page
+    paginator = Paginator(company_data, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Render the dashboard template and pass the paginated data
+    return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
 def book_ticket(request):
     return render(request,'ticket/booktkt.html')
 
 def bus_info_dashboard(request):
-    # Fetch all company (bus information) records from the database
-    company_data = companyRegistration.objects.all()
-    print("Data fetched:", company_data)
-    # Render the template and pass the company data to it
-    return render(request, 'vech_contact.html', {'company_data': company_data})
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination FROM company""")
+            data = cursor.fetchall()
 
+        paginator = Paginator(data, 10)  # Show 10 results per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+    except Exception as e:
+        print("Error executing query:", e)
+        page_obj = []
+
+    return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})

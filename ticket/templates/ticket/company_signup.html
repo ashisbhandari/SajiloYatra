@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% comment %} <link rel="icon" type="image/png" href="image/fastlogo.png"> {% endcomment %}
-    <title>Fast Courier Registration</title>
+    <title>SajiloYatra Company Registration</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -210,6 +210,184 @@
             <div class="mb-3">
                 <label for="Passenger_Capacity" class="form-label">Passenger Capacity</label>
                 <input type="number" class="form-control" id="Passenger_Capacity" name="passenger_capacity" placeholder="Enter Vehicle Passenger Capacity" required>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">From</label>
+                    <select name="origin" class="form-control dest" required>
+                        <option value="">Select District</option>
+                                        <option value="acham">Acham</option>
+                                        <option value="arghakhanchi">Arghakhanchi</option>
+                                        <option value="baglung">Baglung</option>
+                                        <option value="bajhang">Bajhang</option>
+                                        <option value="bajura">Bajura</option>
+                                        <option value="baitadi">Baitadi</option>
+                                        <option value="banke">Banke</option>
+                                        <option value="bardiya">Bardiya</option>
+                                        <option value="bara">Bara</option>
+                                        <option value="Bhaktapur">Bhaktapur</option>
+                                        <option value="bhojpur">Bhojpur</option>
+                                        <option value="chitwan">Chitwan</option>
+                                        <option value="dadeldhura">Dadeldhura</option>
+                                        <option value="Dang">Dang</option>
+                                        <option value="dailekh">Dailekh</option>
+                                        <option value="darchula">Darchula</option>
+                                        <option value="dhading">Dhading</option>
+                                        <option value="dhankuta">Dhankuta</option>
+                                        <option value="dhanusha">Dhanusha</option>
+                                        <option value="dolakha">Dolakha</option>
+                                        <option value="dolpa">Dolpa</option>
+                                        <option value="doti">Doti</option>
+                                        <option value="eastern_rukum">Eastern Rukum</option>
+                                        <option value="gulmi">Gulmi</option>
+                                        <option value="gorkha">Gorkha</option>
+                                        <option value="humla">Humla</option>
+                                        <option value="ilam">Ilam</option>
+                                        <option value="jhapa">Jhapa</option>
+                                        <option value="jajarkot">Jajarkot</option>
+                                        <option value="jumla">Jumla</option>
+                                        <option value="Kathmandu">Kathmandu</option>
+                                        <option value="kanchanpur">Kanchanpur</option>
+                                        <option value="kailali">Kailali</option>
+                                        <option value="kalikot">Kalikot</option>
+                                        <option value="kapilvastu">Kapilvastu</option>
+                                        <option value="kaski">Kaski</option>
+                                        <option value="khotang">Khotang</option>
+                                        <option value="kavrepalanchok">Kavrepalanchok</option>
+                                        <option value="lalitpur">Lalitpur</option>
+                                        <option value="lamjung">Lamjung</option>
+                                        <option value="mahendranagar">Mahendranagar</option>
+                                        <option value="mahottari">Mahottari</option>
+                                        <option value="makwanpur">Makwanpur</option>
+                                        <option value="manang">Manang</option>
+                                        <option value="morang">Morang</option>
+                                        <option value="mugu">Mugu</option>
+                                        <option value="myagdi">Myagdi</option>
+                                        <option value="mustang">Mustang</option>
+                                        <option value="nawalpur">Nawalpur</option>
+                                        <option value="east-nawalparasi">East-Nawalparasi</option>
+                                        <option value="west-nawalparasi">West-Nawalparasi</option>
+                                        <option value="nuwakot">Nuwakot</option>
+                                        <option value="okhaldhunga">Okhaldhunga</option>
+                                        <option value="parbat">Parbat</option>
+                                        <option value="parsa">Parsa</option>
+                                        <option value="pachthar">Pachthar</option>
+                                        <option value="palpa">Palpa</option>
+                                        <option value="pyuthan">Pyuthan</option>
+                                        <option value="rajbiraj">Rajbiraj</option>
+                                        <option value="rautahat">Rautahat</option>
+                                        <option value="ramechap">Ramechap</option>
+                                        <option value="rasuwa">Rasuwa</option>
+                                        <option value="Rupandehi">Rupandehi</option>
+                                        <option value="Rolpa">Rolpa</option>
+                                        <option value="salyan">Salyan</option>
+                                        <option value="sankhuwasabha">Sankhuwasabha</option>
+                                        <option value="saptari">Saptari</option>
+                                        <option value="sarlahi">Sarlahi</option>
+                                        <option value="sindhuli">Sindhuli</option>
+                                        <option value="sindhupalchok">Sindhupalchok</option>
+                                        <option value="siraha">Siraha</option>
+                                        <option value="solukhumbu">Solukhumbu</option>
+                                        <option value="sunsari">Sunsari</option>
+                                        <option value="Surkhet">Surkhet</option>
+                                        <option value="Syangja">Syangja</option>
+                                        <option value="tanahun">Tanahun</option>
+                                        <option value="taplejung">Taplejung</option>
+                                        <option value="terhathum">Terhathum</option>
+                                        <option value="udayapur">Udayapur</option>
+                                        <option value="western_rukum">Western Rukum</option>
+                    </select>
+                </div>
+                {% comment %} <!-- Swap icon in the center -->
+                <div class="col-md-2 text-center">
+                    <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
+                </div> {% endcomment %}
+                <div class="col-md-6">
+                    <label class="form-label">To</label>
+                    <select name="destination" class="form-control dest" required>
+                        <option value="">Select District</option>
+                                        <option value="acham">Acham</option>
+                                        <option value="arghakhanchi">Arghakhanchi</option>
+                                        <option value="baglung">Baglung</option>
+                                        <option value="bajhang">Bajhang</option>
+                                        <option value="bajura">Bajura</option>
+                                        <option value="baitadi">Baitadi</option>
+                                        <option value="banke">Banke</option>
+                                        <option value="bardiya">Bardiya</option>
+                                        <option value="bara">Bara</option>
+                                        <option value="Bhaktapur">Bhaktapur</option>
+                                        <option value="bhojpur">Bhojpur</option>
+                                        <option value="chitwan">Chitwan</option>
+                                        <option value="dadeldhura">Dadeldhura</option>
+                                        <option value="Dang">Dang</option>
+                                        <option value="dailekh">Dailekh</option>
+                                        <option value="darchula">Darchula</option>
+                                        <option value="dhading">Dhading</option>
+                                        <option value="dhankuta">Dhankuta</option>
+                                        <option value="dhanusha">Dhanusha</option>
+                                        <option value="dolakha">Dolakha</option>
+                                        <option value="dolpa">Dolpa</option>
+                                        <option value="doti">Doti</option>
+                                        <option value="eastern_rukum">Eastern Rukum</option>
+                                        <option value="gulmi">Gulmi</option>
+                                        <option value="gorkha">Gorkha</option>
+                                        <option value="humla">Humla</option>
+                                        <option value="ilam">Ilam</option>
+                                        <option value="jhapa">Jhapa</option>
+                                        <option value="jajarkot">Jajarkot</option>
+                                        <option value="jumla">Jumla</option>
+                                        <option value="Kathmandu">Kathmandu</option>
+                                        <option value="kanchanpur">Kanchanpur</option>
+                                        <option value="kailali">Kailali</option>
+                                        <option value="kalikot">Kalikot</option>
+                                        <option value="kapilvastu">Kapilvastu</option>
+                                        <option value="kaski">Kaski</option>
+                                        <option value="khotang">Khotang</option>
+                                        <option value="kavrepalanchok">Kavrepalanchok</option>
+                                        <option value="lalitpur">Lalitpur</option>
+                                        <option value="lamjung">Lamjung</option>
+                                        <option value="mahendranagar">Mahendranagar</option>
+                                        <option value="mahottari">Mahottari</option>
+                                        <option value="makwanpur">Makwanpur</option>
+                                        <option value="manang">Manang</option>
+                                        <option value="morang">Morang</option>
+                                        <option value="mugu">Mugu</option>
+                                        <option value="myagdi">Myagdi</option>
+                                        <option value="mustang">Mustang</option>
+                                        <option value="nawalpur">Nawalpur</option>
+                                        <option value="east-nawalparasi">East-Nawalparasi</option>
+                                        <option value="west-nawalparasi">West-Nawalparasi</option>
+                                        <option value="nuwakot">Nuwakot</option>
+                                        <option value="okhaldhunga">Okhaldhunga</option>
+                                        <option value="parbat">Parbat</option>
+                                        <option value="parsa">Parsa</option>
+                                        <option value="pachthar">Pachthar</option>
+                                        <option value="palpa">Palpa</option>
+                                        <option value="pyuthan">Pyuthan</option>
+                                        <option value="rajbiraj">Rajbiraj</option>
+                                        <option value="rautahat">Rautahat</option>
+                                        <option value="ramechap">Ramechap</option>
+                                        <option value="rasuwa">Rasuwa</option>
+                                        <option value="Rupandehi">Rupandehi</option>
+                                        <option value="Rolpa">Rolpa</option>
+                                        <option value="salyan">Salyan</option>
+                                        <option value="sankhuwasabha">Sankhuwasabha</option>
+                                        <option value="saptari">Saptari</option>
+                                        <option value="sarlahi">Sarlahi</option>
+                                        <option value="sindhuli">Sindhuli</option>
+                                        <option value="sindhupalchok">Sindhupalchok</option>
+                                        <option value="siraha">Siraha</option>
+                                        <option value="solukhumbu">Solukhumbu</option>
+                                        <option value="sunsari">Sunsari</option>
+                                        <option value="Surkhet">Surkhet</option>
+                                        <option value="Syangja">Syangja</option>
+                                        <option value="tanahun">Tanahun</option>
+                                        <option value="taplejung">Taplejung</option>
+                                        <option value="terhathum">Terhathum</option>
+                                        <option value="udayapur">Udayapur</option>
+                                        <option value="western_rukum">Western Rukum</option>
+                    </select>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

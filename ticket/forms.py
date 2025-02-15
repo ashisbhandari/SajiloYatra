@@ -68,13 +68,61 @@ class companyEntry(forms.Form):
     contact = forms.CharField(max_length=15, label="Contact Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter Contact number'}))
     vehicle_number = forms.CharField(max_length=15, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'Enter your vehicle number'}))
 
-    # Passengers Type field
+    # vehicle Type field
     vehicle_type = forms.ChoiceField(
         choices=[('Long Route', 'Long Routes (Night Bus)'), 
                  ('Short Route', 'Short Route (Local Bus)'), 
                  ('Reservations', 'Small (Reservation) Vehicle')],
         label="Vehicle Type"
     )
+    #destination / origin type
+    destination=forms.ChoiceField(
+        choices=[
+            ("acham", "Acham"), ("arghakhanchi", "Arghakhanchi"), ("baglung", "Baglung"), ("bajhang", "Bajhang"), 
+            ("bajura", "Bajura"), ("baitadi", "Baitadi"), ("banke", "Banke"), ("bardiya", "Bardiya"), ("bara", "Bara"), 
+            ("bhaktapur", "Bhaktapur"), ("bhojpur", "Bhojpur"), ("chitwan", "Chitwan"), ("dadeldhura", "Dadeldhura"), 
+            ("dang", "Dang"), ("dailekh", "Dailekh"), ("darchula", "Darchula"), ("dhading", "Dhading"), ("dhankuta", "Dhankuta"), 
+            ("dhanusha", "Dhanusha"), ("dolakha", "Dolakha"), ("dolpa", "Dolpa"), ("doti", "Doti"), ("eastern_rukum", "Eastern Rukum"), 
+            ("gulmi", "Gulmi"), ("gorkha", "Gorkha"), ("humla", "Humla"), ("ilam", "Ilam"), ("jhapa", "Jhapa"), ("jajarkot", "Jajarkot"), 
+            ("jumla", "Jumla"), ("kathmandu", "Kathmandu"), ("kanchanpur", "Kanchanpur"), ("kailali", "Kailali"), ("kalikot", "Kalikot"), 
+            ("kapilvastu", "Kapilvastu"), ("kaski", "Kaski"), ("khotang", "Khotang"), ("kavrepalanchok", "Kavrepalanchok"), 
+            ("lalitpur", "Lalitpur"), ("lamjung", "Lamjung"), ("mahendranagar", "Mahendranagar"), ("mahottari", "Mahottari"), 
+            ("makwanpur", "Makwanpur"), ("manang", "Manang"), ("morang", "Morang"), ("mugu", "Mugu"), ("myagdi", "Myagdi"), 
+            ("mustang", "Mustang"), ("nawalpur", "Nawalpur"), ("east-nawalparasi", "East-Nawalparasi"), ("west-nawalparasi", "West-Nawalparasi"), 
+            ("nuwakot", "Nuwakot"), ("okhaldhunga", "Okhaldhunga"), ("parbat", "Parbat"), ("parsa", "Parsa"), ("pachthar", "Pachthar"), 
+            ("palpa", "Palpa"), ("pyuthan", "Pyuthan"), ("rajbiraj", "Rajbiraj"), ("rautahat", "Rautahat"), ("ramechap", "Ramechap"), 
+            ("rasuwa", "Rasuwa"), ("rupandehi", "Rupandehi"), ("rolpa", "Rolpa"), ("salyan", "Salyan"), ("sankhuwasabha", "Sankhuwasabha"), 
+            ("saptari", "Saptari"), ("sarlahi", "Sarlahi"), ("sindhuli", "Sindhuli"), ("sindhupalchok", "Sindhupalchok"), 
+            ("siraha", "Siraha"), ("solukhumbu", "Solukhumbu"), ("sunsari", "Sunsari"), ("surkhet", "Surkhet"), ("syangja", "Syangja"), 
+            ("tanahun", "Tanahun"), ("taplejung", "Taplejung"), ("terhathum", "Terhathum"), ("udayapur", "Udayapur"), ("western_rukum", "Western Rukum")
+        ],
+        label="destination"
+    )
+    #destination / origin type
+    origin=forms.ChoiceField(
+        choices=[
+            ("acham", "Acham"), ("arghakhanchi", "Arghakhanchi"), ("baglung", "Baglung"), ("bajhang", "Bajhang"), 
+            ("bajura", "Bajura"), ("baitadi", "Baitadi"), ("banke", "Banke"), ("bardiya", "Bardiya"), ("bara", "Bara"), 
+            ("bhaktapur", "Bhaktapur"), ("bhojpur", "Bhojpur"), ("chitwan", "Chitwan"), ("dadeldhura", "Dadeldhura"), 
+            ("dang", "Dang"), ("dailekh", "Dailekh"), ("darchula", "Darchula"), ("dhading", "Dhading"), ("dhankuta", "Dhankuta"), 
+            ("dhanusha", "Dhanusha"), ("dolakha", "Dolakha"), ("dolpa", "Dolpa"), ("doti", "Doti"), ("eastern_rukum", "Eastern Rukum"), 
+            ("gulmi", "Gulmi"), ("gorkha", "Gorkha"), ("humla", "Humla"), ("ilam", "Ilam"), ("jhapa", "Jhapa"), ("jajarkot", "Jajarkot"), 
+            ("jumla", "Jumla"), ("kathmandu", "Kathmandu"), ("kanchanpur", "Kanchanpur"), ("kailali", "Kailali"), ("kalikot", "Kalikot"), 
+            ("kapilvastu", "Kapilvastu"), ("kaski", "Kaski"), ("khotang", "Khotang"), ("kavrepalanchok", "Kavrepalanchok"), 
+            ("lalitpur", "Lalitpur"), ("lamjung", "Lamjung"), ("mahendranagar", "Mahendranagar"), ("mahottari", "Mahottari"), 
+            ("makwanpur", "Makwanpur"), ("manang", "Manang"), ("morang", "Morang"), ("mugu", "Mugu"), ("myagdi", "Myagdi"), 
+            ("mustang", "Mustang"), ("nawalpur", "Nawalpur"), ("east-nawalparasi", "East-Nawalparasi"), ("west-nawalparasi", "West-Nawalparasi"), 
+            ("nuwakot", "Nuwakot"), ("okhaldhunga", "Okhaldhunga"), ("parbat", "Parbat"), ("parsa", "Parsa"), ("pachthar", "Pachthar"), 
+            ("palpa", "Palpa"), ("pyuthan", "Pyuthan"), ("rajbiraj", "Rajbiraj"), ("rautahat", "Rautahat"), ("ramechap", "Ramechap"), 
+            ("rasuwa", "Rasuwa"), ("rupandehi", "Rupandehi"), ("rolpa", "Rolpa"), ("salyan", "Salyan"), ("sankhuwasabha", "Sankhuwasabha"), 
+            ("saptari", "Saptari"), ("sarlahi", "Sarlahi"), ("sindhuli", "Sindhuli"), ("sindhupalchok", "Sindhupalchok"), 
+            ("siraha", "Siraha"), ("solukhumbu", "Solukhumbu"), ("sunsari", "Sunsari"), ("surkhet", "Surkhet"), ("syangja", "Syangja"), 
+            ("tanahun", "Tanahun"), ("taplejung", "Taplejung"), ("terhathum", "Terhathum"), ("udayapur", "Udayapur"), ("western_rukum", "Western Rukum")
+        ],
+        label="origin"
+    )
+        
+    
 
     passenger_capacity = forms.IntegerField(label="Passenger Capacity", widget=forms.NumberInput(attrs={'placeholder': 'Enter passenger capacity number'}))
 
@@ -104,6 +152,8 @@ class companyEntry(forms.Form):
             contact=self.cleaned_data["contact"],
             vehicle_number=self.cleaned_data["vehicle_number"],
             vehicle_type=self.cleaned_data["vehicle_type"],
+            origin=self.cleaned_data["origin"],
+            destination=self.cleaned_data["destination"],
             passenger_capacity=self.cleaned_data["passenger_capacity"],
             password=self.cleaned_data["password"],  # Store the hashed password
         )
