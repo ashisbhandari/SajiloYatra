@@ -162,7 +162,7 @@
                     </a>
                 </div>
                 <div class="email-container">
-                    <a href="photolaija@email.com" class="text-black">
+                    <a href="mailto:photolaija@email.com" class="text-black">
                         <i class="fas fa-envelope email-icon"></i>photolaija@email.com
                     </a>
                 </div>
@@ -170,12 +170,24 @@
 
             <!-- Login, Signup, and Dropdown -->
             <div class="d-flex login-options">
-                <select class="form-select me-2">
+                <select class="form-select me-2" id="ticketOptions" onchange="navigateToPage()">
                     <option selected>Tickets</option>
-                    <option>View Tickets</option>
-                    <option>Cancel Tickets</option>
-                    <option>Book Tickets</option>
+                    <option value="/#bus_ticket">View Tickets</option>
+                    <option value="/#">Cancel Tickets</option>
+                    <option value="/Book_ticket">Book Tickets</option>
                 </select>
+                
+                <script>
+                    function navigateToPage() {
+                        let select = document.getElementById("ticketOptions");
+                        let value = select.value;
+                
+                        if (value !== "Tickets") {
+                            window.location.href = value; // Navigate to the selected option
+                        }
+                    }
+                </script>
+                
 
                 <a href="/register_company" class="me-2">
                     <button type="button" class="btn btn-login">
@@ -215,22 +227,22 @@
                     <ul class="navbar-nav me-auto">
                         <!-- Navigation Links -->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
+                            <a class="nav-link" href="/">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#bus_ticket">Bus Tickets</a>
+                            <a class="nav-link" href="/#bus_ticket">Bus Tickets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Reservations</a>
+                            <a class="nav-link" href="/Reserve_vehicle">Reservations</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#abt">About</a>
+                            <a class="nav-link" href="/#abt">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#service">Services</a>
+                            <a class="nav-link" href="/#service">Services</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#contact">Contact</a>
+                            <a class="nav-link" href="/#contact">Contact</a>
                         </li>
                         
                     </ul>

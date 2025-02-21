@@ -67,3 +67,15 @@ class companyRegistration(models.Model):
     class Meta:
         db_table = 'company'
         
+
+class BusRoute(models.Model):
+    vehicle_number = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
+    contact = models.CharField(max_length=15)
+    origin = models.CharField(max_length=100)
+    vehicle_type = models.CharField(max_length=50)
+    destination = models.CharField(max_length=100)
+    passenger_capacity = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.vehicle_number} - {self.origin} to {self.destination}"

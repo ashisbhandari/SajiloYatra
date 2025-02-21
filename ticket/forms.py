@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password  # Import for password hashing
-from .models import UserRegistration,companyRegistration
+from .models import UserRegistration,companyRegistration,BusRoute
 
 class SignupForm(forms.Form):
     username = forms.CharField(max_length=100, label="Your Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your company name'}))
@@ -159,3 +159,54 @@ class companyEntry(forms.Form):
         )
         user.save()
         return user
+    
+    
+
+class BusRouteForm(forms.ModelForm):
+    # Define the choices for origin, destination, and vehicle types
+    ORIGIN_CHOICES = [
+        ('Kathmandu', 'Kathmandu'),
+        ('Pokhara', 'Pokhara'),
+        ('Chitwan', 'Chitwan'),
+        ('Biratnagar', 'Biratnagar'),
+        ('Butwal', 'Butwal'),
+    ]
+
+    DESTINATION_CHOICES = [
+        ('Kathmandu', 'Kathmandu'),
+        ('Pokhara', 'Pokhara'),
+        ('Chitwan', 'Chitwan'),
+        ('Biratnagar', 'Biratnagar'),
+        ('Butwal', 'Butwal'),
+    ]
+    
+    VEHICLE_TYPE_CHOICES = [
+        ('Long Route', 'Long Routes (Night Bus)'),
+        ('Short Route', 'Short Route (Local Bus)'),
+        ('Reservations', 'Small (Reservation) Vehicle'),
+    ]
+
+    origin = forms.ChoiceField(choices=ORIGIN_CHOICES, required=True)
+    destination = forms.ChoiceField(choices=DESTINATION_CHOICES, required=True)
+    vehicle_number = forms.CharField(max_length=10, required=True)
+    vehicle_type = forms.ChoiceField(choices=VEHICLE_TYPE_CHOICES, required=True)
+    username = forms.CharField(max_length=100, required=True)
+    contact = forms.CharField(max_length=15, required=True)
+    passenger_capacity = forms.IntegerField(min_value=1, required=True)
+    departure_date = forms.DateField(required=True)
+
+    class Meta:
+        model = BusRoute
+        fields = ['origin', 'destination', 'vehicle_number', 'vehicle_type', 'username', 'contact', 'passenger_capacity', 'departure_date']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        origin = cleaned_data.get('origin')
+        destination = cleaned_data.get('destination')
+
+        # Add custom validation: origin and destination must not be the same
+        if origin == destination:
+            raise forms.ValidationError("Origin and destination cannot be the same.")
+
+        # Return the cleaned data
+        return cleaned_data

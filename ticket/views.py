@@ -1,13 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login as auth_login
-from .forms import SignupForm,companyEntry
+from .forms import SignupForm,companyEntry,BusRouteForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import logging
 from django.db import connection
 from django.contrib.auth.models import User
-from .models import companyRegistration
+from .models import companyRegistration,BusRoute
 from django.core.paginator import Paginator
+from datetime import date,datetime
 
 
 # Create your views here.
@@ -16,6 +17,8 @@ def home(request):
     return render(request, 'ticket/index.html')
 def test(request):
     return render(request, 'ticket/hi.html')
+def reservation(request):
+    return render(request, 'ticket/reserve_vech.html')
 
 
 logger = logging.getLogger(__name__)
@@ -81,8 +84,18 @@ def dashboard(request):
 
     # Render the dashboard template and pass the paginated data
     return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
-def book_ticket(request):
-    return render(request,'ticket/booktkt.html')
+def company_dashboard(request):
+    # Get all records from companyRegistration
+    company_data = companyRegistration.objects.all()
+
+    # Pagination: Show 10 records per page
+    paginator = Paginator(company_data, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Render the dashboard template and pass the paginated data
+    return render(request, 'ticket/company_dash.html', {'page_obj': page_obj})
+
 
 def bus_info_dashboard(request):
     try:
@@ -99,3 +112,37 @@ def bus_info_dashboard(request):
         page_obj = []
 
     return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
+
+def bus_route_info(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination FROM company""")
+            data = cursor.fetchall()
+
+        paginator = Paginator(data, 10)  # Show 10 results per page
+        page_number = request.GET.get('page')
+        page_obj1 = paginator.get_page(page_number)
+
+    except Exception as e:
+        print("Error executing query:", e)
+        page_obj1 = []
+
+    return render(request, 'ticket/company_dash.html', {'page_obj': page_obj1})
+
+#sending seats value to another page
+def book_ticket(request):
+    selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
+    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
+
+
+def register_bus(request):
+    today = date.today()  # Get today's date
+    if request.method == 'POST':
+        form = BusRouteForm(request.POST)
+        if form.is_valid():
+            form.save()  # Save the form data to the database
+            return redirect('/comp_dash')  # Redirect to the vehicle travel history page
+    else:
+        form = BusRouteForm()
+
+    return render(request, 'ticket/register_bus.html', {'form': form, 'today': today})

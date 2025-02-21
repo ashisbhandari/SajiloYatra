@@ -1,0 +1,213 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Bus</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"> -->
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    
+</head>
+<body>
+
+
+    
+    <nav>
+        <style>
+            /* Custom styling for transparent navbar */
+            .navbar {
+                background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            }
+            
+            .navbar-brand, .navbar-nav .nav-link {
+                color: black !important;
+            }
+            .navbar-nav .nav-link:hover {
+                color: #ff6347;
+            }
+            .nav {
+                padding: 10px;
+            }
+    
+            /* Smooth background transition */
+            body {
+                text-align: center;
+                transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+            }
+    
+            /* Style the toggle image button */
+            #toggleButton {
+                width: 40px; /* Set a proper size */
+                height: 40px;
+                cursor: pointer;
+                border-radius: 50%; /* Circular button */
+                transition: transform 0.3s ease-in-out;
+            }
+            #toggleButton:hover {
+                transform: scale(1.1); /* Slight zoom on hover */
+            }
+        </style>
+    </head>
+    <body>
+    
+        <!-- Transparent Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container nav">
+                <a class="navbar-brand" href="#">
+                    <img src="{% static 'ticket/image/logoplease.png' %}" alt="SajiloYatra" width="50" height="30">
+                    <b>SajiloYatra</b>
+                </a>
+    
+                <!-- Navbar toggler button for mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+    
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <!-- Light Theme Icon Button -->
+                            <i id="toggleButton" class="bi bi-brightness-high-fill fs-4 text-dark"></i>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/comp_dash">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register" onclick="">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="" onclick="scrollToSection('history')">history</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <button type="button" class="btn btn-outline-danger bi bi-box-arrow-right">  logout
+                                  </button>
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <script>
+            function scrollToSection(sectionId) {
+                var section = document.getElementById(sectionId);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+    
+            // Toggle Background Color and Icon for Light/Dark Theme
+            let isLight = false;
+    
+            document.getElementById("toggleButton").addEventListener("click", function() {
+                if (isLight) {
+                    document.body.style.color = "white";  // Dark theme text color
+                    document.body.style.backgroundColor = "rgb(54, 54, 54)";  // Dark theme background
+                    document.getElementById("toggleButton").classList.replace("bi-brightness-high-fill", "bi-moon-fill");
+                } else {
+                    document.body.style.color = "black";  // Light theme text color
+                    document.body.style.backgroundColor = "rgb(255, 255, 255)";  // Light theme background
+                    document.getElementById("toggleButton").classList.replace("bi-moon-fill", "bi-brightness-high-fill");
+                }
+                isLight = !isLight;
+            });
+        </script>
+    
+        </nav>
+
+
+
+
+
+
+
+
+    <div class="container my-5">
+        <div class="card p-4 shadow-sm">
+            <h1>Register you vehicle for departure Schedule</h1>
+            <form method="POST" action="{% url 'register_bus' %}">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="origin"><b>From</b></label>
+                        <select class="form-control" id="origin" name="origin" required>
+                            <option value="" disabled selected>Select Departure Location</option>
+                            <option value="Kathmandu">Kathmandu</option>
+                            <option value="Pokhara">Pokhara</option>
+                            <option value="Chitwan">Chitwan</option>
+                            <option value="Biratnagar">Biratnagar</option>
+                            <option value="Butwal">Butwal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="destination"><b>To</b></label>
+                        <select class="form-control" id="destination" name="destination" required>
+                            <option value="" disabled selected>Select Destination</option>
+                            <option value="Kathmandu">Kathmandu</option>
+                            <option value="Pokhara">Pokhara</option>
+                            <option value="Chitwan">Chitwan</option>
+                            <option value="Biratnagar">Biratnagar</option>
+                            <option value="Butwal">Butwal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    
+                    <!-- Vehicle Number -->
+                    <div class="col-md-6">
+                        <label class="form-label">Vehicle Number</label>
+                        <input type="text" class="form-control" name="vehicle_number" placeholder="Vehicle Number" required>
+                    </div>
+                    
+                    <!-- Vehicle Type -->
+                    <div class="col-md-6">
+                        <label for="vehicle_type" class="form-label">Vehicle Types</label>
+                        <select class="form-control" id="vehicle_type" name="vehicle_type" required>
+                            <option value="" disabled selected>Please select your vehicle type</option>
+                            <option value="Long Route">Long Routes (Night Bus)</option>
+                            <option value="Short Route">Short Route (Local Bus)</option>
+                            <option value="Reservations">Small (Reservation) Vehicle</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- Driver Name -->
+                    <div class="col-md-6">
+                        <label class="form-label">Driver Name</label>
+                        <input type="text" class="form-control" name="username" placeholder="Driver's Name" required>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="col-md-6">
+                        <label class="form-label">Contact</label>
+                        <input type="text" class="form-control" name="contact" placeholder="Contact Number" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <!-- Passenger Capacity -->
+                    <div class="col-md-6">
+                        <label class="form-label">Passenger Capacity</label>
+                        <input type="number" class="form-control" name="passenger_capacity" placeholder="Passenger Capacity" required>
+                    </div>
+
+                    <!-- Date of Registration -->
+                    <div class="col-md-6">
+                        <label class="form-label">departure Date</label>
+                        <input type="date" class="form-control" name="departure_date" value="{{ today }}" required>
+                    </div>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">Register Bus</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
