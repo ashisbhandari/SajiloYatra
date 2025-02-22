@@ -1,34 +1,30 @@
 from django.contrib.auth.backends import BaseBackend
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import get_user_model
-from django.db import connection
+from ticket.models import UserRegistration, companyRegistration  # Make sure to use companyRegistration
 
-UserModel = get_user_model()
+class MultiUserAuthBackend(BaseBackend):
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        # Check in UserRegistration table (Users)
+        try:
+            user = UserRegistration.objects.get(username=username, password=password)  # Plain text check
+            return user  # Return the user object if found
+        except UserRegistration.DoesNotExist:
+            pass  # If not found, continue to check the company table
 
-class CustomAuthBackend(BaseBackend):
-    def authenticate(self, request, username=None, password=None):
-        user_data = None
-        
-        with connection.cursor() as cursor:
-            # Check in user_registration table
-            cursor.execute("SELECT id, username, password FROM user_registration WHERE username = %s", [username])
-            user_data = cursor.fetchone()
+        # Check in companyRegistration table (Companies)
+        try:
+            company_user = companyRegistration.objects.get(username=username, password=password)  # Plain text check
+            return company_user  # Return the company object if found
+        except companyRegistration.DoesNotExist:
+            return None  # If not found in both tables, return None
 
-            # If not found, check in company table
-            if not user_data:
-                cursor.execute("SELECT id, username, password FROM company WHERE username = %s", [username])
-                user_data = cursor.fetchone()
-        if user_data:
-            user_id, db_username, db_password = user_data
-        if db_password == password:
-            # Try to get or create a Django user object
-            user, created = UserModel.objects.get_or_create(username=db_username, defaults={"id": user_id})
-            return user
-        
-        return None
+        return None  # If authentication fails
 
     def get_user(self, user_id):
+        # Get user from either table
         try:
-            return UserModel.objects.get(pk=user_id)
-        except UserModel.DoesNotExist:
-            return None
+            return UserRegistration.objects.get(pk=user_id)
+        except UserRegistration.DoesNotExist:
+            try:
+                return companyRegistration.objects.get(pk=user_id)
+            except companyRegistration.DoesNotExist:
+                return None

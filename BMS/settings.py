@@ -130,7 +130,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 AUTHENTICATION_BACKENDS = [
-    'ticket.backends.CustomAuthBackend',
+    'ticket.backends.MultiUserAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
     
     ]

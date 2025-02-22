@@ -3,13 +3,15 @@ from django.contrib.auth import authenticate, login as auth_login
 from .forms import SignupForm,companyEntry,BusRouteForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-import logging
+import logging,json
+from django.http import JsonResponse
+
 from django.db import connection
 from django.contrib.auth.models import User
 from .models import companyRegistration,BusRoute
 from django.core.paginator import Paginator
 from datetime import date,datetime
-
+from ticket.models import UserRegistration, companyRegistration  # Import models
 
 # Create your views here.
 
@@ -23,6 +25,13 @@ def reservation(request):
 
 logger = logging.getLogger(__name__)
 
+# If you are returning a datetime in a response:
+def custom_datetime_serialization(data):
+    if isinstance(data, datetime):
+        return data.isoformat()  # Convert datetime to a string
+    raise TypeError("Type not serializable")
+
+
 def login(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -32,17 +41,26 @@ def login(request):
 
         if user is not None:
             auth_login(request, user)
-
-            # Print executed SQL queries to check the database
-            for query in connection.queries:
-                print(query)
-
-            return redirect('dashboard')
+            # Convert last_login to ISO format before storing it in session
+            request.session['last_login'] = user.last_login.isoformat()  # Store as string
+            if isinstance(user, UserRegistration):  # Correct the model name here
+                return redirect('/dashboard')  # Redirect as a user
+            elif isinstance(user, companyRegistration):  # Correct the model name here
+                return redirect('/comp_dash')  # Redirect as a company
         else:
-            messages.error(request, "Invalid username or password.")
-            return redirect('login')
-    else:
-        return render(request, 'ticket/login.html')
+            message.error(request, "Invalid username or password.")
+            return redirect('/login')
+    return render(request, 'ticket/login.html')            
+    #         # Print executed SQL queries to check the database
+    #         for query in connection.queries:
+    #             print(query)
+
+    #         return redirect('dashboard')
+    #     else:
+    #         messages.error(request, "Invalid username or password.")
+    #         return redirect('login')
+    # else:
+    #     return render(request, 'ticket/login.html')
 
 def user_register(request):
     if request.method == 'POST':
@@ -73,6 +91,7 @@ def company_register(request):
     else:
         form = companyEntry()
     return render(request, 'ticket/company_signup.html', {'form': form})
+@login_required
 def dashboard(request):
     # Get all records from companyRegistration
     company_data = companyRegistration.objects.all()
@@ -84,6 +103,7 @@ def dashboard(request):
 
     # Render the dashboard template and pass the paginated data
     return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
+# @login_required
 def company_dashboard(request):
     # Get all records from companyRegistration
     company_data = companyRegistration.objects.all()
