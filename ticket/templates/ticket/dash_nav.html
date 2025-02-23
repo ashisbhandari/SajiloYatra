@@ -48,6 +48,9 @@
         #toggleButton:hover {
             transform: scale(1.1); /* Slight zoom on hover */
         }
+        .name{
+            align-items:center;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +62,7 @@
                 <img src="{% static 'ticket/image/logoplease.png' %}" alt="SajiloYatra" width="50" height="30">
                 <b>SajiloYatra</b>
             </a>
-
+            <p class="name"><b>{{ request.user.username }}<b></p>
             <!-- Navbar toggler button for mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

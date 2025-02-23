@@ -31,6 +31,11 @@
             display: inline-block;
             animation: fadeInText 3s forwards;
         }
+        .username {
+            font-size: 4rem;
+            color: #28a745;
+            opacity:50;
+        }
 
         .sub-text {
             font-size: 1.5rem;
@@ -59,6 +64,7 @@
     </nav>
 
     <div class="hero-section">
+        {% comment %} <h3 class="username">{{ request.user.username }} welcome <br></h3> {% endcomment %}
         <!-- Main Text Animated -->
         <h1 id="busText" class="hero-text"></h1>
         <br>

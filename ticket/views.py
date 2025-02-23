@@ -21,6 +21,8 @@ def test(request):
     return render(request, 'ticket/hi.html')
 def reservation(request):
     return render(request, 'ticket/reserve_vech.html')
+def cancel(request):
+    return render(request, 'ticket/cancel_ticket.html')
 
 
 logger = logging.getLogger(__name__)
@@ -43,12 +45,14 @@ def login(request):
             auth_login(request, user)
             # Convert last_login to ISO format before storing it in session
             request.session['last_login'] = user.last_login.isoformat()  # Store as string
+            request.session['username'] = user.username  #storing username in session
             if isinstance(user, UserRegistration):  # Correct the model name here
                 return redirect('/dashboard')  # Redirect as a user
+            # request.session['username'] = user.username  #storing username in session
             elif isinstance(user, companyRegistration):  # Correct the model name here
                 return redirect('/comp_dash')  # Redirect as a company
         else:
-            message.error(request, "Invalid username or password.")
+            messages.error(request, "Invalid username or password.")
             return redirect('/login')
     return render(request, 'ticket/login.html')            
     #         # Print executed SQL queries to check the database

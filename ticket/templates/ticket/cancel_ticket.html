@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Ticket-SajiloYatra</title>
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .gataway img {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            margin: auto;
+        }
+        .hi {
+            padding-top: 50px;
+            text-align: center;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f1f1f1;
+            text-align: center;
+            
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        {% include "ticket/navbar.html" %}
+    </nav>
+    <div class="container hi">
+        <h1>For cancellation of ticket please fill the form below</h1>
+        <form action="{% url 'cancel_ticket' %}" method="POST">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label"><b>Ticket Number</b></label>
+                    <input type="text" class="form-control" name="ticketnumber" placeholder="Enter your ticket number" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label"><b>Passenger Name</b></label>
+                    <input type="text" class="form-control" name="username" placeholder="Enter your name" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label"><b>Contact Number</b></label>
+                    <input type="tel" class="form-control" name="contact" placeholder="9800000000" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label"><b>Email Address</b></label>
+                    <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary w-50">Cancel Ticket</button><br>
+            </div>
+        </form>
+    </div>
+    <br>
+    <footer>
+        {% include "ticket/footer.html" %}
+    </footer>
+</body>
+</html>

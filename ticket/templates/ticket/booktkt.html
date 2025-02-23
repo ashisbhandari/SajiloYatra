@@ -21,12 +21,37 @@
             height: auto;
             margin: auto;
         }
+
+        .hi {
+            padding: 50px;
+        }
+
+        /* Flexbox container for payment options */
+        .payment-options {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .payment-options .payment-option {
+            text-align: center;
+            margin: 10px;
+        }
+
+        /* For mobile and smaller devices */
+        @media (max-width: 768px) {
+            .payment-options {
+                flex-direction: column;
+            }
+        }
+
     </style>
 </head>
 <body>
     {% include 'ticket/navbar.html' %}
     
-    <div class="container">
+    <div class="container hi">
         <h1>Book Your Ticket</h1>
         <form action="#" method="POST">
             <div class="row mb-3">
@@ -63,7 +88,60 @@
                     </h3>
                 </div>
                 <div class="col-md-6">
-                    <h2>Total Fare: <span id="fare-display"></span></h2>
+                    <h2>Total Fare: <span id="fare-display">0.00</span></h2>
+                
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment-method" id="online-payment" value="online" onclick="togglePaymentOption()">
+                        <label class="form-check-label" for="online-payment">
+                            <h5>Online Payments</h5>
+                        </label>
+                    </div>
+                
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment-method" id="cash-payment" value="cash" onclick="togglePaymentOption()">
+                        <label class="form-check-label" for="cash-payment">
+                            <h5>Cash on counter</h5>
+                        </label>
+                    </div>
+                </div>
+                
+                <script>
+                    function togglePaymentOption(){
+                        var onlinepayment = document.getElementById("online-payment");
+                        var hidden = document.getElementById("hiddengateaway");
+                
+                        if(onlinepayment.checked) {  // Fixed typo: 'checked' instead of 'chacked'
+                            hidden.style.display = "block";
+                        } else {
+                            hidden.style.display = "none";
+                        }
+                    }
+                </script>
+                
+            </div>
+            <div class="col-md-6">
+                <!-- Hidden Gateway Section -->
+                <div class="row mb-3 gataway " id="hiddengateaway" style="display:none;">
+                    <h2>Payment Options</h2>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <a href="#"><img src="{% static 'ticket/image/esewa.png' %}" alt="Esewa"></a>
+                            <p>Esewa</p>
+                        </div>
+                        <div class="payment-option">
+                            <a href="#"><img src="{% static 'ticket/image/khalti.png' %}" alt="Khalti"></a>
+                            <p>Khalti</p>
+                        </div>
+                        <div class="payment-option">
+                            <a href="#"><img src="{% static 'ticket/image/imepay.png' %}" alt="IMEPay"></a>
+                            <p>IMEPay</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success w-100">Book Ticket</button>
                 </div>
             </div>
             
@@ -77,18 +155,6 @@
                 document.getElementById('fare-display').innerText = selectedSeatsCount + " * " + farePerSeat + " = " + totalFare;
             </script>
             
-            <h2>Payment Options</h2>
-            <div class="row mb-3 gataway">
-                <div class="col-md-4">
-                    <a href="#"><img src="{% static 'ticket/image/esewa.png' %}" alt="Esewa"></a>
-                </div>
-                <div class="col-md-4">
-                    <a href="#"><img src="{% static 'ticket/image/khalti.png' %}" alt="Khalti"></a>
-                </div>
-                <div class="col-md-4">
-                    <a href="#"><img src="{% static 'ticket/image/imepay.png' %}" alt="IMEPay"></a>
-                </div>
-            </div>
         </form>
     </div>
 
