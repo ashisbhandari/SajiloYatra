@@ -26,10 +26,12 @@
             </div>
             <div class="col-md-2">
                 <label class="form-label">Depart</label>
-                <input type="date" class="form-control" id="dateInput">
+                <input type="date" class="form-control" id="datePicker">
                 <script>
                     // Set the default date to today's date
-                    document.getElementById("dateInput").value = new Date().toISOString().split('T')[0];
+                    document.getElementById("datePicker").value = new Date().toISOString().split('T')[0];
+                    let today = new Date().toISOString().split('T')[0];
+                    document.getElementById("datePicker").setAttribute("min", today);
                 </script>
             </div>
             <div class="col-md-3 d-flex align-items-end">

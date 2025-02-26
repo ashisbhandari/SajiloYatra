@@ -195,11 +195,17 @@
                         <input type="number" class="form-control" name="passenger_capacity" placeholder="Passenger Capacity" required>
                     </div>
 
-                    <!-- Date of Registration -->
+                    <!-- bus registration -->
                     <div class="col-md-6">
-                        <label class="form-label">departure Date</label>
-                        <input type="date" class="form-control" name="departure_date" value="{{ today }}" required>
+                        <label class="form-label">Departure Date</label>
+                        <input type="date" class="form-control" name="departure_date" id="datePicker" required>
                     </div>
+                    
+                    <script>
+                        let today = new Date().toISOString().split('T')[0];
+                        document.getElementById("datePicker").setAttribute("min", today);
+                    </script>
+                    
                 </div>
 
                 <div class="col-md-3 d-flex align-items-end">
