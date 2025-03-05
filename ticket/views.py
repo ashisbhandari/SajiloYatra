@@ -17,8 +17,7 @@ from ticket.models import UserRegistration, companyRegistration  # Import models
 
 def home(request):
     return render(request, 'ticket/index.html')
-def test(request):
-    return render(request, 'ticket/hi.html')
+
 def reservation(request):
     return render(request, 'ticket/reserve_vech.html')
 def cancel(request):
@@ -109,16 +108,17 @@ def dashboard(request):
     return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
 # @login_required
 def company_dashboard(request):
-    # Get all records from companyRegistration
-    company_data = companyRegistration.objects.all()
-
-    # Pagination: Show 10 records per page
-    paginator = Paginator(company_data, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Render the dashboard template and pass the paginated data
-    return render(request, 'ticket/company_dash.html', {'page_obj': page_obj})
+    try:
+        with connection.cursor() as curs:
+            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_date FROM ticket_busroute WHERE username = %s""",[request.user.username])
+            route_data=curs.fetchall()
+        paginator=Paginator(route_data,5)
+        pageno=request.GET.get('page')
+        pageobj=paginator.get_page(pageno)
+    except Exception as ex:
+        print("Error occur:",ex)
+        pageobj=[]
+    return render(request, 'ticket/company_dash.html',{'page_obj':pageobj})
 
 
 def bus_info_dashboard(request):
@@ -170,3 +170,34 @@ def register_bus(request):
         form = BusRouteForm()
 
     return render(request, 'ticket/register_bus.html', {'form': form, 'today': today})
+
+
+
+def test(request):
+    # Get user input for 'from' and 'to' cities
+    origin = request.GET.get('from', '')
+    destination = request.GET.get('to', '')
+
+    # Prepare SQL query to filter bus routes based on 'from' and 'to'
+    qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination 
+             FROM ticket_busroute 
+             WHERE origin LIKE %s AND destination LIKE %s"""
+    
+    # Parameters to prevent SQL injection
+    params = [f"%{origin}%", f"%{destination}%"]
+
+    try:
+        with connection.cursor() as cur:
+            cur.execute(qry, params)
+            route_data = cur.fetchall()
+
+            # Paginate the results
+            paginator = Paginator(route_data, 5)
+            page_no = request.GET.get('page')
+            page_obj = paginator.get_page(page_no)
+
+    except Exception as ex:
+        print("Error occurred:", ex)
+        page_obj = []
+
+    return render(request, 'ticket/hi.html', {'page_obj': page_obj})

@@ -1,24 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Google Maps in Django</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
-    <script>
-        function initMap() {
-            var location = { lat: 26.5591, lng: 88.0216 };  // Kathmandu, Nepal
-            var map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 10,
-                center: location
-            });
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-        }
-    </script>
-</head>
-<body>
-    <h2>Google Map Integration</h2>
-    <div id="map" style="width: 100%; height: 500px;"></div>
-</body>
-</html>
+{% load static %}
+<div class="container my-5">
+    <div class="py-5 position-relative" id="bus_ticket">
+        <h1 class="background-text">Find Bus</h1>
+        <h3 class="text-center">Find Bus</h3>
+    </div>
+
+    <!-- Bus Search Form -->
+    <div class="card p-4 shadow-sm">
+        <div class="row mb-3">
+            <form method="GET">
+                <div class="col-md-4">
+                    <label class="form-label">From</label>
+                    <input type="text" class="form-control" name="from" placeholder="City or Bus stop" value="{{ request.GET.from }}">
+                </div>
+                <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
+                    <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">TO</label>
+                    <input type="text" class="form-control" name="to" placeholder="City or Bus stop" value="{{ request.GET.to }}">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success w-100" type="submit">SEARCH</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Displaying Results -->
+        <div class="row">
+            {% if page_obj %}
+                <div id="hiddenDiv">
+                    {% for cmp in page_obj %}
+                        <div class="row">
+                            <div class="col-8 pr-5">
+                                <div class="row py-1">
+                                    <div class="col-12 text-truncate">
+                                        <b class="trip-operator">{{ cmp.0 }}</b> <!-- cmp[0] is username -->
+                                    </div>
+                                </div>
+                                <div class="row pb-2">
+                                    <div class="col-6 text-left">
+                                        <span class="trip-fromstationpoint">{{ cmp.3 }}</span> <!-- cmp[3] is origin -->
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span class="trip-tostationpoint">{{ cmp.4 }}</span> <!-- cmp[4] is destination -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 pl-4 border-left">
+                                <div class="col text-nowrap">
+                                    <div style="display: flex; flex-direction: column;">
+                                        <span class="trip-fare">Rs.{{ cmp.2 }}</span> <!-- cmp[2] is passenger_capacity -->
+                                        <span class="trip-seatsavail">Seats Available: 37</span>
+                                    </div>
+                                    <div>
+                                        <button onclick="toggleSeat()" class="btn btn-success w-50">View Seats</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No results found for "{{ request.GET.from }}" to "{{ request.GET.to }}."</p>
+            {% endif %}
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Last</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSeat() {
+        var seatDiv = document.getElementById("hiddenSeat");
+        seatDiv.style.display = seatDiv.style.display === "none" ? "block" : "none";
+    }
+</script>
+
+<style>
+    .background-text {
+        font-size: 4rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(0, 0, 0, 0.1);
+        z-index: -1;
+    }
+    #hiddenDiv {
+        display: block; /* Ensure results are visible */
+        padding: 20px;
+        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+    }
+</style>

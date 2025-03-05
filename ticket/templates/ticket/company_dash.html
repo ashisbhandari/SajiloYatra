@@ -142,45 +142,47 @@
                                 <th>Vehicle Type</th>
                                 <th>To</th>
                                 <th>Total Capacity</th>
+                                <th>Dept Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for company in page_obj1 %}
+                            {% for cmp in page_obj %}
                             <tr>
-                                <td>{{ company.vehicle_number }}</td>
-                                <td>{{ company.username }}</td>
-                                <td>{{ company.contact }}</td>
-                                <td>{{ company.origin }}</td>
-                                <td>{{ company.vehicle_type }}</td>
-                                <td>{{ company.destination }}</td>
-                                <td>{{ company.passenger_capacity }}</td>
+                                <td>{{ cmp.0 }}</td> <!-- vehicle_number -->
+                                <td>{{ cmp.1 }}</td> <!-- username -->
+                                <td>{{ cmp.2 }}</td> <!-- contact -->
+                                <td>{{ cmp.3 }}</td> <!-- origin -->
+                                <td>{{ cmp.4 }}</td> <!-- vehicle_type -->
+                                <td>{{ cmp.5 }}</td> <!-- destination -->
+                                <td>{{ cmp.6 }}</td> <!-- passenger_capacity -->
+                                <td>{{ cmp.7 }}</td> <!-- departure_date -->
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="7" class="text-center">No data available</td>
+                                <td colspan="8" class="text-center">No data available</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-
+                
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between mt-3">
                     <div class="step-links">
-                        {% if page_obj1.has_previous %}
+                        {% if page_obj.has_previous %}
                             <a href="?page=1" class="btn btn-outline-success">&laquo; First</a>
-                            <a href="?page={{ page_obj1.previous_page_number }}" class="btn btn-outline-success">Previous</a>
+                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">Previous</a>
                         {% endif %}
                     </div>
                     
                     <div class="current">
-                        <span>Page {{ page_obj1.number }} of {{ page_obj1.paginator.num_pages }}</span>
+                        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
                     </div>
                     
                     <div class="step-links">
-                        {% if page_obj1.has_next %}
-                            <a href="?page={{ page_obj1.next_page_number }}" class="btn btn-outline-success">Next</a>
-                            <a href="?page={{ page_obj1.paginator.num_pages }}" class="btn btn-outline-success">Last &raquo;</a>
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">Next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">Last &raquo;</a>
                         {% endif %}
                     </div>
                 </div>
