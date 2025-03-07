@@ -22,6 +22,8 @@ def reservation(request):
     return render(request, 'ticket/reserve_vech.html')
 def cancel(request):
     return render(request, 'ticket/cancel_ticket.html')
+def seat(request):
+    return render(request, 'ticket/seats.html')
 
 
 logger = logging.getLogger(__name__)
@@ -172,32 +174,34 @@ def register_bus(request):
     return render(request, 'ticket/register_bus.html', {'form': form, 'today': today})
 
 
-
 def test(request):
-    # Get user input for 'from' and 'to' cities
+     # Get user input for 'from' and 'to' cities
     origin = request.GET.get('from', '')
     destination = request.GET.get('to', '')
 
-    # Prepare SQL query to filter bus routes based on 'from' and 'to'
-    qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination 
-             FROM ticket_busroute 
-             WHERE origin LIKE %s AND destination LIKE %s"""
-    
-    # Parameters to prevent SQL injection
-    params = [f"%{origin}%", f"%{destination}%"]
-
-    try:
-        with connection.cursor() as cur:
-            cur.execute(qry, params)
-            route_data = cur.fetchall()
-
-            # Paginate the results
-            paginator = Paginator(route_data, 5)
-            page_no = request.GET.get('page')
-            page_obj = paginator.get_page(page_no)
-
-    except Exception as ex:
-        print("Error occurred:", ex)
+    if not origin or not destination:  # If either from or to is empty, return empty results
         page_obj = []
+    else:
+        # Prepare SQL query to filter bus routes based on 'from' and 'to'
+        qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination 
+                 FROM ticket_busroute 
+                 WHERE origin LIKE %s AND destination LIKE %s"""
+        
+        # Parameters to prevent SQL injection
+        params = [f"%{origin}%", f"%{destination}%"]
 
-    return render(request, 'ticket/hi.html', {'page_obj': page_obj})
+        try:
+            with connection.cursor() as cur:
+                cur.execute(qry, params)
+                route_data = cur.fetchall()
+
+                # Paginate the results
+                paginator = Paginator(route_data, 5)
+                page_no = request.GET.get('page')
+                page_obj = paginator.get_page(page_no)
+
+        except Exception as ex:
+            print("Error occurred:", ex)
+            page_obj = []
+
+    return render(request, 'ticket/hi.html', {'page_obj': page_obj, 'origin': origin, 'destination': destination})

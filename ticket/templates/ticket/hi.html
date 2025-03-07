@@ -1,108 +1,195 @@
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SajiloYatra - Find Bus</title>
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        .background-text {
+            font-size: 5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(0, 0, 0, 0.1);
+            z-index: -1;
+        }
+
+        .trip-operator {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .chips-night {
+            font-size: 0.9rem;
+            background-color: #333;
+        }
+
+        .trip-fare {
+            font-size: 1.3rem;
+            color: #28a745;
+        }
+
+        .trip-seatsavail {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .pagination {
+            gap: 10px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+        }
+
+        .pagination .btn-outline-secondary {
+            border-radius: 20px;
+            font-weight: bold;
+            padding: 8px 16px;
+            color: #17a2b8;
+        }
+
+        .pagination .btn-outline-secondary:hover {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .trip-operator { font-size: 1rem; }
+            .trip-fare { font-size: 1.1rem; }
+            .btn { font-size: 0.9rem; padding: 10px; }
+        }
+
+        /* Add border for medium screens */
+        .border-left-md {
+            border-left: 1px solid #dee2e6;
+        }
+
+        .exchange-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
 <div class="container my-5">
     <div class="py-5 position-relative" id="bus_ticket">
-        <h1 class="background-text">Find Bus</h1>
+        <h3 class="background-text">Find Bus</h3>
         <h3 class="text-center">Find Bus</h3>
     </div>
-
-    <!-- Bus Search Form -->
+    
     <div class="card p-4 shadow-sm">
-        <div class="row mb-3">
-            <form method="GET">
-                <div class="col-md-4">
-                    <label class="form-label">From</label>
-                    <input type="text" class="form-control" name="from" placeholder="City or Bus stop" value="{{ request.GET.from }}">
-                </div>
-                <div class="col-md-1 text-center d-flex align-items-end justify-content-center">
-                    <i class="fas fa-exchange-alt fs-4 text-secondary"></i>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">TO</label>
-                    <input type="text" class="form-control" name="to" placeholder="City or Bus stop" value="{{ request.GET.to }}">
-                </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-success w-100" type="submit">SEARCH</button>
-                </div>
-            </form>
-        </div>
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">From</label>
+                <input type="text" class="form-control" name="from" placeholder="City or Bus stop" value="{{ request.GET.from }}">
+            </div>
 
-        <!-- Displaying Results -->
-        <div class="row">
+            <div class="col-md-1 text-center exchange-icon">
+                <i class="fas fa-exchange-alt fs-4 text-secondary" aria-hidden="true"></i>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">To</label>
+                <input type="text" class="form-control" name="to" placeholder="City or Bus stop" value="{{ request.GET.to }}">
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-success w-100 rounded-pill shadow-sm" type="submit" aria-label="Search for buses">SEARCH</button>
+            </div>
+        </form>
+
+        <div class="row mt-4">
             {% if page_obj %}
                 <div id="hiddenDiv">
                     {% for cmp in page_obj %}
-                        <div class="row">
-                            <div class="col-8 pr-5">
-                                <div class="row py-1">
-                                    <div class="col-12 text-truncate">
-                                        <b class="trip-operator">{{ cmp.0 }}</b> <!-- cmp[0] is username -->
-                                    </div>
-                                </div>
-                                <div class="row pb-2">
-                                    <div class="col-6 text-left">
-                                        <span class="trip-fromstationpoint">{{ cmp.3 }}</span> <!-- cmp[3] is origin -->
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <span class="trip-tostationpoint">{{ cmp.4 }}</span> <!-- cmp[4] is destination -->
-                                    </div>
+                    <div class="row border-bottom py-3 mb-3">
+                        <div class="col-12 col-md-8">
+                            <div class="row py-1">
+                                <div class="col-12 text-truncate">
+                                    <b class="trip-operator">{{ cmp.0 }}</b> 
+                                    <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.1 }}</b>
                                 </div>
                             </div>
-                            <div class="col-4 pl-4 border-left">
-                                <div class="col text-nowrap">
-                                    <div style="display: flex; flex-direction: column;">
-                                        <span class="trip-fare">Rs.{{ cmp.2 }}</span> <!-- cmp[2] is passenger_capacity -->
-                                        <span class="trip-seatsavail">Seats Available: 37</span>
-                                    </div>
-                                    <div>
-                                        <button onclick="toggleSeat()" class="btn btn-success w-50">View Seats</button>
-                                    </div>
+                            <div class="row pb-2">
+                                <div class="col-6">
+                                    <span class="trip-fromstationpoint">{{ cmp.3 }}</span>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span class="trip-tostationpoint">{{ cmp.4 }}</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
+                            <div class="text-nowrap">
+                                <div class="d-flex flex-column">
+                                    <span class="trip-fare">Rs.{{ cmp.2 }}</span>
+                                    <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
+                                </div>
+                                <div class="mt-2">
+                                    <button onclick="toggleSeat('seatDiv{{ forloop.counter }}')" class="btn btn-success w-50 rounded-pill">View Seats</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="seatDiv{{ forloop.counter }}" class="hiddenSeat" style="display: none;">
+                        <center><h4>Select seat for <b><i>{{ cmp.0 }}</b></i> </h4></center>
+                        {% include "ticket/seats.html" %}
+                    </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p>No results found for "{{ request.GET.from }}" to "{{ request.GET.to }}."</p>
+                <p class="text-danger text-center">No buses found. Try different locations or check for available schedules.</p>
             {% endif %}
         </div>
 
-        <!-- Pagination Controls -->
-        <div class="pagination">
+        <!-- Pagination -->
+        <div class="pagination d-flex justify-content-center my-4">
             {% if page_obj.has_previous %}
-                <a href="?page=1&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">First</a>
-                <a href="?page={{ page_obj.previous_page_number }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Previous</a>
+                <a href="?page=1{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Previous</a>
             {% endif %}
 
-            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            <span class="mx-2 text-muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}&from={{ request.GET.from }}&to={{ request.GET.to }}" class="btn btn-outline-secondary">Last</a>
+                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Last</a>
             {% endif %}
         </div>
     </div>
 </div>
 
 <script>
-    function toggleSeat() {
-        var seatDiv = document.getElementById("hiddenSeat");
-        seatDiv.style.display = seatDiv.style.display === "none" ? "block" : "none";
+    function redirectToLogin() {
+        window.location.href = "login"; 
+    }
+
+    function showDiv() {
+        document.getElementById("hiddenDiv").style.display = "block";
+    }
+
+    function toggleSeat(id) {
+        document.querySelectorAll(".hiddenSeat").forEach(div => {
+            if (div.id !== id) div.style.display = "none";
+        });
+        var seatDiv = document.getElementById(id);
+        seatDiv.style.display = (seatDiv.style.display === "none" || seatDiv.style.display === "") ? "block" : "none";
     }
 </script>
 
-<style>
-    .background-text {
-        font-size: 4rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: rgba(0, 0, 0, 0.1);
-        z-index: -1;
-    }
-    #hiddenDiv {
-        display: block; /* Ensure results are visible */
-        padding: 20px;
-        background: linear-gradient(135deg, #e0f7fa, #e1bee7);
-    }
-</style>
+</body>
+</html>
