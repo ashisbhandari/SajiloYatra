@@ -81,6 +81,15 @@
             justify-content: center;
             height: 100%;
         }
+
+        /* Fix the layout to prevent shifting */
+        .seat-section {
+            display: none; /* Initially hide all seat sections */
+        }
+
+        .bus-listing {
+            position: relative;
+        }
     </style>
 </head>
 <body>
@@ -108,49 +117,51 @@
             </div>
 
             <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-success w-100 rounded-pill shadow-sm" type="submit" aria-label="Search for buses">SEARCH</button>
+                <button class="btn btn-info w-100 rounded-pill shadow-sm" type="submit" aria-label="Search for buses">SEARCH</button>
             </div>
         </form>
 
-        <div class="row mt-4">
+        <div class="row mt-4" id="busListings">
             {% if page_obj %}
-                <div id="hiddenDiv">
-                    {% for cmp in page_obj %}
-                    <div class="row border-bottom py-3 mb-3">
-                        <div class="col-12 col-md-8">
-                            <div class="row py-1">
-                                <div class="col-12 text-truncate">
-                                    <b class="trip-operator">{{ cmp.0 }}</b> 
-                                    <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.1 }}</b>
-                                </div>
-                            </div>
-                            <div class="row pb-2">
-                                <div class="col-6">
-                                    <span class="trip-fromstationpoint">{{ cmp.3 }}</span>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <span class="trip-tostationpoint">{{ cmp.4 }}</span>
-                                </div>
+                {% for cmp in page_obj %}
+                <div class="row border-bottom py-3 mb-3 bus-listing" id="busRow{{ forloop.counter }}">
+                    <div class="col-12 col-md-8">
+                        <div class="row py-1">
+                            <div class="col-12 text-truncate">
+                                <b class="trip-operator">{{ cmp.5 }}</b> 
+                                <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.1 }}</b>
                             </div>
                         </div>
-                        <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
-                            <div class="text-nowrap">
-                                <div class="d-flex flex-column">
-                                    <span class="trip-fare">Rs.{{ cmp.2 }}</span>
-                                    <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
-                                </div>
-                                <div class="mt-2">
-                                    <button onclick="toggleSeat('seatDiv{{ forloop.counter }}')" class="btn btn-success w-50 rounded-pill">View Seats</button>
-                                </div>
+                        <div class="row pb-2">
+                            <div class="col-6">
+                                <span class="trip-fromstationpoint">{{ cmp.3 }}</span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="trip-tostationpoint">{{ cmp.4 }}</span>
+                            </div>
+                        </div>
+                        <div class="col-6 text-end">
+                            <span class="Drivername">Driver Name: <b>:{{ cmp.0 }}</b></span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
+                        <div class="text-nowrap">
+                            <div class="d-flex flex-column">
+                                <span class="trip-fare">Rs.{{ cmp.2 }}</span>
+                                <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
+                            </div>
+                            <div class="mt-2">
+                                <button onclick="toggleSeatx('seatDiv{{ forloop.counter }}', 'busRow{{ forloop.counter }}')" 
+                                        class="btn btn-info w-50 rounded-pill">View Seats</button>
                             </div>
                         </div>
                     </div>
-                    <div id="seatDiv{{ forloop.counter }}" class="hiddenSeat" style="display: none;">
-                        <center><h4>Select seat for <b><i>{{ cmp.0 }}</b></i> </h4></center>
-                        {% include "ticket/seats.html" %}
-                    </div>
-                    {% endfor %}
                 </div>
+                <div id="seatDiv{{ forloop.counter }}" class="seat-section">
+                    <center><h4>Select seat for <b><i>{{ cmp.0 }}</b></i> </h4></center>
+                    {% include "ticket/seats.html" %}
+                </div>
+                {% endfor %}
             {% else %}
                 <p class="text-danger text-center">No buses found. Try different locations or check for available schedules.</p>
             {% endif %}
@@ -159,35 +170,50 @@
         <!-- Pagination -->
         <div class="pagination d-flex justify-content-center my-4">
             {% if page_obj.has_previous %}
-                <a href="?page=1{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">First</a>
-                <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Previous</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-secondary">Previous</a>
             {% endif %}
 
             <span class="mx-2 text-muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.from or request.GET.to %}&{% endif %}{% if request.GET.from %}from={{ request.GET.from }}{% endif %}{% if request.GET.to %}&to={{ request.GET.to }}{% endif %}" class="btn btn-outline-secondary">Last</a>
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-secondary">Next</a>
             {% endif %}
         </div>
     </div>
 </div>
 
 <script>
-    function redirectToLogin() {
-        window.location.href = "login"; 
-    }
+    let isSeatsVisible = false;
+    let previousBusId = null;
 
-    function showDiv() {
-        document.getElementById("hiddenDiv").style.display = "block";
-    }
+    function toggleSeatx(seatId, busId) {
+        let seatDiv = document.getElementById(seatId);
+        let allSeats = document.querySelectorAll(".seat-section");
+        let allBuses = document.querySelectorAll(".bus-listing");
 
-    function toggleSeat(id) {
-        document.querySelectorAll(".hiddenSeat").forEach(div => {
-            if (div.id !== id) div.style.display = "none";
-        });
-        var seatDiv = document.getElementById(id);
-        seatDiv.style.display = (seatDiv.style.display === "none" || seatDiv.style.display === "") ? "block" : "none";
+        if (!isSeatsVisible || previousBusId !== busId) {
+            // Hide all other buses except the clicked one
+            allBuses.forEach(bus => {
+                if (bus.id !== busId) {
+                    bus.style.display = "none";
+                }
+            });
+
+            // Hide all seats except the clicked one
+            allSeats.forEach(div => div.style.display = "none");
+
+            // Show selected seat section
+            seatDiv.style.display = "block";
+            isSeatsVisible = true;
+            previousBusId = busId;
+        } else {
+            // Show all buses again and hide seats
+            allBuses.forEach(bus => bus.style.display = "block");
+            allSeats.forEach(div => div.style.display = "none");
+            window.location.reload();
+            isSeatsVisible = false;
+            previousBusId = null;
+        }
     }
 </script>
 

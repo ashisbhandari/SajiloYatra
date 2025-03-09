@@ -100,6 +100,12 @@ class BusRoute(models.Model):
     vehicle_type = models.CharField(max_length=50)
     destination = models.CharField(max_length=100)
     passenger_capacity = models.IntegerField()
+    comp_name = models.CharField(max_length=100)
 
     def __str__(self):
         return f"{self.vehicle_number} - {self.origin} to {self.destination}"
+    def save(self, *args, **kwargs):
+        # If comp_name is not set, assign the logged-in company's name
+        if not self.comp_name and hasattr(self, 'request'):
+            self.comp_name = self.request.user.username  # Assuming username stores the company name
+        super().save(*args, **kwargs)

@@ -112,7 +112,7 @@ def dashboard(request):
 def company_dashboard(request):
     try:
         with connection.cursor() as curs:
-            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_date FROM ticket_busroute WHERE username = %s""",[request.user.username])
+            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_date FROM ticket_busroute WHERE comp_name = %s""",[request.user.username])
             route_data=curs.fetchall()
         paginator=Paginator(route_data,5)
         pageno=request.GET.get('page')
@@ -166,15 +166,17 @@ def register_bus(request):
     if request.method == 'POST':
         form = BusRouteForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the form data to the database
-            return redirect('/comp_dash')  # Redirect to the vehicle travel history page
+            bus_route = form.save(commit=False)  # Don't save to DB yet
+            bus_route.comp_name = request.user.username  # Assign company name
+            bus_route.save()  # Now save to DB
+            return redirect('/comp_dash')  # Redirect to dashboard
     else:
         form = BusRouteForm()
 
     return render(request, 'ticket/register_bus.html', {'form': form, 'today': today})
 
 
-def test(request):
+def search_vech(request):
      # Get user input for 'from' and 'to' cities
     origin = request.GET.get('from', '')
     destination = request.GET.get('to', '')
@@ -183,7 +185,7 @@ def test(request):
         page_obj = []
     else:
         # Prepare SQL query to filter bus routes based on 'from' and 'to'
-        qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination 
+        qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination,comp_name 
                  FROM ticket_busroute 
                  WHERE origin LIKE %s AND destination LIKE %s"""
         
@@ -204,4 +206,4 @@ def test(request):
             print("Error occurred:", ex)
             page_obj = []
 
-    return render(request, 'ticket/hi.html', {'page_obj': page_obj, 'origin': origin, 'destination': destination})
+    return render(request, 'ticket/search_vech.html', {'page_obj': page_obj, 'origin': origin, 'destination': destination})
