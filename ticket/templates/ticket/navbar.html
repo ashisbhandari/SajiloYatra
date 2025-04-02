@@ -28,9 +28,10 @@
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* First Row: Logo, Socials, Search */
+        /* Navbar Top Section */
         .navbar-top {
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             padding: 10px 20px;
@@ -43,52 +44,42 @@
             margin-right: 10px;
             transition: 0.3s;
         }
-
-        /* Add spacing between first social link */
-        .social-icons a:first-child {
-            margin-left: 15px;
-        }
-
         .social-icons a:hover {
             color: #ff6347;
         }
 
-        /* Phone Contact */
-        .phone-container {
+        /* Contact Info */
+        .contact-container {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .contact-container a {
             color: black;
-            margin-right: 15px;
+            text-decoration: none;
         }
 
-        .phone-icon {
-            margin-right: 8px;
-            font-size: 16px;
+        /* Login Buttons */
+        .btn-login {
+            border: 2px solid green;
+            color: green;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn-login:hover {
+            background: green;
+            color: white;
         }
 
-        /* Search Bar */
-        .search-container {
-            position: relative;
-            width: 250px;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding-right: 30px;
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        /* Second Row: Navigation */
+        /* Navbar Bottom */
         .navbar-bottom {
             background: #e1bee7;
             padding: 10px 0;
+            transition: background 0.3s ease;
+        }
+        .navbar-bottom.transparent {
+            background: transparent !important;
         }
 
         .navbar-bottom .nav-link {
@@ -96,43 +87,80 @@
             font-weight: bold;
             padding: 10px 15px;
         }
-
         .navbar-bottom .nav-link:hover {
             color: #ff6347;
         }
 
-        /* Improved login/signup button styling */
-        .btn-login {
-            border: 2px solid green;
-            color: green;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: 0.3s ease-in-out;
+        /* Adjust Ticket Options Dropdown */
+        #ticketOptions {
+            width: 120px;
+            font-size: 14px;
+            padding: 5px;
         }
 
-        .btn-login:hover {
-            background: green;
-            color: white;
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .navbar-top {
+                flex-direction: column;
+                text-align: center;
+            }
+            .contact-container {
+                justify-content: center;
+            }
+            .social-icons {
+                margin-bottom: 10px;
+            }
+            .login-options {
+                flex-direction: column;
+                gap: 5px;
+            }
+            /* Adjust navbar menu for mobile view */
+            .navbar-nav {
+                text-align: center;
+            }
         }
-
-        /* Adjusted dropdown styling */
-        .form-select {
-            border: 2px solid #28a745;
-            padding: 6px;
+        @media (max-width: 768px) {
+            .navbar-top {
+                flex-direction: column;
+                text-align: center;
+            }
+    
+            /* Adjust the social icons and contact info */
+            .social-icons {
+                margin-bottom: 10px;
+            }
+    
+            .contact-container {
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+    
+            .login-options {
+                flex-direction: column;
+                gap: 5px;
+            }
+    
+            /* Adjust Navbar for Mobile View */
+            .navbar-nav {
+                text-align: center;
+            }
+    
+            .navbar-top .d-flex {
+                justify-content: center;
+                align-items: center;
+            }
+    
+            /* Adjust Dropdown for Mobile View */
+            #ticketOptions {
+                width: 180px;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
         }
-
-        /* Space out login buttons */
-        .login-options {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .login{
+            font-size: 15px;
         }
-
-        /* Navbar Toggle for Mobile */
-        .navbar-toggler {
-            border: none;
-        }
-
+        
     </style>
 </head>
 <body>
@@ -170,7 +198,7 @@
 
             <!-- Login, Signup, and Dropdown -->
             <div class="d-flex login-options">
-                <select class="form-select me-2" id="ticketOptions" onchange="navigateToPage()">
+                <select class="form-select me-2 box" id="ticketOptions" onchange="navigateToPage()">
                     <option selected>Tickets</option>
                     <option value="/#bus_ticket">View Tickets</option>
                     <option value="/cancel_ticket">Cancel Tickets</option>
@@ -191,19 +219,19 @@
 
                 <a href="/register_company" class="me-2">
                     <button type="button" class="btn btn-login">
-                        <i class="fas fa-user-plus me-1"> Company</i>
+                        <i class="fas fa-user-plus me-1 login"> Company</i>
                     </button>
                 </a>
                 
                 <a href="/login" class="me-2">
                     <button type="button" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt me-1"> Login</i>
+                        <i class="fas fa-sign-in-alt me-1 login"> Login</i>
                     </button>
                 </a>
 
                 <a href="/register_user">
                     <button type="button" class="btn btn-login">
-                        <i class="fas fa-user-plus me-1"> Signup</i>
+                        <i class="fas fa-user-plus me-1 login"> Signup</i>
                     </button>
                 </a>
             </div>

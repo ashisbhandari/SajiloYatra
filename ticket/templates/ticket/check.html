@@ -4,194 +4,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SajiloYatra - Find Bus</title>
-    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
-    
+    <title></title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        .background-text {
-            font-size: 5rem;
+        body {
+            padding-top: 110px; /* Adjust according to navbar height */
+        }
+
+        /* Wrapper for navbar */
+        .navbar-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* First Row: Logo, Socials, Search */
+        .navbar-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        /* Social Icons */
+        .social-icons a {
+            color: black;
+            font-size: 18px;
+            margin-right: 10px;
+            transition: 0.3s;
+        }
+
+        /* Add spacing between first social link */
+        .social-icons a:first-child {
+            margin-left: 15px;
+        }
+
+        .social-icons a:hover {
+            color: #ff6347;
+        }
+
+        /* Phone Contact */
+        .phone-container {
+            display: flex;
+            align-items: center;
+            color: black;
+            margin-right: 15px;
+        }
+
+        .phone-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding-right: 30px;
+        }
+
+        .search-icon {
             position: absolute;
+            right: 10px;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(0, 0, 0, 0.1);
-            z-index: -1;
+            transform: translateY(-50%);
+            color: #888;
         }
 
-        .trip-operator {
+        /* Second Row: Navigation */
+        .navbar-bottom {
+            background: #e1bee7;
+            padding: 10px 0;
+        }
+
+        .navbar-bottom .nav-link {
+            color: black !important;
             font-weight: bold;
-            font-size: 1.2rem;
+            padding: 10px 15px;
         }
 
-        .chips-night {
-            font-size: 0.9rem;
-            background-color: #333;
+        .navbar-bottom .nav-link:hover {
+            color: #ff6347;
         }
 
-        .trip-fare {
-            font-size: 1.3rem;
-            color: #28a745;
+        /* Improved login/signup button styling */
+        .btn-login {
+            border: 2px solid green;
+            color: green;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: 0.3s ease-in-out;
         }
 
-        .trip-seatsavail {
-            font-size: 1rem;
-            color: #6c757d;
+        .btn-login:hover {
+            background: green;
+            color: white;
         }
 
-        .pagination {
+        /* Adjusted dropdown styling */
+        .form-select {
+            border: 2px solid #28a745;
+            padding: 6px;
+        }
+
+        /* Space out login buttons */
+        .login-options {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
 
-        .pagination a {
-            text-decoration: none;
+        /* Navbar Toggle for Mobile */
+        .navbar-toggler {
+            border: none;
         }
 
-        .pagination .btn-outline-secondary {
-            border-radius: 20px;
-            font-weight: bold;
-            padding: 8px 16px;
-            color: #17a2b8;
-        }
-
-        .pagination .btn-outline-secondary:hover {
-            background-color: #17a2b8;
-            color: #fff;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .trip-operator { font-size: 1rem; }
-            .trip-fare { font-size: 1.1rem; }
-            .btn { font-size: 0.9rem; padding: 10px; }
-        }
-
-        /* Add border for medium screens */
-        .border-left-md {
-            border-left: 1px solid #dee2e6;
-        }
-
-        .exchange-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
     </style>
 </head>
 <body>
 
-<div class="container my-5">
-    <div class="py-5 position-relative" id="bus_ticket">
-        <h3 class="background-text">Find Bus</h3>
-        <h3 class="text-center">Find Bus</h3>
-    </div>
-    
-    <div class="card p-4 shadow-sm">
-        <form method="GET" class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">From</label>
-                <input type="text" class="form-control" name="from" placeholder="City or Bus stop" value="{{ request.GET.from }}">
+    <!-- Navbar Wrapper -->
+    <div class="navbar-wrapper">
+        <!-- First Row -->
+        <div class="navbar-top">
+            <!-- Social Media Icons -->
+            <div class="social-icons">
+                <a href="https://api.whatsapp.com/send/?phone=%2B9779824915826" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/adee.tya.39" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
             </div>
 
-            <div class="col-md-1 text-center exchange-icon">
-                <i class="fas fa-exchange-alt fs-4 text-secondary" aria-hidden="true"></i>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">To</label>
-                <input type="text" class="form-control" name="to" placeholder="City or Bus stop" value="{{ request.GET.to }}">
-            </div>
-
-            <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-info w-100 rounded-pill shadow-sm" type="submit" aria-label="Search for buses">SEARCH</button>
-            </div>
-        </form>
-
-        <div class="row mt-4">
-            {% if page_obj %}
-                <div id="hiddenDiv">
-                    {% for cmp in page_obj %}
-                    <div class="row border-bottom py-3 mb-3 bus-listing">
-                        <div class="col-12 col-md-8">
-                            <div class="row py-1">
-                                <div class="col-12 text-truncate">
-                                    <b class="trip-operator">{{ cmp.5 }}</b> 
-                                    <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.1 }}</b>
-                                </div>
-                            </div>
-                            <div class="row pb-2">
-                                <div class="col-6">
-                                    <span class="trip-fromstationpoint">{{ cmp.3 }}</span>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <span class="trip-tostationpoint">{{ cmp.4 }}</span>
-                                </div>
-                            </div>
-                            <div class="col-6 text-end">
-                                <span class="Drivername">Driver Name: <b>:{{ cmp.0 }}</b></span>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
-                            <div class="text-nowrap">
-                                <div class="d-flex flex-column">
-                                    <span class="trip-fare">Rs.{{ cmp.2 }}</span>
-                                    <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
-                                </div>
-                                <div class="mt-2">
-                                    <button onclick="toggleSeatx('seatDiv{{ forloop.counter }}', {{ forloop.counter0 }})" 
-                                            class="btn btn-info w-50 rounded-pill">View Seats</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="seatDiv{{ forloop.counter }}" class="hiddenSeat" style="display: none;">
-                        <center><h4>Select seat for <b><i>{{ cmp.0 }}</b></i> </h4></center>
-                        {% include "ticket/seats.html" %}
-                    </div>
-                    {% endfor %}
+            <!-- Phone Contacts -->
+            <div class="d-flex">
+                <div class="phone-container">
+                    <a href="tel:+9779801445777" class="text-black">
+                        <i class="fas fa-phone-alt phone-icon"></i> 9801445777
+                    </a>
                 </div>
-            {% else %}
-                <p class="text-danger text-center">No buses found. Try different locations or check for available schedules.</p>
-            {% endif %}
+                <div class="phone-container">
+                    <a href="tel:+9779824915826" class="text-black">
+                        <i class="fas fa-phone-alt phone-icon"></i> 9824915826
+                    </a>
+                </div>
+                <div class="email-container">
+                    <a href="mailto:photolaija@email.com" class="text-black">
+                        <i class="fas fa-envelope email-icon"></i>photolaija@email.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Login, Signup, and Dropdown -->
+            <div class="d-flex login-options">
+                <select class="form-select me-2" id="ticketOptions" onchange="navigateToPage()">
+                    <option selected>Tickets</option>
+                    <option value="/#bus_ticket">View Tickets</option>
+                    <option value="/cancel_ticket">Cancel Tickets</option>
+                    <option value="/Book_ticket">Book Tickets</option>
+                </select>
+                
+                <script>
+                    function navigateToPage() {
+                        let select = document.getElementById("ticketOptions");
+                        let value = select.value;
+                
+                        if (value !== "Tickets") {
+                            window.location.href = value; // Navigate to the selected option
+                        }
+                    }
+                </script>
+                
+
+                <a href="/register_company" class="me-2">
+                    <button type="button" class="btn btn-login">
+                        <i class="fas fa-user-plus me-1"> Company</i>
+                    </button>
+                </a>
+                
+                <a href="/login" class="me-2">
+                    <button type="button" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt me-1"> Login</i>
+                    </button>
+                </a>
+
+                <a href="/register_user">
+                    <button type="button" class="btn btn-login">
+                        <i class="fas fa-user-plus me-1"> Signup</i>
+                    </button>
+                </a>
+            </div>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination d-flex justify-content-center my-4">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-secondary">Previous</a>
-            {% endif %}
+        <!-- Second Row: Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-bottom">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <img src="{% static 'ticket/image/logoplease.png' %}" alt="SajiloYatra" width="100" height="60">
+                </a>
 
-            <span class="mx-2 text-muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                <!-- Navbar Toggler -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-secondary">Next</a>
-            {% endif %}
-        </div>
+                <!-- Navbar Items -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <!-- Navigation Links -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#bus_ticket">Bus Tickets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Reserve_vehicle">Reservations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#abt">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#service">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#contact">Contact</a>
+                        </li>
+                        
+                    </ul>
+                    <a class="nav-link marquee-container" href="/">
+                        <marquee behavior="scroll" direction="left">
+                            ( <span>Your Journey Starts From Here With SajiloYatra</span> )
+                        </marquee>
+                    </a>
+                    
+                </div>
+            </div>
+        </nav>
     </div>
-</div>
 
-<script>
-    function toggleSeatx(id, busIndex) {
-        // Hide all seat selection divs
-        document.querySelectorAll(".hiddenSeat").forEach(div => div.style.display = "none");
-
-        // Hide all bus listings except the selected one
-        document.querySelectorAll(".bus-listing").forEach((listing, index) => {
-            if (index !== busIndex) {
-                listing.style.display = "none";
-            }
-        });
-
-        // Show the selected seat div
-        var seatDiv = document.getElementById(id);
-        seatDiv.style.display = (seatDiv.style.display === "none" || seatDiv.style.display === "") ? "block" : "none";
-    }
-</script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

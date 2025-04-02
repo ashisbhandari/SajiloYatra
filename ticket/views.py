@@ -16,7 +16,36 @@ from ticket.models import UserRegistration, companyRegistration  # Import models
 # Create your views here.
 
 def home(request):
-    return render(request, 'ticket/index.html')
+    origin = request.GET.get('from', '')
+    destination = request.GET.get('to', '')
+
+    if not origin or not destination:  # If either from or to is empty, return empty results
+        page_obj = []
+    else:
+        # Prepare SQL query to filter bus routes based on 'from' and 'to'
+        qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination,comp_name 
+                 FROM ticket_busroute 
+                 WHERE origin LIKE %s AND destination LIKE %s"""
+        
+        # Parameters to prevent SQL injection
+        params = [f"%{origin}%", f"%{destination}%"]
+
+        try:
+            with connection.cursor() as cur:
+                cur.execute(qry, params)
+                route_data = cur.fetchall()
+
+                # Paginate the results
+                paginator = Paginator(route_data, 5)
+                page_no = request.GET.get('page')
+                page_obj = paginator.get_page(page_no)
+
+        except Exception as ex:
+            print("Error occurred:", ex)
+            page_obj = []
+
+    return render(request, 'ticket/index.html', {'page_obj': page_obj, 'origin': origin, 'destination': destination})
+    # return render(request, 'ticket/index.html')
 
 def reservation(request):
     return render(request, 'ticket/reserve_vech.html')

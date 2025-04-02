@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seats</title>
+    <title>SajiloYatra-Seat</title>
+    
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    
     <style>
         .seat {
             display: flex;
@@ -27,7 +30,13 @@
         .seat-line button, .last-line button {
             width: 50px; 
         }
-        
+        .payment-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -58,7 +67,6 @@
                     // Update the link dynamically with selected seat values
                     let proceedLink = document.getElementById("proceedLink");
                     proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}`;
-
                 });
             });
     
@@ -185,13 +193,6 @@
                     <b>Selected Seats (0):<br></b> None
                 </div>
             </div>
-            <style>
-                .payment-container {
-                    display: flex;
-                    justify-content:center; /* Aligns content to the right */
-                    padding: 10px; /* Optional padding */
-                }
-            </style>
         </div>
     </div>
 </body>
