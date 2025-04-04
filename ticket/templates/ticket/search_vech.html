@@ -13,7 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <style>
+        body{
+            background-color: rgba(245, 242, 240, 0.7); 
+            background-image: url({% static 'ticket/image/logoplease.png' %});
+            background-repeat: no-repeat;
+            background-size:fit;
+        }
         .background-text {
+            
             font-size: 5rem;
             position: absolute;
             top: 50%;
@@ -90,10 +97,96 @@
         .bus-listing {
             position: relative;
         }
+        .clock {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+        }
     </style>
 </head>
 <body>
+<div class="clock">
+    <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                height: 100vh; /* Full viewport height */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .datetime {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .date {
+                font-size: 2rem solid black;
+                background-color: transparent;
+                
+                padding: 10px;
+                box-shadow: 0 0 5px rgb(76, 76, 77);
+                border-radius: 15px;
+                margin-bottom: 10px; /* Space between date and time */
+            }
+            .time-blocks {
+                display: flex;
+                gap: 10px;
+            }
+            .time-block {
+                font-size: 2rem solid black;
+                background-color: transparent;
+                box-shadow: 0 0 5px rgb(76, 76, 77);
+                padding: 10px;
+                border-radius: 5px;
+                width: 40px;
+                text-align: center;
+                font-size: 1rem;
+            }
+    </style>
 
+    <div class="datetime">
+        <div class="date" id="date"></div>
+        <div class="time-blocks">
+            <div class="time-block" id="hours"></div>
+            <div class="time-block" id="minutes"></div>
+            <div class="time-block" id="ampm"></div>
+        </div>
+    </div>
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Date
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = now.toLocaleDateString('en-US', dateOptions);
+            document.getElementById('date').textContent = dateStr;
+
+            // Time
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('ampm').textContent = ampm;
+        }
+
+        // Update date and time immediately
+        updateDateTime();
+        
+        // Update every second
+        setInterval(updateDateTime, 1000);
+    </script>
+
+</div>
 <div class="container my-5">
     <div class="py-5 position-relative" id="bus_ticket">
         <h3 class="background-text">Find Bus</h3>
