@@ -287,22 +287,32 @@
         <h1 class="background-text">Contact Us</h1>
         <h3 class="text-center">Contact Us</h3>
     </div>
-    <div class="container-fluid">
+    <style>
+        label{
+            font-size: 20px;
+            margin: 8px;
+            font-weight:bolder;
+        }
+       
+    </style>
+    <div class="container-fluid w-50 m-auto contactinfo">
         <form>
+            
             <label for="name">Your name</label>
-            <input class="form-control" type="text" name="name" id="name" placeholder="Full name here..." required>
+            <input class="form-control" type="text" name="name" id="name"  placeholder="Full name here..." required>
             
             <label for="contact">Contact number</label>
             <input class="form-control" type="number" name="contact" id="contact" placeholder="9812345678" maxlength="10" required>
             
             <label for="email">Email</label>
-            <input class="form-control" type="email" name="email" id="email" required>
+            <input class="form-control" type="email" placeholder="sajiloyatra@gmail.com" name="email" id="email" required>
             
             <label for="comments">Comments</label>
             <textarea class="form-control" name="comments" id="comments" placeholder="Your comments here..."></textarea>
             
             <br>
             <input class="form-control btn btn-success" type="submit" name="submit" id="submit">
+            
         </form>
     </div>
 </section>
