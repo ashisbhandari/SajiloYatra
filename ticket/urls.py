@@ -14,6 +14,7 @@ urlpatterns = [
     path('register/', views.register_bus, name='register_bus'),
     path('cancel_ticket/', views.cancel, name='cancel_ticket'),
     path('seat/', views.seat, name='cancel_ticket'),
+    path('check/', views.map, name='map'),
     # path('vehicle-history/', views.vehicle_history, name='vehicle_history'),
     # path('con/',views.contctt, name="vech_contact"),,
     # path('bus-info/', views.bus_info_dashboard, name='bus_info_dashboard'),

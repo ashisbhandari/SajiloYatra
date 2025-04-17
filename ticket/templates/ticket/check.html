@@ -4,260 +4,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-
+    <title>SajiloYatra-Seat</title>
+    
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        body {
-            padding-top: 110px; /* Adjust according to navbar height */
-        }
-
-        /* Wrapper for navbar */
-        .navbar-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* First Row: Logo, Socials, Search */
-        .navbar-top {
+        .seat {
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
+            padding-top: 20px;
+            flex-direction: column;
         }
-
-        /* Social Icons */
-        .social-icons a {
-            color: black;
-            font-size: 18px;
-            margin-right: 10px;
-            transition: 0.3s;
-        }
-
-        /* Add spacing between first social link */
-        .social-icons a:first-child {
-            margin-left: 15px;
-        }
-
-        .social-icons a:hover {
-            color: #ff6347;
-        }
-
-        /* Phone Contact */
-        .phone-container {
+        .seat-line {
             display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 10px;
+        }
+        .last-line {
+            display: flex;
+            justify-content: center;
+            gap: 10px; 
+        }
+        .seat-line button, .last-line button {
+            width: 50px; 
+        }
+        .payment-container {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            flex-direction: column;
             align-items: center;
-            color: black;
-            margin-right: 15px;
         }
-
-        .phone-icon {
-            margin-right: 8px;
-            font-size: 16px;
-        }
-
-        /* Search Bar */
-        .search-container {
-            position: relative;
-            width: 250px;
-        }
-
-        .search-container input {
-            width: 100%;
-            padding-right: 30px;
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #888;
-        }
-
-        /* Second Row: Navigation */
-        .navbar-bottom {
-            background: #e1bee7;
-            padding: 10px 0;
-        }
-
-        .navbar-bottom .nav-link {
-            color: black !important;
+        .error-message {
+            color: red;
             font-weight: bold;
-            padding: 10px 15px;
+            margin-bottom: 15px;
+            display: none; /* Initially hidden */
         }
 
-        .navbar-bottom .nav-link:hover {
-            color: #ff6347;
+        /* Accessibility styles */
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
         }
-
-        /* Improved login/signup button styling */
-        .btn-login {
-            border: 2px solid green;
-            color: green;
-            padding: 8px 12px;
-            border-radius: 5px;
-            transition: 0.3s ease-in-out;
-        }
-
-        .btn-login:hover {
-            background: green;
-            color: white;
-        }
-
-        /* Adjusted dropdown styling */
-        .form-select {
-            border: 2px solid #28a745;
-            padding: 6px;
-        }
-
-        /* Space out login buttons */
-        .login-options {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Navbar Toggle for Mobile */
-        .navbar-toggler {
-            border: none;
-        }
-
     </style>
 </head>
 <body>
-
-    <!-- Navbar Wrapper -->
-    <div class="navbar-wrapper">
-        <!-- First Row -->
-        <div class="navbar-top">
-            <!-- Social Media Icons -->
-            <div class="social-icons">
-                <a href="https://api.whatsapp.com/send/?phone=%2B9779824915826" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.facebook.com/adee.tya.39" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.youtube.com/" target="_blank"><i class="fab fa-youtube"></i></a>
-            </div>
-
-            <!-- Phone Contacts -->
-            <div class="d-flex">
-                <div class="phone-container">
-                    <a href="tel:+9779801445777" class="text-black">
-                        <i class="fas fa-phone-alt phone-icon"></i> 9801445777
-                    </a>
+    <div class="seat">
+        <div class="col-md-6">
+            <div class="cabin">
+                <div class="seat-line">
+                    <div class="a">
+                        <br><br>
+                        <p><b><i>Door</i></b></p> 
+                    </div>
+                    <div class="b" style="padding-left: 60px;">
+                        <img src="{% static 'ticket/image/driver.png' %}" alt="Driver" height="100px" width="100px">
+                    </div>
                 </div>
-                <div class="phone-container">
-                    <a href="tel:+9779824915826" class="text-black">
-                        <i class="fas fa-phone-alt phone-icon"></i> 9824915826
-                    </a>
+            </div><br>
+            {% for row in "ABCDEFGH" %}
+            <div class="seat-line">
+                <div class="a">
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}1">{{ row }}1</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}2">{{ row }}2</button>
                 </div>
-                <div class="email-container">
-                    <a href="mailto:photolaija@email.com" class="text-black">
-                        <i class="fas fa-envelope email-icon"></i>photolaija@email.com
-                    </a>
+                <div class="b">
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}3">{{ row }}3</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}4">{{ row }}4</button>
                 </div>
             </div>
+            {% endfor %}
 
-            <!-- Login, Signup, and Dropdown -->
-            <div class="d-flex login-options">
-                <select class="form-select me-2" id="ticketOptions" onchange="navigateToPage()">
-                    <option selected>Tickets</option>
-                    <option value="/#bus_ticket">View Tickets</option>
-                    <option value="/cancel_ticket">Cancel Tickets</option>
-                    <option value="/Book_ticket">Book Tickets</option>
-                </select>
-                
-                <script>
-                    function navigateToPage() {
-                        let select = document.getElementById("ticketOptions");
-                        let value = select.value;
-                
-                        if (value !== "Tickets") {
-                            window.location.href = value; // Navigate to the selected option
-                        }
-                    }
-                </script>
-                
+            <!-- Last Row (L) -->
+            <div class="last-line">
+                <button class="btn btn-outline-success selected-seat" id="L1">L1</button>
+                <button class="btn btn-outline-success selected-seat" id="L2">L2</button>
+                <button class="btn btn-outline-success selected-seat" id="L3">L3</button>
+                <button class="btn btn-outline-success selected-seat" id="L4">L4</button>
+                <button class="btn btn-outline-success selected-seat" id="L5">L5</button>
+            </div>
 
-                <a href="/register_company" class="me-2">
-                    <button type="button" class="btn btn-login">
-                        <i class="fas fa-user-plus me-1"> Company</i>
-                    </button>
-                </a>
-                
-                <a href="/login" class="me-2">
-                    <button type="button" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt me-1"> Login</i>
-                    </button>
-                </a>
+            <div class="payment-container">
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message">Please select a seat before proceeding.</div>
 
-                <a href="/register_user">
-                    <button type="button" class="btn btn-login">
-                        <i class="fas fa-user-plus me-1"> Signup</i>
-                    </button>
+                <a id="proceedLink" href="#">
+                    <button id="proceedButton" class="btn btn-primary mt-3" disabled>Proceed to Payment</button>
                 </a>
+                <div id="selectedSeatInfo" class="mt-3" style="text-align: center; font-size: 18px;">
+                    <b>Selected Seats (0):<br></b> None
+                </div>
             </div>
         </div>
-
-        <!-- Second Row: Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-bottom">
-            <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img src="{% static 'ticket/image/logoplease.png' %}" alt="SajiloYatra" width="100" height="60">
-                </a>
-
-                <!-- Navbar Toggler -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <!-- Navbar Items -->
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <!-- Navigation Links -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#bus_ticket">Bus Tickets</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Reserve_vehicle">Reservations</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#abt">About</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#service">Services</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/#contact">Contact</a>
-                        </li>
-                        
-                    </ul>
-                    <a class="nav-link marquee-container" href="/">
-                        <marquee behavior="scroll" direction="left">
-                            ( <span>Your Journey Starts From Here With SajiloYatra</span> )
-                        </marquee>
-                    </a>
-                    
-                </div>
-            </div>
-        </nav>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const buttons = document.querySelectorAll(".selected-seat");
+            var proceedButton = document.getElementById("proceedButton");
+            var errorMessage = document.getElementById("errorMessage");
+            let selectedSeats = [];
+
+            buttons.forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    const seatId = this.id;
+                    if (this.classList.contains("btn-success")) {
+                        this.classList.remove("btn-success");
+                        this.classList.add("btn-outline-success");
+                        selectedSeats = selectedSeats.filter(seat => seat !== seatId);
+                    } else {
+                        if (selectedSeats.length < 5) {
+                            this.classList.remove("btn-outline-success");
+                            this.classList.add("btn-success");
+                            selectedSeats.push(seatId);
+                        } else {
+                            alert("You can select a maximum of 5 seats only at a time.");
+                        }
+                    }
+
+                    proceedButton.disabled = selectedSeats.length === 0;
+                    updateSelectedSeatsDisplay();
+
+                    // Update the link dynamically with selected seat values
+                    let proceedLink = document.getElementById("proceedLink");
+                    proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}`;
+
+                    // Show or hide error message based on seat selection
+                    if (selectedSeats.length === 0) {
+                        errorMessage.style.display = 'block'; // Show error message when no seat is selected
+                    } else {
+                        errorMessage.style.display = 'none';  // Hide error message when seats are selected
+                    }
+                });
+            });
+
+            // Listen for "Proceed to Payment" button click
+            proceedButton.addEventListener("click", function(event) {
+                if (selectedSeats.length === 0) {
+                    event.preventDefault(); // Prevent navigation
+                    errorMessage.style.display = 'block'; // Show error message
+                }
+            });
+
+            function updateSelectedSeatsDisplay() {
+                let seatInfo = document.getElementById("selectedSeatInfo");
+                seatInfo.innerHTML = `<b>Selected Seats (${selectedSeats.length}):</b><br> ${selectedSeats.join(", ")}`;
+            }
+        });
+    </script>
 </body>
 </html>

@@ -148,14 +148,14 @@
                         <tbody>
                             {% for cmp in page_obj %}
                             <tr>
-                                <td>{{ cmp.0 }}</td> <!-- vehicle_number -->
-                                <td>{{ cmp.1 }}</td> <!-- username -->
-                                <td>{{ cmp.2 }}</td> <!-- contact -->
-                                <td>{{ cmp.3 }}</td> <!-- origin -->
-                                <td>{{ cmp.4 }}</td> <!-- vehicle_type -->
-                                <td>{{ cmp.5 }}</td> <!-- destination -->
-                                <td>{{ cmp.6 }}</td> <!-- passenger_capacity -->
-                                <td>{{ cmp.7 }}</td> <!-- departure_date -->
+                                <td>{{ cmp.0 }}</td> 
+                                <td>{{ cmp.1 }}</td> 
+                                <td>{{ cmp.2 }}</td> 
+                                <td>{{ cmp.3 }}</td> 
+                                <td>{{ cmp.4 }}</td> 
+                                <td>{{ cmp.5 }}</td> 
+                                <td>{{ cmp.6 }}</td> 
+                                <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
                             </tr>
                             {% empty %}
                             <tr>

@@ -258,24 +258,26 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>Bus Number</th>
-                                <th>Name</th>
+                                <th>Driver Name</th>
                                 <th>Number</th>
                                 <th>From</th>
                                 <th>Vehicle Type</th>
                                 <th>To</th>
                                 <th>Total Capacity</th>
+                                <th>Dept Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for company in page_obj %}
+                            {% for cmp in page_obj %}
                             <tr>
-                                <td>{{ company.vehicle_number }}</td>
-                                <td>{{ company.username }}</td>
-                                <td>{{ company.contact }}</td>
-                                <td>{{ company.origin }}</td>
-                                <td>{{ company.vehicle_type }}</td>
-                                <td>{{ company.destination }}</td>
-                                <td>{{ company.passenger_capacity }}</td>
+                                <td>{{ cmp.0 }}</td> 
+                                <td>{{ cmp.1 }}</td> 
+                                <td>{{ cmp.2 }}</td> 
+                                <td>{{ cmp.3 }}</td> 
+                                <td>{{ cmp.4 }}</td> 
+                                <td>{{ cmp.5 }}</td> 
+                                <td>{{ cmp.6 }}</td> 
+                                <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
                             </tr>
                             {% empty %}
                             <tr>

@@ -59,7 +59,7 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label"><b>Passenger Name</b></label>
-                    <input type="text" class="form-control" name="username" placeholder="Enter your name" required>
+                    <input type="text" class="form-control" name="name" placeholder="Enter your name" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label"><b>Email Address</b></label>
@@ -69,7 +69,7 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label"><b>Contact Number</b></label>
-                    <input type="tel" class="form-control" name="contact" placeholder="9800000000" required>
+                    <input type="tel" class="form-control" name="phone" placeholder="9800000000" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label"><b>Special Instructions</b></label>
@@ -78,6 +78,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
+                    <input type="hidden" name="seats" value="{{ selected_seats|length }}">
                     <h2>Selected Seats: {{ selected_seats|length }}</h2>
                     <h3>
                         <b>
@@ -88,8 +89,14 @@
                             {% endif %}
                         </b>
                     </h3>
-                    <h4>Bus Name:</h4>
+                    <h4 class="busname">Bus Name:</h4>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label"><b>Departure Time</b></label>
+                    <input type="datetime-local" class="form-control" name="departure_time" 
+                           min="{% now 'Y-m-d\TH:i' %}" required>  <!-- Disable past dates -->
+                </div>
+                
                 <div class="col-md-6">
                     <h2>Total Fare: <span id="fare-display">0.00</span></h2>
                 

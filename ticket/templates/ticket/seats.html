@@ -8,6 +8,9 @@
     
     <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
     
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         .seat {
             display: flex;
@@ -37,13 +40,76 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Accessibility styles */
+        .btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
     </style>
+</head>
+<body>
+    <div class="seat">
+        <div class="col-md-6">
+            <!-- Message to show if no seat is selected -->
+            <div id="seatMessage" style="color: red; font-weight: bold; text-align: center; margin-bottom: 20px;">
+                Please select a seat before proceeding.
+            </div>
+
+            <div class="cabin">
+                <div class="seat-line">
+                    <div class="a">
+                        <br><br>
+                        <p><b><i>Door</i></b></p> 
+                    </div>
+                    <div class="b" style="padding-left: 60px;">
+                        <img src="{% static 'ticket/image/driver.png' %}" alt="Driver" height="100px" width="100px">
+                    </div>
+                </div>
+            </div><br>
+            {% for row in "ABCDEFGH" %}
+            <div class="seat-line">
+                <div class="a">
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}1">{{ row }}1</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}2">{{ row }}2</button>
+                </div>
+                <div class="b">
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}3">{{ row }}3</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}4">{{ row }}4</button>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Last Row (L) -->
+            <div class="last-line">
+                <button class="btn btn-outline-success selected-seat" id="L1">L1</button>
+                <button class="btn btn-outline-success selected-seat" id="L2">L2</button>
+                <button class="btn btn-outline-success selected-seat" id="L3">L3</button>
+                <button class="btn btn-outline-success selected-seat" id="L4">L4</button>
+                <button class="btn btn-outline-success selected-seat" id="L5">L5</button>
+            </div>
+
+            <div class="payment-container">
+                <a id="proceedLink" href="#">
+                    <button id="proceedButton" class="btn btn-primary mt-3" disabled>Proceed to Payment</button>
+                </a>
+                <div id="selectedSeatInfo" class="mt-3" style="text-align: center; font-size: 18px;">
+                    <b>Selected Seats (0):<br></b> None
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".selected-seat");
             var proceedButton = document.getElementById("proceedButton");
+            var seatMessage = document.getElementById("seatMessage");
             let selectedSeats = [];
-    
+
             buttons.forEach((btn) => {
                 btn.addEventListener("click", function () {
                     const seatId = this.id;
@@ -60,140 +126,36 @@
                             alert("You can select a maximum of 5 seats only at a time.");
                         }
                     }
-    
+
                     proceedButton.disabled = selectedSeats.length === 0;
                     updateSelectedSeatsDisplay();
-    
+
                     // Update the link dynamically with selected seat values
                     let proceedLink = document.getElementById("proceedLink");
                     proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}`;
+
+                    // Update the message visibility based on seat selection
+                    if (selectedSeats.length === 0) {
+                        seatMessage.style.display = 'block'; // Show message when no seat is selected
+                    } else {
+                        seatMessage.style.display = 'none';  // Hide message when seats are selected
+                    }
                 });
             });
-    
+
+            // Listen for "Proceed to Payment" button click
+            proceedButton.addEventListener("click", function(event) {
+                if (selectedSeats.length === 0) {
+                    event.preventDefault(); // Prevent navigation
+                    alert("Please select seats before proceeding.");
+                }
+            });
+
             function updateSelectedSeatsDisplay() {
                 let seatInfo = document.getElementById("selectedSeatInfo");
                 seatInfo.innerHTML = `<b>Selected Seats (${selectedSeats.length}):</b><br> ${selectedSeats.join(", ")}`;
             }
         });
     </script>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="seat">
-        <div class="col-md-6">
-            <div class="cabin">
-                <div class="seat-line">
-                    <div class="a">
-                        <br>
-                        <br>
-                        <p><b><i>Door</i></b></p> 
-                    </div>
-                    <div class="b" style="padding-left: 60px;">
-                        <img src="{% static 'ticket/image/driver.png' %}" alt="Driver" height="100px" width="100px">
-                    </div>
-                </div>
-            </div><br>
-
-            <!-- A and B Rows -->
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A1">A1</button>
-                    <button class="btn btn-outline-success selected-seat" id="A2">A2</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B1">B1</button>
-                    <button class="btn btn-outline-success selected-seat" id="B2">B2</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A3">A3</button>
-                    <button class="btn btn-outline-success selected-seat" id="A4">A4</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B3">B3</button>
-                    <button class="btn btn-outline-success selected-seat" id="B4">B4</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A5">A5</button>
-                    <button class="btn btn-outline-success selected-seat" id="A6">A6</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B5">B5</button>
-                    <button class="btn btn-outline-success selected-seat" id="B6">B6</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A7">A7</button>
-                    <button class="btn btn-outline-success selected-seat" id="A8">A8</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B7">B7</button>
-                    <button class="btn btn-outline-success selected-seat" id="B8">B8</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A9">A9</button>
-                    <button class="btn btn-outline-success selected-seat" id="A10">A10</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B9">B9</button>
-                    <button class="btn btn-outline-success selected-seat" id="B10">B10</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A11">A11</button>
-                    <button class="btn btn-outline-success selected-seat" id="A12">A12</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B11">B11</button>
-                    <button class="btn btn-outline-success selected-seat" id="B12">B12</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A13">A13</button>
-                    <button class="btn btn-outline-success selected-seat" id="A14">A14</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B13">B13</button>
-                    <button class="btn btn-outline-success selected-seat" id="B14">B14</button>
-                </div>
-            </div>
-            <div class="seat-line">
-                <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="A15">A15</button>
-                    <button class="btn btn-outline-success selected-seat" id="A16">A16</button>
-                </div>
-                <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="B15">B15</button>
-                    <button class="btn btn-outline-success selected-seat" id="B16">B16</button>
-                </div>
-            </div>
-
-            <!-- LAST Row as L.. -->
-            <div class="last-line">
-                <button class="btn btn-outline-success selected-seat" id="L1">L1</button>
-                <button class="btn btn-outline-success selected-seat" id="L2">L2</button>
-                <button class="btn btn-outline-success selected-seat" id="L3">L3</button>
-                <button class="btn btn-outline-success selected-seat" id="L4">L4</button>
-                <button class="btn btn-outline-success selected-seat" id="L5">L5</button>
-            </div>
-            <div class="payment-container">
-                <a id="proceedLink" href="#">
-                    <button id="proceedButton" class="btn btn-primary mt-3" disabled>Proceed to Payment</button>
-                </a>
-                <div id="selectedSeatInfo" class="mt-3" style="text-align: center; font-size: 18px;">
-                    <b>Selected Seats (0):<br></b> None
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

@@ -54,6 +54,9 @@ def cancel(request):
 def seat(request):
     return render(request, 'ticket/seats.html')
 
+def map(request):
+    return render(request, 'ticket/check.html')  # Pass seats as 20 for example
+
 
 logger = logging.getLogger(__name__)
 
@@ -125,23 +128,25 @@ def company_register(request):
     else:
         form = companyEntry()
     return render(request, 'ticket/company_signup.html', {'form': form})
-@login_required
-def dashboard(request):
-    # Get all records from companyRegistration
-    company_data = companyRegistration.objects.all()
-
-    # Pagination: Show 10 records per page
-    paginator = Paginator(company_data, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    # Render the dashboard template and pass the paginated data
-    return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
 # @login_required
+# def dashboard(request):
+#     # Get all records from companyRegistration
+#     company_data = companyRegistration.objects.all()
+
+#     # Pagination: Show 10 records per page
+#     paginator = Paginator(company_data, 10)
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+
+#     # Render the dashboard template and pass the paginated data
+#     return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
+# # @login_required
+
+
 def company_dashboard(request):
     try:
         with connection.cursor() as curs:
-            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_date FROM ticket_busroute WHERE comp_name = %s""",[request.user.username])
+            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity FROM ticket_busroute where comp_name=%s""", [request.user.username])
             route_data=curs.fetchall()
         paginator=Paginator(route_data,5)
         pageno=request.GET.get('page')
@@ -152,26 +157,23 @@ def company_dashboard(request):
     return render(request, 'ticket/company_dash.html',{'page_obj':pageobj})
 
 
-def bus_info_dashboard(request):
+def dashboard(request):
     try:
-        with connection.cursor() as cursor:
-            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination FROM company""")
-            data = cursor.fetchall()
-
-        paginator = Paginator(data, 10)  # Show 10 results per page
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
-    except Exception as e:
-        print("Error executing query:", e)
-        page_obj = []
-
-    return render(request, 'ticket/dashboard.html', {'page_obj': page_obj})
+        with connection.cursor() as curs:
+            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_time FROM ticket_busroute """)
+            route_data=curs.fetchall()
+        paginator=Paginator(route_data,5)
+        pageno=request.GET.get('page')
+        pageobj=paginator.get_page(pageno)
+    except Exception as ex:
+        print("Error occur:",ex)
+        pageobj=[]
+    return render(request, 'ticket/dashboard.html',{'page_obj':pageobj})
 
 def bus_route_info(request):
     try:
         with connection.cursor() as cursor:
-            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination FROM company""")
+            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination,departure_time FROM company""")
             data = cursor.fetchall()
 
         paginator = Paginator(data, 10)  # Show 10 results per page
@@ -186,6 +188,47 @@ def bus_route_info(request):
 
 #sending seats value to another page
 def book_ticket(request):
+    def book_ticket(request):
+        if request.method == 'POST':
+            # Extract data from form
+            seat_numbers = request.POST.getlist('seats')  # List of selected seats
+            passenger_name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            bus_id = request.POST.get('bus_id')
+            departure_time = request.POST.get('departure_time')  # Format: "YYYY-MM-DD HH:MM"
+            
+            try:
+                bus = Bus.objects.get(id=bus_id)
+                departure_time = timezone.datetime.strptime(departure_time, "%Y-%m-%d %H:%M")
+                
+                # Validate seats
+                for seat in seat_numbers:
+                    if BookedTicket.objects.filter(
+                        bus=bus, 
+                        seat_number=seat,
+                        departure_time=departure_time
+                    ).exists():
+                        messages.error(request, f"Seat {seat} is already booked!")
+                        return redirect('seat_selection')
+                
+                # Create tickets
+                for seat in seat_numbers:
+                    BookedTicket.objects.create(
+                        seat_number=seat,
+                        passenger_name=passenger_name,
+                        phone_number=phone,
+                        bus=bus,
+                        departure_time=departure_time,
+                        # booking_time is auto-set by auto_now_add
+                    )
+                
+                messages.success(request, f"{len(seat_numbers)} ticket(s) booked successfully!")
+                return redirect('/')
+                
+            except Bus.DoesNotExist:
+                messages.error(request, "Invalid bus selection!")
+        
+        return redirect('seat_selection')
     selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
     return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
 
@@ -203,8 +246,6 @@ def register_bus(request):
         form = BusRouteForm()
 
     return render(request, 'ticket/register_bus.html', {'form': form, 'today': today})
-
-
 def search_vech(request):
      # Get user input for 'from' and 'to' cities
     origin = request.GET.get('from', '')

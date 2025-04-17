@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+import pytz
+from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -93,6 +95,8 @@ class companyRegistration(models.Model):
 
 
 class BusRoute(models.Model):
+    nepal_tz = pytz.timezone('Asia/Kathmandu')
+    nepal_time = timezone.now().astimezone(nepal_tz)
     vehicle_number = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     contact = models.CharField(max_length=15)
@@ -101,7 +105,7 @@ class BusRoute(models.Model):
     destination = models.CharField(max_length=100)
     passenger_capacity = models.IntegerField()
     comp_name = models.CharField(max_length=100)
-
+    departure_time = models.DateTimeField(default=nepal_time)
     def __str__(self):
         return f"{self.vehicle_number} - {self.origin} to {self.destination}"
     def save(self, *args, **kwargs):
@@ -109,3 +113,34 @@ class BusRoute(models.Model):
         if not self.comp_name and hasattr(self, 'request'):
             self.comp_name = self.request.user.username  # Assuming username stores the company name
         super().save(*args, **kwargs)
+        
+class Bus(models.Model):
+    number = models.CharField(max_length=100, unique=True)
+    route = models.ForeignKey(BusRoute, on_delete=models.CASCADE, related_name='buses')
+    total_seats = models.PositiveIntegerField(default=30)
+    
+    def __str__(self):
+        return f"{self.number} ({self.route})"
+
+class BookedTicket(models.Model):
+    comp_name = models.CharField(max_length=255, default="Unknown Company")
+    seat_number = models.CharField(max_length=10, unique=True, null=True, blank=True )
+    passenger_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    email = models.EmailField(null=True, blank=True)
+    bus = models.ForeignKey(Bus, on_delete=models.CASCADE, related_name='tickets')
+    booking_time = models.DateTimeField(auto_now_add=True)  # Auto-set on creation
+    departure_time = models.DateTimeField()  # Manually set based on schedule
+    comments = models.TextField(blank=True)
+    
+    class Meta:
+        ordering = ['-booking_time']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['bus', 'seat_number', 'departure_time'],
+                name='unique_seat_per_bus_per_time'
+            )
+        ]
+    
+    def __str__(self):
+        return f"{self.passenger_name} - Seat {self.seat_number} ({self.bus})"
