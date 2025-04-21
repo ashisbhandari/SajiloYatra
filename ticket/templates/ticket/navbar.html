@@ -236,12 +236,28 @@
             </div>
 
             <!-- Login, Signup, and Dropdown -->
+            <style>
+                #ticketOptions {
+                    appearance: none; /* Remove default arrow */
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background: transparent;
+                    border: 2px solid white;
+                    color: black;
+                    padding: 5px 30px 5px 10px;
+                    font-size: 14px;
+                    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+                    background-repeat: no-repeat;
+                    background-position: right 10px center;
+                    background-size: 25px;
+                    box-shadow: 0px 2px 10px rgba(90, 20, 160, 0.12);
+                }
+                </style>
             <div class="d-flex login-options">
                 <select class="form-select me-2 box" id="ticketOptions" onchange="navigateToPage()">
                     <option selected>Tickets</option>
-                    <option value="/#bus_ticket">View Tickets</option>
-                    <option value="/cancel_ticket">Cancel Tickets</option>
-                    <option value="/Book_ticket">Book Tickets</option>
+                    <option id="ticketOptions" value="/#bus_ticket">View Tickets</option>
+                    <option id="ticketOptions" value="/cancel_ticket">Cancel Tickets</option>
                 </select>
 
                 <script>
