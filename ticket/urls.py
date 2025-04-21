@@ -18,4 +18,5 @@ urlpatterns = [
     # path('vehicle-history/', views.vehicle_history, name='vehicle_history'),
     # path('con/',views.contctt, name="vech_contact"),,
     # path('bus-info/', views.bus_info_dashboard, name='bus_info_dashboard'),
+    path('submit_contact/', views.submit_contact, name='submit_contact'),
 ]

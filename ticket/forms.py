@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password  # Import for password hashing
-from .models import UserRegistration,companyRegistration,BusRoute
+from .models import UserRegistration,companyRegistration,BusRoute,BookedTicket
 
 class SignupForm(forms.Form):
     username = forms.CharField(max_length=100, label="Your Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your company name'}))
@@ -210,3 +210,11 @@ class BusRouteForm(forms.ModelForm):
 
         # Return the cleaned data
         return cleaned_data
+    
+from django import forms
+from .models import BookedTicket
+
+class BookedTicketForm(forms.ModelForm):
+    class Meta:
+        model = BookedTicket
+        fields = ['passenger_name', 'email', 'phone', 'comments', 'departure_time', 'seats', 'bus', 'payment_method']

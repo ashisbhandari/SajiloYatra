@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login as auth_login
-from .forms import SignupForm,companyEntry,BusRouteForm
+from .forms import SignupForm,companyEntry,BusRouteForm,BookedTicketForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import logging,json
@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from .models import companyRegistration,BusRoute
 from django.core.paginator import Paginator
 from datetime import date,datetime
-from ticket.models import UserRegistration, companyRegistration  # Import models
+from ticket.models import UserRegistration, companyRegistration,BookedTicket,Bus  # Import models
 
 # Create your views here.
 
@@ -162,7 +162,7 @@ def dashboard(request):
         with connection.cursor() as curs:
             curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_time FROM ticket_busroute """)
             route_data=curs.fetchall()
-        paginator=Paginator(route_data,5)
+        paginator=Paginator(route_data,10)
         pageno=request.GET.get('page')
         pageobj=paginator.get_page(pageno)
     except Exception as ex:
@@ -187,51 +187,46 @@ def bus_route_info(request):
     return render(request, 'ticket/company_dash.html', {'page_obj': page_obj1})
 
 #sending seats value to another page
-def book_ticket(request):
-    def book_ticket(request):
-        if request.method == 'POST':
-            # Extract data from form
-            seat_numbers = request.POST.getlist('seats')  # List of selected seats
-            passenger_name = request.POST.get('name')
-            phone = request.POST.get('phone')
-            bus_id = request.POST.get('bus_id')
-            departure_time = request.POST.get('departure_time')  # Format: "YYYY-MM-DD HH:MM"
-            
-            try:
-                bus = Bus.objects.get(id=bus_id)
-                departure_time = timezone.datetime.strptime(departure_time, "%Y-%m-%d %H:%M")
-                
-                # Validate seats
-                for seat in seat_numbers:
-                    if BookedTicket.objects.filter(
-                        bus=bus, 
-                        seat_number=seat,
-                        departure_time=departure_time
-                    ).exists():
-                        messages.error(request, f"Seat {seat} is already booked!")
-                        return redirect('seat_selection')
-                
-                # Create tickets
-                for seat in seat_numbers:
-                    BookedTicket.objects.create(
-                        seat_number=seat,
-                        passenger_name=passenger_name,
-                        phone_number=phone,
-                        bus=bus,
-                        departure_time=departure_time,
-                        # booking_time is auto-set by auto_now_add
-                    )
-                
-                messages.success(request, f"{len(seat_numbers)} ticket(s) booked successfully!")
-                return redirect('/')
-                
-            except Bus.DoesNotExist:
-                messages.error(request, "Invalid bus selection!")
-        
-        return redirect('seat_selection')
-    selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
-    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
+from django.contrib import messages
+from django.utils import timezone
+from datetime import datetime
 
+def book_ticket(request):
+    selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
+
+    if request.method == 'POST':
+        passenger_name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        bus_id = request.POST.get('bus_id')
+        departure_time = request.POST.get('departure_time')
+        
+        try:
+            bus = Bus.objects.get(id=bus_id)
+            departure_time = timezone.datetime.strptime(departure_time, "%Y-%m-%dT%H:%M")
+
+            # Check for already booked seats
+            for seat in selected_seats:
+                if BookedTicket.objects.filter(bus=bus, seat_number=seat, departure_time=departure_time).exists():
+                    messages.error(request, f"Seat {seat} is already booked!")
+                    return redirect('seat_selection')
+
+            # Book the tickets
+            for seat in selected_seats:
+                BookedTicket.objects.create(
+                    seat_number=seat,
+                    passenger_name=passenger_name,
+                    phone_number=phone,
+                    bus=bus,
+                    departure_time=departure_time
+                )
+
+            messages.success(request, f"{len(selected_seats)} ticket(s) booked successfully!")
+            return redirect('/')
+        
+        except Bus.DoesNotExist:
+            messages.error(request, "Invalid bus selected!")
+
+    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
 
 def register_bus(request):
     today = date.today()  # Get today's date
@@ -277,3 +272,38 @@ def search_vech(request):
             page_obj = []
 
     return render(request, 'ticket/search_vech.html', {'page_obj': page_obj, 'origin': origin, 'destination': destination})
+
+# for sending email from fillup form of index page
+
+from django.core.mail import send_mail
+def contact(request):
+    return render(request, 'ticket/main.html')
+def submit_contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        contact = request.POST.get('contact')
+        email = request.POST.get('email')
+        comments = request.POST.get('comments')  # Fixed field name
+
+        subject = f'Feedback to SajiloYatra by {name }'
+        message = f'''
+        Name: {name}
+        Contact: {contact}
+        Email: {email}
+        Comments: {comments}
+        '''
+
+        recipient = 'photolaija@gmail.com'  # Your admin/support email
+        sender = email  # Fixed sender value
+
+        try:
+            send_mail(subject, message, sender, [recipient])
+        except Exception as e:
+            print(f"Error sending email: {e}")
+            messages.error(request, "There was an error sending your message. Please try again later.")
+            return redirect('/')
+
+        messages.success(request, "Your message has been sent successfully!")
+        return redirect('/')
+
+    return render(request, 'ticket/main.html')

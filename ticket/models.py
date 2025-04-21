@@ -123,24 +123,17 @@ class Bus(models.Model):
         return f"{self.number} ({self.route})"
 
 class BookedTicket(models.Model):
-    comp_name = models.CharField(max_length=255, default="Unknown Company")
-    seat_number = models.CharField(max_length=10, unique=True, null=True, blank=True )
     passenger_name = models.CharField(max_length=100)
-    phone_number = models.CharField(max_length=15)
-    email = models.EmailField(null=True, blank=True)
-    bus = models.ForeignKey(Bus, on_delete=models.CASCADE, related_name='tickets')
-    booking_time = models.DateTimeField(auto_now_add=True)  # Auto-set on creation
-    departure_time = models.DateTimeField()  # Manually set based on schedule
-    comments = models.TextField(blank=True)
-    
-    class Meta:
-        ordering = ['-booking_time']
-        constraints = [
-            models.UniqueConstraint(
-                fields=['bus', 'seat_number', 'departure_time'],
-                name='unique_seat_per_bus_per_time'
-            )
-        ]
-    
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    comments = models.TextField(blank=True, null=True)
+    departure_time = models.DateTimeField()
+    seats = models.PositiveIntegerField()
+    bus = models.CharField(max_length=100)  # You can change this to a ForeignKey if you have a Bus model
+    payment_method = models.CharField(max_length=20, choices=[
+        ('online', 'Online'),
+        ('cash', 'Cash at Counter')
+    ])
+
     def __str__(self):
-        return f"{self.passenger_name} - Seat {self.seat_number} ({self.bus})"
+        return f"{self.passenger_name} - {self.seats} seat(s)"

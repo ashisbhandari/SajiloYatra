@@ -296,8 +296,9 @@
        
     </style>
     <div class="container-fluid w-50 m-auto contactinfo">
-        <form>
-            
+        <h4 class="text-center">Contact Information<br>Please help developer team for better performance</h4>
+        <form method="POST" action="{% url 'submit_contact' %}">
+            {% csrf_token %}
             <label for="name">Your name</label>
             <input class="form-control" type="text" name="name" id="name"  placeholder="Full name here..." required>
             
