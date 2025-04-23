@@ -137,21 +137,7 @@
                 padding: 10px;
             }
         }
-        .error-message {
-            color: red;
-            font-size: 20px;
-            margin-top: 5px;
-            display: none;
-        }
-        .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 18px;
-            color: #6a1b9a;
-        }
+        
     </style>
 </head>
 <body>
@@ -160,21 +146,11 @@
             <button type="button" class="btn btn-outline-success">Return to home</button>
         </a>
     </div>
-    {% if form.errors %}
-        <div class="errorlist">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+   
     <div class="container">
         <h1><b>SajiloYatra</b></h1>
         <h2><b>Register Into SajiloYatra as a Company</b></h2>
-        <a href="register_user">
+        <a href="/register_user">
             <button type="button" class="btn btn-outline-success">Register as user</button>
         </a><br><br>
 
@@ -184,6 +160,28 @@
                 <label for="company-name" class="form-label">Company Name</label>
                 <input type="text" class="form-control" id="company-name" placeholder="Enter your company name" required>
             </div> {% endcomment %}
+            <div class="mb-3">
+                <style>
+                    .errorlist {
+                        color: red;
+                        font-size: 20px;
+                    }
+                </style>
+                {% if form.errors %}
+                <div class="errorlist">
+                    <ul type="none">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label">Owner Name</label>
                 <input type="text" class="form-control" name="username" id="username" placeholder="Enter owner's name" required>
@@ -195,13 +193,28 @@
 
             <div class="mb-3">
                 <label for="contact" class="form-label">Contact Number</label>
-                <input type="number" class="form-control" name="contact" id="contact" placeholder="Enter Contact number" required>
+                <input type="number" class="form-control" name="contact" id="contact" placeholder="Enter Contact number" pattern="\d{10}" maxlength="10" minlength="10" required>
             </div>
+            <script>
+                document.getElementById("contact").addEventListener("input", function (e) {
+                  this.value = this.value.replace(/\D/g, "").slice(0, 10);
+                });
+                document.getElementById("registrationForm").addEventListener("submit", function(event) {
+                    let contactNumber = document.getElementById("contact").value;
+                    
+                    // Check if the contact number is not 10 digits
+                    if (contactNumber.length !== 10) {
+                        alert("Contact number should be of 10 digits");
+                        event.preventDefault();  // Prevent form submission
+                    }
+                });
+              </script>
 
             <div class="mb-3">
                 <label for="vehicle_Number" class="form-label">Vehicle Number</label>
                 <input type="text" class="form-control" id="vehicle_number" name="vehicle_number" placeholder="Enter your Vehicle Number" required>
             </div>
+            
             <div class="mb-3">
                 <label for="vehicle_type" class="form-label">Vehicle Types</label>
                 <select class="form-control" id="vehicle_type" name="vehicle_type" required>
@@ -215,91 +228,22 @@
                 <label for="Passenger_Capacity" class="form-label">Passenger Capacity</label>
                 <input type="number" class="form-control" id="Passenger_Capacity" name="passenger_capacity" placeholder="Enter Vehicle Passenger Capacity" required>
             </div>
+            <script>
+                document.getElementById("Passenger_Capacity").addEventListener("input", function (e) {
+                    this.value = this.value.replace(/\D/g, "").slice(0, 10);
+                  });
+                </script>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">From</label>
                     <select name="origin" class="form-control dest" required>
-                        <option value="">Select District</option>
-                                        <option value="acham">Acham</option>
-                                        <option value="arghakhanchi">Arghakhanchi</option>
-                                        <option value="baglung">Baglung</option>
-                                        <option value="bajhang">Bajhang</option>
-                                        <option value="bajura">Bajura</option>
-                                        <option value="baitadi">Baitadi</option>
-                                        <option value="banke">Banke</option>
-                                        <option value="bardiya">Bardiya</option>
-                                        <option value="bara">Bara</option>
-                                        <option value="Bhaktapur">Bhaktapur</option>
-                                        <option value="bhojpur">Bhojpur</option>
-                                        <option value="chitwan">Chitwan</option>
-                                        <option value="dadeldhura">Dadeldhura</option>
-                                        <option value="Dang">Dang</option>
-                                        <option value="dailekh">Dailekh</option>
-                                        <option value="darchula">Darchula</option>
-                                        <option value="dhading">Dhading</option>
-                                        <option value="dhankuta">Dhankuta</option>
-                                        <option value="dhanusha">Dhanusha</option>
-                                        <option value="dolakha">Dolakha</option>
-                                        <option value="dolpa">Dolpa</option>
-                                        <option value="doti">Doti</option>
-                                        <option value="eastern_rukum">Eastern Rukum</option>
-                                        <option value="gulmi">Gulmi</option>
-                                        <option value="gorkha">Gorkha</option>
-                                        <option value="humla">Humla</option>
-                                        <option value="ilam">Ilam</option>
-                                        <option value="jhapa">Jhapa</option>
-                                        <option value="jajarkot">Jajarkot</option>
-                                        <option value="jumla">Jumla</option>
-                                        <option value="Kathmandu">Kathmandu</option>
-                                        <option value="kanchanpur">Kanchanpur</option>
-                                        <option value="kailali">Kailali</option>
-                                        <option value="kalikot">Kalikot</option>
-                                        <option value="kapilvastu">Kapilvastu</option>
-                                        <option value="kaski">Kaski</option>
-                                        <option value="khotang">Khotang</option>
-                                        <option value="kavrepalanchok">Kavrepalanchok</option>
-                                        <option value="lalitpur">Lalitpur</option>
-                                        <option value="lamjung">Lamjung</option>
-                                        <option value="mahendranagar">Mahendranagar</option>
-                                        <option value="mahottari">Mahottari</option>
-                                        <option value="makwanpur">Makwanpur</option>
-                                        <option value="manang">Manang</option>
-                                        <option value="morang">Morang</option>
-                                        <option value="mugu">Mugu</option>
-                                        <option value="myagdi">Myagdi</option>
-                                        <option value="mustang">Mustang</option>
-                                        <option value="nawalpur">Nawalpur</option>
-                                        <option value="east-nawalparasi">East-Nawalparasi</option>
-                                        <option value="west-nawalparasi">West-Nawalparasi</option>
-                                        <option value="nuwakot">Nuwakot</option>
-                                        <option value="okhaldhunga">Okhaldhunga</option>
-                                        <option value="parbat">Parbat</option>
-                                        <option value="parsa">Parsa</option>
-                                        <option value="pachthar">Pachthar</option>
-                                        <option value="palpa">Palpa</option>
-                                        <option value="pyuthan">Pyuthan</option>
-                                        <option value="rajbiraj">Rajbiraj</option>
-                                        <option value="rautahat">Rautahat</option>
-                                        <option value="ramechap">Ramechap</option>
-                                        <option value="rasuwa">Rasuwa</option>
-                                        <option value="Rupandehi">Rupandehi</option>
-                                        <option value="Rolpa">Rolpa</option>
-                                        <option value="salyan">Salyan</option>
-                                        <option value="sankhuwasabha">Sankhuwasabha</option>
-                                        <option value="saptari">Saptari</option>
-                                        <option value="sarlahi">Sarlahi</option>
-                                        <option value="sindhuli">Sindhuli</option>
-                                        <option value="sindhupalchok">Sindhupalchok</option>
-                                        <option value="siraha">Siraha</option>
-                                        <option value="solukhumbu">Solukhumbu</option>
-                                        <option value="sunsari">Sunsari</option>
-                                        <option value="Surkhet">Surkhet</option>
-                                        <option value="Syangja">Syangja</option>
-                                        <option value="tanahun">Tanahun</option>
-                                        <option value="taplejung">Taplejung</option>
-                                        <option value="terhathum">Terhathum</option>
-                                        <option value="udayapur">Udayapur</option>
-                                        <option value="western_rukum">Western Rukum</option>
+                        <option value="" disabled selected>Select District</option>
+                        <option value="Kathmandu">Kathmandu</option>
+                        <option value="Pokhara">Pokhara</option>
+                        <option value="Chitwan">Chitwan</option>
+                        <option value="Biratnagar">Biratnagar</option>
+                        <option value="Butwal">Butwal</option>
+                        <option value="Jhapa">Jhapa</option>
                     </select>
                 </div>
                 {% comment %} <!-- Swap icon in the center -->
@@ -309,87 +253,13 @@
                 <div class="col-md-6">
                     <label class="form-label">To</label>
                     <select name="destination" class="form-control dest" required>
-                        <option value="">Select District</option>
-                                        <option value="acham">Acham</option>
-                                        <option value="arghakhanchi">Arghakhanchi</option>
-                                        <option value="baglung">Baglung</option>
-                                        <option value="bajhang">Bajhang</option>
-                                        <option value="bajura">Bajura</option>
-                                        <option value="baitadi">Baitadi</option>
-                                        <option value="banke">Banke</option>
-                                        <option value="bardiya">Bardiya</option>
-                                        <option value="bara">Bara</option>
-                                        <option value="Bhaktapur">Bhaktapur</option>
-                                        <option value="bhojpur">Bhojpur</option>
-                                        <option value="chitwan">Chitwan</option>
-                                        <option value="dadeldhura">Dadeldhura</option>
-                                        <option value="Dang">Dang</option>
-                                        <option value="dailekh">Dailekh</option>
-                                        <option value="darchula">Darchula</option>
-                                        <option value="dhading">Dhading</option>
-                                        <option value="dhankuta">Dhankuta</option>
-                                        <option value="dhanusha">Dhanusha</option>
-                                        <option value="dolakha">Dolakha</option>
-                                        <option value="dolpa">Dolpa</option>
-                                        <option value="doti">Doti</option>
-                                        <option value="eastern_rukum">Eastern Rukum</option>
-                                        <option value="gulmi">Gulmi</option>
-                                        <option value="gorkha">Gorkha</option>
-                                        <option value="humla">Humla</option>
-                                        <option value="ilam">Ilam</option>
-                                        <option value="jhapa">Jhapa</option>
-                                        <option value="jajarkot">Jajarkot</option>
-                                        <option value="jumla">Jumla</option>
-                                        <option value="Kathmandu">Kathmandu</option>
-                                        <option value="kanchanpur">Kanchanpur</option>
-                                        <option value="kailali">Kailali</option>
-                                        <option value="kalikot">Kalikot</option>
-                                        <option value="kapilvastu">Kapilvastu</option>
-                                        <option value="kaski">Kaski</option>
-                                        <option value="khotang">Khotang</option>
-                                        <option value="kavrepalanchok">Kavrepalanchok</option>
-                                        <option value="lalitpur">Lalitpur</option>
-                                        <option value="lamjung">Lamjung</option>
-                                        <option value="mahendranagar">Mahendranagar</option>
-                                        <option value="mahottari">Mahottari</option>
-                                        <option value="makwanpur">Makwanpur</option>
-                                        <option value="manang">Manang</option>
-                                        <option value="morang">Morang</option>
-                                        <option value="mugu">Mugu</option>
-                                        <option value="myagdi">Myagdi</option>
-                                        <option value="mustang">Mustang</option>
-                                        <option value="nawalpur">Nawalpur</option>
-                                        <option value="east-nawalparasi">East-Nawalparasi</option>
-                                        <option value="west-nawalparasi">West-Nawalparasi</option>
-                                        <option value="nuwakot">Nuwakot</option>
-                                        <option value="okhaldhunga">Okhaldhunga</option>
-                                        <option value="parbat">Parbat</option>
-                                        <option value="parsa">Parsa</option>
-                                        <option value="pachthar">Pachthar</option>
-                                        <option value="palpa">Palpa</option>
-                                        <option value="pyuthan">Pyuthan</option>
-                                        <option value="rajbiraj">Rajbiraj</option>
-                                        <option value="rautahat">Rautahat</option>
-                                        <option value="ramechap">Ramechap</option>
-                                        <option value="rasuwa">Rasuwa</option>
-                                        <option value="Rupandehi">Rupandehi</option>
-                                        <option value="Rolpa">Rolpa</option>
-                                        <option value="salyan">Salyan</option>
-                                        <option value="sankhuwasabha">Sankhuwasabha</option>
-                                        <option value="saptari">Saptari</option>
-                                        <option value="sarlahi">Sarlahi</option>
-                                        <option value="sindhuli">Sindhuli</option>
-                                        <option value="sindhupalchok">Sindhupalchok</option>
-                                        <option value="siraha">Siraha</option>
-                                        <option value="solukhumbu">Solukhumbu</option>
-                                        <option value="sunsari">Sunsari</option>
-                                        <option value="Surkhet">Surkhet</option>
-                                        <option value="Syangja">Syangja</option>
-                                        <option value="tanahun">Tanahun</option>
-                                        <option value="taplejung">Taplejung</option>
-                                        <option value="terhathum">Terhathum</option>
-                                        <option value="udayapur">Udayapur</option>
-                                        <option value="western_rukum">Western Rukum</option>
+                        <option value="" disabled selected>Select District</option>
+                        <option value="Kathmandu">Kathmandu</option>
+                        <option value="Pokhara">Pokhara</option>
+                        <option value="Chitwan">Chitwan</option>
+                        <option value="Biratnagar">Biratnagar</option>
+                        <option value="Butwal">Butwal</option>
+                        <option value="Jhapa">Jhapa</option>
                     </select>
                 </div>
             </div>
@@ -401,8 +271,25 @@
                         <i class="bi bi-eye-fill"></i>
                     </span>
                 </div>
+                <span id="password-error-text" class="error-message"></span>
             </div>
-
+            <style>
+                .error-message {
+                    color: red;
+                    font-size: 14px;
+                    margin-top: 5px;
+                    display: none;  /* Initially hidden */
+                }
+                .toggle-password {
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    font-size: 18px;
+                    color: #6a1b9a;
+                }
+                </style>
             <div class="mb-3">
                 <label for="confirm-password" class="form-label">Confirm Password</label>
                 <div class="input-group">
@@ -411,7 +298,7 @@
                         <i class="bi bi-eye-fill"></i>
                     </span>
                 </div>
-                <div id="password-error" class="error-message"><b>Passwords do not match!</b></div>
+                <span id="confirm-password-error-text" class="error-message"></span>
             </div>
 
             <button type="submit" class="btn btn-custom w-100">Register</button>
@@ -425,15 +312,20 @@
         document.getElementById("registrationForm").addEventListener("submit", function(event) {
             let password = document.getElementById("password").value;
             let confirmPassword = document.getElementById("confirm_password").value;
-            let errorMessage = document.getElementById("password-error");
-        
+            let errorText = document.getElementById("confirm-password-error-text");
+            
+            // Clear any previous error messages
+            errorText.style.display = "none";
+            
             if (password !== confirmPassword) {
-                errorMessage.style.display = "block";
-                event.preventDefault();
-            } else {
-                errorMessage.style.display = "none";
+                errorText.style.display = "block";
+                errorText.textContent = "Passwords do not match!";
+                event.preventDefault();  // Prevent form submission
             }
         });
+        
+
+
         function togglePassword(fieldId) {
             let field = document.getElementById(fieldId);
             let icon = field.nextElementSibling.querySelector("i");

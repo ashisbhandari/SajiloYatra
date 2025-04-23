@@ -190,8 +190,22 @@
             </div> {% endcomment %}
             <div class="mb-3">
                 <label for="contact" class="form-label">Contact Number</label>
-                <input type="number" class="form-control" id="contact" name="contact" placeholder="Enter Contact number" required>
+                <input type="number" class="form-control" id="contact" name="contact" pattern="\d{10}" maxlength="10" minlength="10" placeholder="Enter Contact number" required>
             </div>
+            <script>
+                document.getElementById("contact").addEventListener("input", function (e) {
+                  this.value = this.value.replace(/\D/g, "").slice(0, 10);
+                });
+                document.getElementById("registrationForm").addEventListener("submit", function(event) {
+                    let contactNumber = document.getElementById("contact").value;
+                    
+                    // Check if the contact number is not 10 digits
+                    if (contactNumber.length !== 10) {
+                        alert("Contact number should be of 10 digits");
+                        event.preventDefault();  // Prevent form submission
+                    }
+                });
+              </script>
             
             <div class="mb-3">
                 <label for="passenger_type" class="form-label">Passengers Type</label>

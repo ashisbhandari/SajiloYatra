@@ -77,48 +77,26 @@ class companyEntry(forms.Form):
     )
     #destination / origin type
     destination=forms.ChoiceField(
-        choices=[
-            ("acham", "Acham"), ("arghakhanchi", "Arghakhanchi"), ("baglung", "Baglung"), ("bajhang", "Bajhang"), 
-            ("bajura", "Bajura"), ("baitadi", "Baitadi"), ("banke", "Banke"), ("bardiya", "Bardiya"), ("bara", "Bara"), 
-            ("bhaktapur", "Bhaktapur"), ("bhojpur", "Bhojpur"), ("chitwan", "Chitwan"), ("dadeldhura", "Dadeldhura"), 
-            ("dang", "Dang"), ("dailekh", "Dailekh"), ("darchula", "Darchula"), ("dhading", "Dhading"), ("dhankuta", "Dhankuta"), 
-            ("dhanusha", "Dhanusha"), ("dolakha", "Dolakha"), ("dolpa", "Dolpa"), ("doti", "Doti"), ("eastern_rukum", "Eastern Rukum"), 
-            ("gulmi", "Gulmi"), ("gorkha", "Gorkha"), ("humla", "Humla"), ("ilam", "Ilam"), ("jhapa", "Jhapa"), ("jajarkot", "Jajarkot"), 
-            ("jumla", "Jumla"), ("kathmandu", "Kathmandu"), ("kanchanpur", "Kanchanpur"), ("kailali", "Kailali"), ("kalikot", "Kalikot"), 
-            ("kapilvastu", "Kapilvastu"), ("kaski", "Kaski"), ("khotang", "Khotang"), ("kavrepalanchok", "Kavrepalanchok"), 
-            ("lalitpur", "Lalitpur"), ("lamjung", "Lamjung"), ("mahendranagar", "Mahendranagar"), ("mahottari", "Mahottari"), 
-            ("makwanpur", "Makwanpur"), ("manang", "Manang"), ("morang", "Morang"), ("mugu", "Mugu"), ("myagdi", "Myagdi"), 
-            ("mustang", "Mustang"), ("nawalpur", "Nawalpur"), ("east-nawalparasi", "East-Nawalparasi"), ("west-nawalparasi", "West-Nawalparasi"), 
-            ("nuwakot", "Nuwakot"), ("okhaldhunga", "Okhaldhunga"), ("parbat", "Parbat"), ("parsa", "Parsa"), ("pachthar", "Pachthar"), 
-            ("palpa", "Palpa"), ("pyuthan", "Pyuthan"), ("rajbiraj", "Rajbiraj"), ("rautahat", "Rautahat"), ("ramechap", "Ramechap"), 
-            ("rasuwa", "Rasuwa"), ("rupandehi", "Rupandehi"), ("rolpa", "Rolpa"), ("salyan", "Salyan"), ("sankhuwasabha", "Sankhuwasabha"), 
-            ("saptari", "Saptari"), ("sarlahi", "Sarlahi"), ("sindhuli", "Sindhuli"), ("sindhupalchok", "Sindhupalchok"), 
-            ("siraha", "Siraha"), ("solukhumbu", "Solukhumbu"), ("sunsari", "Sunsari"), ("surkhet", "Surkhet"), ("syangja", "Syangja"), 
-            ("tanahun", "Tanahun"), ("taplejung", "Taplejung"), ("terhathum", "Terhathum"), ("udayapur", "Udayapur"), ("western_rukum", "Western Rukum")
-        ],
+        choices= [
+        ('Kathmandu', 'Kathmandu'),
+        ('Pokhara', 'Pokhara'),
+        ('Chitwan', 'Chitwan'),
+        ('Biratnagar', 'Biratnagar'),
+        ('Butwal', 'Butwal'),
+        ('Jhapa', 'Jhapa'),
+    ],
         label="destination"
     )
     #destination / origin type
     origin=forms.ChoiceField(
         choices=[
-            ("acham", "Acham"), ("arghakhanchi", "Arghakhanchi"), ("baglung", "Baglung"), ("bajhang", "Bajhang"), 
-            ("bajura", "Bajura"), ("baitadi", "Baitadi"), ("banke", "Banke"), ("bardiya", "Bardiya"), ("bara", "Bara"), 
-            ("bhaktapur", "Bhaktapur"), ("bhojpur", "Bhojpur"), ("chitwan", "Chitwan"), ("dadeldhura", "Dadeldhura"), 
-            ("dang", "Dang"), ("dailekh", "Dailekh"), ("darchula", "Darchula"), ("dhading", "Dhading"), ("dhankuta", "Dhankuta"), 
-            ("dhanusha", "Dhanusha"), ("dolakha", "Dolakha"), ("dolpa", "Dolpa"), ("doti", "Doti"), ("eastern_rukum", "Eastern Rukum"), 
-            ("gulmi", "Gulmi"), ("gorkha", "Gorkha"), ("humla", "Humla"), ("ilam", "Ilam"), ("jhapa", "Jhapa"), ("jajarkot", "Jajarkot"), 
-            ("jumla", "Jumla"), ("kathmandu", "Kathmandu"), ("kanchanpur", "Kanchanpur"), ("kailali", "Kailali"), ("kalikot", "Kalikot"), 
-            ("kapilvastu", "Kapilvastu"), ("kaski", "Kaski"), ("khotang", "Khotang"), ("kavrepalanchok", "Kavrepalanchok"), 
-            ("lalitpur", "Lalitpur"), ("lamjung", "Lamjung"), ("mahendranagar", "Mahendranagar"), ("mahottari", "Mahottari"), 
-            ("makwanpur", "Makwanpur"), ("manang", "Manang"), ("morang", "Morang"), ("mugu", "Mugu"), ("myagdi", "Myagdi"), 
-            ("mustang", "Mustang"), ("nawalpur", "Nawalpur"), ("east-nawalparasi", "East-Nawalparasi"), ("west-nawalparasi", "West-Nawalparasi"), 
-            ("nuwakot", "Nuwakot"), ("okhaldhunga", "Okhaldhunga"), ("parbat", "Parbat"), ("parsa", "Parsa"), ("pachthar", "Pachthar"), 
-            ("palpa", "Palpa"), ("pyuthan", "Pyuthan"), ("rajbiraj", "Rajbiraj"), ("rautahat", "Rautahat"), ("ramechap", "Ramechap"), 
-            ("rasuwa", "Rasuwa"), ("rupandehi", "Rupandehi"), ("rolpa", "Rolpa"), ("salyan", "Salyan"), ("sankhuwasabha", "Sankhuwasabha"), 
-            ("saptari", "Saptari"), ("sarlahi", "Sarlahi"), ("sindhuli", "Sindhuli"), ("sindhupalchok", "Sindhupalchok"), 
-            ("siraha", "Siraha"), ("solukhumbu", "Solukhumbu"), ("sunsari", "Sunsari"), ("surkhet", "Surkhet"), ("syangja", "Syangja"), 
-            ("tanahun", "Tanahun"), ("taplejung", "Taplejung"), ("terhathum", "Terhathum"), ("udayapur", "Udayapur"), ("western_rukum", "Western Rukum")
-        ],
+        ('Kathmandu', 'Kathmandu'),
+        ('Pokhara', 'Pokhara'),
+        ('Chitwan', 'Chitwan'),
+        ('Biratnagar', 'Biratnagar'),
+        ('Butwal', 'Butwal'),
+        ('Jhapa', 'Jhapa'),
+    ],
         label="origin"
     )
         
@@ -138,10 +116,8 @@ class companyEntry(forms.Form):
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
 
-        if password and confirm_password:
-            if password != confirm_password:
-                raise ValidationError("Passwords do not match!")
-
+        if password != confirm_password:
+            raise forms.ValidationError("Passwords do not match!")
         return cleaned_data
 
     def save(self):
