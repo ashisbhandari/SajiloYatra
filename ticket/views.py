@@ -49,6 +49,9 @@ def home(request):
 
 def reservation(request):
     return render(request, 'ticket/reserve_vech.html')
+# url for payment
+def payment(request):
+    return render(request, 'ticket/payment.html')
 def cancel(request):
     return render(request, 'ticket/cancel_ticket.html')
 def seat(request):
@@ -228,6 +231,16 @@ def book_ticket(request):
 
     return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
 
+def booktkt(request):
+    selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
+    bus_id = request.GET.get('bus_id', '')
+    departure_time = request.GET.get('departure_time', '')
+
+    if not selected_seats or not bus_id or not departure_time:
+        messages.error(request, "Invalid booking details!")
+        return redirect('/')
+
+    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats, 'bus_id': bus_id, 'departure_time': departure_time})
 def register_bus(request):
     today = date.today()  # Get today's date
     if request.method == 'POST':
