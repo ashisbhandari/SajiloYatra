@@ -187,15 +187,44 @@
                     <!-- Contact -->
                     <div class="col-md-6">
                         <label class="form-label">Contact</label>
-                        <input type="text" class="form-control" name="contact" placeholder="Contact Number" required>
+                        <input type="text" class="form-control" pattern="\d{10}" maxlength="10" minlength="10" name="contact" id="contact" placeholder="Contact Number" required>
                     </div>
+                    <script>
+                        document.getElementById("contact").addEventListener("input", function (e) {
+                          this.value = this.value.replace(/\D/g, "").slice(0, 10);
+                        });
+                        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+                            let contactNumber = document.getElementById("contact").value;
+                            
+                            // Check if the contact number is not 10 digits
+                            if (contactNumber.length !== 10) {
+                                alert("Contact number should be of 10 digits");
+                                event.preventDefault();  // Prevent form submission
+                            }
+                        });
+                      </script>
+                    
                 </div>
                 <div class="row mb-3">
                     <!-- Passenger Capacity -->
                     <div class="col-md-6">
                         <label class="form-label">Passenger Capacity</label>
-                        <input type="number" class="form-control" name="passenger_capacity" placeholder="Passenger Capacity" required>
+                        <input type="number" class="form-control" maxlength="2" minlength="1" name="passenger_capacity" id="passenger_capacity" placeholder="Passenger Capacity" required>
                     </div>
+                    <script>
+                        document.getElementById("passenger_capacity").addEventListener("input", function (e) {
+                          this.value = this.value.replace(/\D/g, "").slice(0, 2);
+                        });
+                        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+                            let passenger_capacity = document.getElementById("passenger_capacity").value;
+                            
+                            // Check if vehicle passenger capacity is not more then 2 digit 3 digits
+                            if (passenger_capacity.length !== 2) {
+                                alert("Maximum passenger capacity should be of 2 digits");// upto 99 passengers in one bus
+                                event.preventDefault();  // Prevent form submission
+                            }
+                        });
+                      </script>
 
                     <!-- bus registration -->
                     <div class="col-md-6">
