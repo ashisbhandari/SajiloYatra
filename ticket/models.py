@@ -115,6 +115,7 @@ class BusRoute(models.Model):
         super().save(*args, **kwargs)
         
 class Bus(models.Model):
+    bus_id=5
     number = models.CharField(max_length=100, unique=True)
     route = models.ForeignKey(BusRoute, on_delete=models.CASCADE, related_name='buses')
     total_seats = models.PositiveIntegerField(default=30)
@@ -123,17 +124,27 @@ class Bus(models.Model):
         return f"{self.number} ({self.route})"
 
 class BookedTicket(models.Model):
-    passenger_name = models.CharField(max_length=100)
-    email = models.EmailField()
+    PAYMENT_TYPE = [
+        ('Cash on counter', 'Cash on counter'),
+        ('online payment', 'online payment'),
+    ]
+
+    payment = models.CharField(max_length=50, choices=PAYMENT_TYPE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()  # Removed unique=True to allow multiple bookings with same email
     phone = models.CharField(max_length=15)
-    comments = models.TextField(blank=True, null=True)
-    departure_time = models.DateTimeField()
-    seats = models.PositiveIntegerField()
-    bus = models.CharField(max_length=100)  # You can change this to a ForeignKey if you have a Bus model
-    payment_method = models.CharField(max_length=20, choices=[
-        ('online', 'Online'),
-        ('cash', 'Cash at Counter')
-    ])
+    comments = models.CharField(max_length=500, blank=True, null=True)
+    departure_time = models.DateField()
+    vech_no = models.CharField(max_length=20)
+    paymentproof = models.ImageField(
+        upload_to='payment_proofs/',  # Optional: change folder name as needed
+        max_length=255,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        db_table = 'ticket_bookedticket'
 
     def __str__(self):
-        return f"{self.passenger_name} - {self.seats} seat(s)"
+        return f"{self.name} - {self.departure_time}"

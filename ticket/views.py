@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login as auth_login
-from .forms import SignupForm,companyEntry,BusRouteForm,BookedTicketForm
+from .forms import SignupForm,companyEntry,BusRouteForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import logging,json
@@ -23,7 +23,7 @@ def home(request):
         page_obj = []
     else:
         # Prepare SQL query to filter bus routes based on 'from' and 'to'
-        qry = """SELECT username, vehicle_type, passenger_capacity, origin, destination,comp_name 
+        qry = """SELECT username, vehicle_number,vehicle_type, passenger_capacity, origin, destination,comp_name,contact 
                  FROM ticket_busroute 
                  WHERE origin LIKE %s AND destination LIKE %s"""
         
@@ -56,6 +56,9 @@ def cancel(request):
     return render(request, 'ticket/cancel_ticket.html')
 def seat(request):
     return render(request, 'ticket/seats.html')
+def seat(request, vehicle_no):
+    # You can use vehicle_no to query bus/seat details from DB
+    return render(request, 'ticket/seats.html', {'vehicle_no': vehicle_no})
 
 def map(request):
     return render(request, 'ticket/check.html')  # Pass seats as 20 for example
@@ -196,51 +199,64 @@ from datetime import datetime
 
 def book_ticket(request):
     selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
+    year = datetime.now().year
+    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats,'year': year,})
 
+
+# def booktkt(request):
+#     year = datetime.now().year
+#     selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
+#     if request.method=='POST':
+#         bus = Bus.objects.filter(total_seats__gt=0).first()
+#         if not bus:
+#             return HttpResponse("No bus available!", status=404)
+#         form=BookedTicketForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             message.success(request,"Your Ticket have been booked successfully")
+#             return redirect('/login')
+#         else:
+#             print(form.errors)
+#             message.error(request,"there was an error with your form submission, please try again")
+#     else:
+#         form=BookedTicketForm()
+   
+#     return render(request, 'ticket/booktkt.html',{
+#     'form': form,
+#     'selected_seats': selected_seats,
+#     'year':year,
+#     })
+from .forms import BookedTicketForm
+
+def book_ticket(request):
+    year = datetime.now().year
+    selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
+    vech_no = request.GET.get('vech_no','')
     if request.method == 'POST':
-        passenger_name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        bus_id = request.POST.get('bus_id')
-        departure_time = request.POST.get('departure_time')
-        
-        try:
-            bus = Bus.objects.get(id=bus_id)
-            departure_time = timezone.datetime.strptime(departure_time, "%Y-%m-%dT%H:%M")
+        post_data = request.POST.copy()
+        if 'vech_no' not in post_data:
+            post_data['vech_no'] = request.GET.get('vech_no', '')
+        form = BookedTicketForm(request.POST, request.FILES)  # Handle form submission
+        if form.is_valid():
+            ticket = form.save()
+            ticket.selected_seats = ','.join(selected_seats)
+            ticket.save()
+            form.save()  # Save the form data to the database
+            return redirect('/')  # Redirect after successful submission
+        else:
+            print(form.errors)  # For debugging errors
+            # You can also pass errors to the template if you want
+    else:
+        form = BookedTicketForm(initial={ 'vech_no': vech_no })
 
-            # Check for already booked seats
-            for seat in selected_seats:
-                if BookedTicket.objects.filter(bus=bus, seat_number=seat, departure_time=departure_time).exists():
-                    messages.error(request, f"Seat {seat} is already booked!")
-                    return redirect('seat_selection')
+    # Ensure form is passed in the context
+    return render(request, 'ticket/booktkt.html', {
+        'form': form,
+        'selected_seats': selected_seats,
+        'year': year,
+        'vech_vo':vech_no,
+    })
 
-            # Book the tickets
-            for seat in selected_seats:
-                BookedTicket.objects.create(
-                    seat_number=seat,
-                    passenger_name=passenger_name,
-                    phone_number=phone,
-                    bus=bus,
-                    departure_time=departure_time
-                )
-
-            messages.success(request, f"{len(selected_seats)} ticket(s) booked successfully!")
-            return redirect('/')
-        
-        except Bus.DoesNotExist:
-            messages.error(request, "Invalid bus selected!")
-
-    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats})
-
-def booktkt(request):
-    selected_seats = request.GET.get('seats', '').split(',') if request.GET.get('seats') else []
-    bus_id = request.GET.get('bus_id', '')
-    departure_time = request.GET.get('departure_time', '')
-
-    if not selected_seats or not bus_id or not departure_time:
-        messages.error(request, "Invalid booking details!")
-        return redirect('/')
-
-    return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats, 'bus_id': bus_id, 'departure_time': departure_time})
 def register_bus(request):
     today = date.today()  # Get today's date
     if request.method == 'POST':

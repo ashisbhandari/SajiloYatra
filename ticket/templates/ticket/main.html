@@ -124,31 +124,36 @@
                     <div class="col-12 col-md-8">
                         <div class="row py-1">
                             <div class="col-12 text-truncate">
-                                <b class="trip-operator">{{ cmp.5 }}</b> 
-                                <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.1 }}</b>
+                                <b class="trip-operator">{{ cmp.6 }}</b> 
+                                <b class="trip-operator chips-night bg-dark text-white rounded-pill p-1 ms-2">{{ cmp.2 }}</b>
                             </div>
                         </div>
                         <div class="row pb-2">
                             <div class="col-6">
-                                <span class="trip-fromstationpoint">{{ cmp.3 }}</span>
+                                <span class="trip-fromstationpoint">{{ cmp.4 }}</span>
                             </div>
                             <div class="col-6 text-end">
-                                <span class="trip-tostationpoint">{{ cmp.4 }}</span>
+                                <span class="trip-tostationpoint">{{ cmp.5 }}</span>
                             </div>
                         </div>
                         <div class="col-6 text-end">
-                            <span class="Drivername">Driver Name: <b>:{{ cmp.0 }}</b></span>
+                            <span class="Drivername">Driver<b>:{{ cmp.0 }}</b></span><br>
+                            <span class="Drivername">vehicle No: <b>:{{ cmp.1 }}</b></span><br>
+                            <span class="Drivername">contact: <b>:{{ cmp.7 }}</b></span>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
                         <div class="text-nowrap">
                             <div class="d-flex flex-column">
-                                <span class="trip-fare">Rs.{{ cmp.2 }}</span>
-                                <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
+                                <span class="trip-fare">Rs.{{ cmp.3 }}</span>
+                                <span class="trip-seatsavail">Seats Available: {{ cmp.3 }}</span> 
                             </div>
                             <div class="mt-2">
-                                <button onclick="toggleSeatx('seatDiv{{ forloop.counter }}', 'busRow{{ forloop.counter }}')" 
-                                        class="btn btn-info w-50 rounded-pill">View Seats</button>
+                                {% comment %} <button onclick="toggleSeatx('seatDiv{{ forloop.counter }}', 'busRow{{ forloop.counter }}')" 
+                                        class="btn btn-info w-50 rounded-pill" >View Seats</button> {% endcomment %}
+
+                                    <a href="{% url 'seats_page' vehicle_no=cmp.1 %}" class="btn btn-info w-50 rounded-pill">View Seats</a>
+
                             </div>
                         </div>
                     </div>
@@ -227,14 +232,21 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-12">
-                <img src="{% static 'ticket/image/logoplease.png' %}" class="img-fluid aboutimg" alt="About SajiloYatra">
+                <img style="margin-left:150px;" src="{% static 'ticket/image/logoplease.png' %}" class="img-fluid aboutimg" alt="About SajiloYatra">
                 <div class="d-flex justify-content-end">
                     <a href="/" class="btn btn-success mt-3">Check More</a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-12">
-                <p class="py-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ab quos eligendi neque tempora, voluptatibus incidunt assumenda libero magni, commodi odit quia? Autem maiores blanditiis reiciendis cum veniam rerum debitis.
+                <p class="py-3" style="text-align:justify; margin:20px;">
+                    SajiloYatra is an intelligent and streamlined bus management system to mechanize 
+                    the operations of transport operators in a way that does not turn commuter journeys strenuous.
+                     It establishes a regular pattern of managing routes, buses, timetables, and commuters through
+                      which free and convenient travel is ensured. Whereas the daily operations of buses, routes, and 
+                      direction along with timings need to be executed manually by the transporters and make the operation 
+                      time-consuming with errors. Passengers are also disadvantaged in obtaining proper information on bus availability 
+                      and the timing. SajiloYatra fills the void because it provides an instantaneous interface that collates and provides
+                       all the required information at one spot.
                 </p>
             </div>
         </div>

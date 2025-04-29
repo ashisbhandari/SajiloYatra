@@ -7,8 +7,6 @@
     <title>SajiloYatra-Seat</title>
     
     <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
-    
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -28,10 +26,10 @@
         .last-line {
             display: flex;
             justify-content: center;
-            gap: 10px; 
+            gap: 10px;
         }
         .seat-line button, .last-line button {
-            width: 50px; 
+            width: 50px;
         }
         .payment-container {
             display: flex;
@@ -40,8 +38,6 @@
             flex-direction: column;
             align-items: center;
         }
-
-        /* Accessibility styles */
         .btn:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
@@ -51,22 +47,19 @@
 <body>
     <div class="seat">
         <div class="col-md-6">
-            <!-- Message to show if no seat is selected -->
             <div id="seatMessage" style="color: red; font-weight: bold; text-align: center; margin-bottom: 20px;">
                 Please select a seat before proceeding.
             </div>
-
+            <h2>Seats for Vehicle: {{ vehicle_no }}</h2>
             <div class="cabin">
                 <div class="seat-line">
-                    <div class="a">
-                        <br><br>
-                        <p><b><i>Door</i></b></p> 
-                    </div>
+                    <div class="a"><br><br><p><b><i>Door</i></b></p></div>
                     <div class="b" style="padding-left: 60px;">
                         <img src="{% static 'ticket/image/driver.png' %}" alt="Driver" height="100px" width="100px">
                     </div>
                 </div>
             </div><br>
+
             {% for row in "ABCDEFGH" %}
             <div class="seat-line">
                 <div class="a">
@@ -80,7 +73,6 @@
             </div>
             {% endfor %}
 
-            <!-- Last Row (L) -->
             <div class="last-line">
                 <button class="btn btn-outline-success selected-seat" id="L1">L1</button>
                 <button class="btn btn-outline-success selected-seat" id="L2">L2</button>
@@ -100,14 +92,14 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".selected-seat");
-            var proceedButton = document.getElementById("proceedButton");
-            var seatMessage = document.getElementById("seatMessage");
+            const vehicleNo = "{{ vehicle_no }}";  // Injected from Django
+            const proceedButton = document.getElementById("proceedButton");
+            const seatMessage = document.getElementById("seatMessage");
             let selectedSeats = [];
 
             buttons.forEach((btn) => {
@@ -130,29 +122,23 @@
                     proceedButton.disabled = selectedSeats.length === 0;
                     updateSelectedSeatsDisplay();
 
-                    // Update the link dynamically with selected seat values
-                    let proceedLink = document.getElementById("proceedLink");
-                    proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}`;
+                    // ✅ Update URL with seats + vehicle number
+                    const proceedLink = document.getElementById("proceedLink");
+                    proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}&vech_no=${vehicleNo}`;
 
-                    // Update the message visibility based on seat selection
-                    if (selectedSeats.length === 0) {
-                        seatMessage.style.display = 'block'; // Show message when no seat is selected
-                    } else {
-                        seatMessage.style.display = 'none';  // Hide message when seats are selected
-                    }
+                    seatMessage.style.display = selectedSeats.length === 0 ? 'block' : 'none';
                 });
             });
 
-            // Listen for "Proceed to Payment" button click
             proceedButton.addEventListener("click", function(event) {
                 if (selectedSeats.length === 0) {
-                    event.preventDefault(); // Prevent navigation
+                    event.preventDefault();
                     alert("Please select seats before proceeding.");
                 }
             });
 
             function updateSelectedSeatsDisplay() {
-                let seatInfo = document.getElementById("selectedSeatInfo");
+                const seatInfo = document.getElementById("selectedSeatInfo");
                 seatInfo.innerHTML = `<b>Selected Seats (${selectedSeats.length}):</b><br> ${selectedSeats.join(", ")}`;
             }
         });

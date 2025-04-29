@@ -56,7 +56,7 @@ class SignupForm(forms.Form):
             contact=self.cleaned_data["contact"],
             passenger_type=self.cleaned_data["passenger_type"],
             # student_image=self.cleaned_data.get("student_image"),  # student_image is optional
-           password = self.cleaned_data["password"],  # Store the hashed password
+            password = self.cleaned_data["password"],  # Store the hashed password
         )
         user.save()
         return user
@@ -188,9 +188,46 @@ class BusRouteForm(forms.ModelForm):
         return cleaned_data
     
 from django import forms
-from .models import BookedTicket
+from .models import BookedTicket  # Make sure this model is imported
 
 class BookedTicketForm(forms.ModelForm):
+    PAYMENT_TYPE = [
+        ('Cash on counter', 'Cash on counter'),
+        ('online payment', 'online payment'),
+    ]
+    
+    payment = forms.ChoiceField(choices=PAYMENT_TYPE, required=True)
+    name = forms.CharField(max_length=100, label="Passenger Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}))
+    email = forms.EmailField(label="Email Address", widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
+    phone = forms.CharField(max_length=15, label="Contact Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter contact number'}))
+    comments = forms.CharField(max_length=500, required=False, label="Special Instructions", widget=forms.Textarea(attrs={'placeholder': 'Optional'}))
+    departure_time = forms.DateField(required=True)
+    paymentproof = forms.ImageField(label="Upload Payment Screenshot (if applicable)", required=False)
+    vech_no = forms.CharField(max_length=20, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'E.g. BA 2 KHA 1234'}))  # ✅ new field
+
     class Meta:
-        model = BookedTicket
-        fields = ['passenger_name', 'email', 'phone', 'comments', 'departure_time', 'seats', 'bus', 'payment_method']
+        model = BookedTicket  # Link the form to the BookedTicket model
+        fields = ['name', 'email', 'phone', 'comments', 'payment', 'departure_time', 'paymentproof', 'vech_no']  # Include all the fields for the model
+
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
+    def __init__(self, *args, **kwargs):
+        vech_no = kwargs.pop('vech_no', None)
+        super().__init__(*args, **kwargs)
+        if vech_no:
+            self.fields['vech_no'].initial = vech_no
+            
+    def save(self):
+        user = BookedTicket(
+            name=self.cleaned_data["name"],
+            phone=self.cleaned_data["phone"],
+            email=self.cleaned_data["email"],
+            comments=self.cleaned_data["comments"],
+            departure_time=self.cleaned_data["departure_time"],
+            paymentproof=self.cleaned_data.get("paymentproof"),
+            payment=self.cleaned_data["payment"],
+            vech_no=self.cleaned_data["vech_no"],  # ✅ new field
+        )
+        user.save()
+        return user
