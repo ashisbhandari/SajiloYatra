@@ -247,7 +247,7 @@ def book_ticket(request):
             print(form.errors)  # For debugging errors
             # You can also pass errors to the template if you want
     else:
-        form = BookedTicketForm(initial={ 'vech_no': vech_no })
+        form = BookedTicketForm(initial={ 'vech_no': vech_no }) 
 
     # Ensure form is passed in the context
     return render(request, 'ticket/booktkt.html', {
