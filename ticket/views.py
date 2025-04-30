@@ -200,7 +200,6 @@ def book_ticket(request):
     return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats,'year': year,})
 
 
-
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .forms import BookedTicketForm
@@ -254,7 +253,7 @@ SajiloYatra Team
                 fail_silently=False,
             )
 
-            return redirect('/')  # Redirect after booking
+            return redirect('/')  # Redirect after successful booking
 
     else:
         form = BookedTicketForm(initial={
@@ -269,6 +268,10 @@ SajiloYatra Team
         'vech_no': vech_no,
         'Seat_no': seat_str,
     })
+
+
+def map(request):
+    return render(request, 'ticket/check.html')
 
 
 def register_bus(request):
