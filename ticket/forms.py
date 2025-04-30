@@ -243,7 +243,7 @@ class BookedTicketForm(forms.ModelForm):
     name = forms.CharField(max_length=100, label="Passenger Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}))
     email = forms.EmailField(label="Email Address", widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
     phone = forms.CharField(max_length=15, label="Contact Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter contact number'}))
-    comments = forms.CharField(max_length=500, required=False, label="Special Instructions", widget=forms.Textarea(attrs={'placeholder': 'Optional'}))
+    comments = forms.CharField(max_length=500, required=False, label="Special Instructions", widget=forms.Textarea(attrs={'placeholder': 'Optional','rows': 2,}))
     departure_time = forms.DateField(required=True)
     paymentproof = forms.ImageField(label="Upload Payment Screenshot (if applicable)", required=False)
     vech_no = forms.CharField(max_length=20, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'E.g. BA 2 KHA 1234'}))

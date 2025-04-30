@@ -4,170 +4,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SajiloYatra - Reservation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>SajiloYatra-Ticket Booking</title>
+
+    <!-- Bootstrap CSS link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    
     <style>
         body {
             background: linear-gradient(135deg, #e0f7fa, #e1bee7);
             font-family: 'Arial', sans-serif;
         }
+
+        .container {
+            max-width: 800px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
         h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007bff;
             text-align: center;
+            margin-bottom: 40px;
         }
-        .gataway img {
+
+        .form-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            font-size: 16px;
+            margin-top: 8px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .form-control::placeholder {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-light {
+            background-color: #007bff;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 8px;
             width: 100%;
-            max-width: 150px;
-            height: auto;
-            margin: auto;
+            transition: background-color 0.3s ease;
         }
 
-        .hi {
-            padding: 50px;
+        .btn-light:hover {
+            background-color: #0056b3;
         }
 
-        /* Flexbox container for payment options */
         .payment-options {
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
-        .payment-options .payment-option {
+        .payment-option img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-option img:hover {
+            transform: scale(1.1);
+        }
+
+        .pay-des {
+            font-weight: bold;
             text-align: center;
-            margin: 10px;
+            font-size: 16px;
+            color: red;
+            margin: 20px;
         }
 
-        /* For mobile and smaller devices */
-        @media (max-width: 768px) {
-            .payment-options {
-                flex-direction: column;
-            }
+        .card {
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
     </style>
+
 </head>
 <body>
+
     {% include 'ticket/navbar.html' %}
-    
-    <div class="container hi">
-        <h1>Book Your Ticket From<img src="{% static 'ticket/image/logoplease.png' %}" height="100px">
+    <br>
+    <br>
+    <br>
+<div class="container">
+    <h1>Book Your Ticket From<img src="{% static 'ticket/image/logoplease.png' %}" height="100px">
         <h1> </h1>
-  <section class="ticket-booking-form">
-    <h2>Book a Bus Ticket</h2>
 
     <form method="POST" enctype="multipart/form-data">
+        <center>
+        <label for="paymentproof" class="pay-des">
+            Please provide a screenshot of the payment made online.<br>
+            If you do not provide a screenshot, you will be required to pay again at the counter.
+            <br>
+            कृपया अनलाइन गरिएको भुक्तानीको स्क्रिनसट प्रदान गर्नुहोस्।<br>
+            यदि तपाईंले स्क्रिनसट प्रदान गर्नुभएन भने, तपाईंले काउन्टरमा फेरि भुक्तानी गर्नुपर्नेछ।
+        </label></center>
         {% csrf_token %}
-        
+        <center>
         <div class="form-group">
-            <label for="name">Passenger Name:</label>
+            <label for="name" class="form-label">Passenger Name:</label>
             {{ form.name }}
         </div>
 
         <div class="form-group">
-            <label for="email">Email Address:</label>
+            <label for="email" class="form-label">Email Address:</label>
             {{ form.email }}
         </div>
 
         <div class="form-group">
-            <label for="phone">Contact Number:</label>
+            <label for="phone" class="form-label">Contact Number:</label>
             {{ form.phone }}
         </div>
 
-        <div class="form-group">
-            <label for="comments">Special Instructions (Optional):</label>
-            {{ form.comments }}
-        </div>
+        
 
         <div class="form-group">
-            <label for="departure_time">Departure Date:</label>
+            <label for="departure_time" class="form-label">Departure Date:</label>
             {{ form.departure_time }}
         </div>
 
         <div class="form-group">
-            <label for="payment">Payment Type:</label>
+            <label for="payment" class="form-label">Payment Type:</label>
             {{ form.payment }}
         </div>
 
         <div class="form-group" id="payment-proof-section" {% if form.payment.data != 'online payment' %}style="display:none;"{% endif %}>
-            <label for="paymentproof">Upload Payment Screenshot (if online payment):</label>
+            <label for="paymentproof" class="form-label">Upload Payment Screenshot (if online payment):</label>
             {{ form.paymentproof }}
         </div>
 
         <div class="form-group">
-            <label for="vech_no">Vehicle Number:</label>
+            <label for="vech_no" class="form-label">Vehicle Number:</label>
             {{ form.vech_no }}
         </div>
 
         <div class="form-group">
-            <label for="Seat_no">Your Selected Seats:</label>
+            <label for="Seat_no" class="form-label">Your Selected Seats:</label>
             {{ form.Seat_no }}
         </div>
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <div class="row mb-3 gataway"  >
-                    <h2>Payment Options</h2>
-                    <div class="payment-options">
-                        <div class="payment-option">
-                            <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa"></a>
-                            <p>Esewa</p>
-                        </div>
-                        <div class="payment-option">
-                            <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti"></a>
-                            <p>Khalti</p>
-                        </div>
-                        <div class="payment-option">
-                            <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay"></a>
-                            <p>IMEPay</p>
-                        </div>
-                    </div>
-    
-                    <br>
-                    <style>
-                        .pay-des{
-                            font-weight:bolder;
-                            text-align:center;
-                            font-size:24px;
-                            color:red;
-                        }
-                    </style>
-                    <label for="paymentproof" class="pay-des">
-                        Please provide a screenshot of the payment made online.<br>
-                        If you do not provide a screenshot, you will be required to pay again at the counter.
-                        <br>
-                        कृपया अनलाइन गरिएको भुक्तानीको स्क्रिनसट प्रदान गर्नुहोस्।<br>
-    यदि तपाईंले स्क्रिनसट प्रदान गर्नुभएन भने, तपाईंले काउन्टरमा फेरि भुक्तानी गर्नुपर्नेछ।
-                    </label>
+        <div class="form-group">
+            <label for="comments" class="form-label">Special Instructions (Optional):</label>
+            {{ form.comments }}
+        </div>
+
+        <div class="card">
+            <h5 class="text-center">Payment Options</h5>
+            <div class="payment-options">
+                <div class="payment-option">
+                    <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa">
+                    <p class="text-center">Esewa</p>
+                </div>
+                <div class="payment-option">
+                    <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti">
+                    <p class="text-center">Khalti</p>
+                </div>
+                <div class="payment-option">
+                    <img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay">
+                    <p class="text-center">IMEPay</p>
                 </div>
             </div>
         </div>
+
         <div class="form-group">
-            <button type="submit">Submit Booking</button>
+            <button type="submit" class="btn btn-light">Submit Booking</button>
         </div>
     </form>
-</section>
+</div>
+</center>
 
-<script>
-    // Show payment proof field only if the payment is online
-    const paymentField = document.getElementById('id_payment');
-    const paymentProofSection = document.getElementById('payment-proof-section');
-    
-    paymentField.addEventListener('change', function() {
-        if (paymentField.value === 'online payment') {
-            paymentProofSection.style.display = 'block';
-        } else {
-            paymentProofSection.style.display = 'none';
-        }
-    });
+<!-- Bootstrap JS and Popper.js links -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
-    // Initial check in case the user has already selected online payment
-    if (paymentField.value === 'online payment') {
-        paymentProofSection.style.display = 'block';
-    }
-</script>
-    </div>
-
-    {% include 'ticket/footer.html' %}
 </body>
 </html>
