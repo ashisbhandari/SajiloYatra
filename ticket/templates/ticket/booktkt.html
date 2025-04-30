@@ -130,8 +130,48 @@
     {{ form.as_p }}
   
     <!-- Include hidden vech_no -->
-    <input type="hidden" name="vech_no" value="{{ vech_vo }}">
-  
+    <input type="hidden" name="vech_no" value="{{ vech_no }}">
+    <input type="hidden" name="Seat_no" value="{{ Seat_no }}">
+    {% comment %} <input type="hidden" name="Ticket_no" value="{{ Ticket_vo }}"> {% endcomment %}
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="row mb-3 gataway"  >
+                <h2>Payment Options</h2>
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa"></a>
+                        <p>Esewa</p>
+                    </div>
+                    <div class="payment-option">
+                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti"></a>
+                        <p>Khalti</p>
+                    </div>
+                    <div class="payment-option">
+                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay"></a>
+                        <p>IMEPay</p>
+                    </div>
+                </div>
+
+                <br>
+                <style>
+                    .pay-des{
+                        font-weight:bolder;
+                        text-align:center;
+                        font-size:24px;
+                        color:red;
+                    }
+                </style>
+                <label for="paymentproof" class="pay-des">
+                    Please provide a screenshot of the payment made online.<br>
+                    If you do not provide a screenshot, you will be required to pay again at the counter.
+                    <br>
+                    कृपया अनलाइन गरिएको भुक्तानीको स्क्रिनसट प्रदान गर्नुहोस्।<br>
+यदि तपाईंले स्क्रिनसट प्रदान गर्नुभएन भने, तपाईंले काउन्टरमा फेरि भुक्तानी गर्नुपर्नेछ।
+                </label>{% comment %} <input type="file" class="form-control" name="paymentproof" id="paymentproof" accept="image/*"> {% endcomment %}
+                
+            </div>
+        </div>
+    </div>
     <button type="submit">Submit</button>
   </form>
     </div>

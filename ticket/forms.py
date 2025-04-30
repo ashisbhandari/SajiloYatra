@@ -190,12 +190,55 @@ class BusRouteForm(forms.ModelForm):
 from django import forms
 from .models import BookedTicket  # Make sure this model is imported
 
+# class BookedTicketForm(forms.ModelForm):
+#     PAYMENT_TYPE = [
+#         ('Cash on counter', 'Cash on counter'),
+#         ('online payment', 'online payment'),
+#     ]
+    
+#     payment = forms.ChoiceField(choices=PAYMENT_TYPE, required=True)
+#     name = forms.CharField(max_length=100, label="Passenger Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}))
+#     email = forms.EmailField(label="Email Address", widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
+#     phone = forms.CharField(max_length=15, label="Contact Number", widget=forms.NumberInput(attrs={'placeholder': 'Enter contact number'}))
+#     comments = forms.CharField(max_length=500, required=False, label="Special Instructions", widget=forms.Textarea(attrs={'placeholder': 'Optional'}))
+#     departure_time = forms.DateField(required=True)
+#     paymentproof = forms.ImageField(label="Upload Payment Screenshot (if applicable)", required=False)
+#     vech_no = forms.CharField(max_length=20, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'E.g. BA 2 KHA 1234'}))  # ✅ new field
+
+#     class Meta:
+#         model = BookedTicket  # Link the form to the BookedTicket model
+#         fields = ['name', 'email', 'phone', 'comments', 'payment', 'departure_time', 'paymentproof', 'vech_no']  # Include all the fields for the model
+
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         return cleaned_data
+#     def __init__(self, *args, **kwargs):
+#         vech_no = kwargs.pop('vech_no', None)
+#         super().__init__(*args, **kwargs)
+#         if vech_no:
+#             self.fields['vech_no'].initial = vech_no
+            
+#     def save(self):
+#         user = BookedTicket(
+#             name=self.cleaned_data["name"],
+#             phone=self.cleaned_data["phone"],
+#             email=self.cleaned_data["email"],
+#             comments=self.cleaned_data["comments"],
+#             departure_time=self.cleaned_data["departure_time"],
+#             paymentproof=self.cleaned_data.get("paymentproof"),
+#             payment=self.cleaned_data["payment"],
+#             vech_no=self.cleaned_data["vech_no"],  # ✅ new field
+#         )
+#         user.save()
+#         return user
+import uuid
+
 class BookedTicketForm(forms.ModelForm):
     PAYMENT_TYPE = [
         ('Cash on counter', 'Cash on counter'),
         ('online payment', 'online payment'),
     ]
-    
+
     payment = forms.ChoiceField(choices=PAYMENT_TYPE, required=True)
     name = forms.CharField(max_length=100, label="Passenger Name", widget=forms.TextInput(attrs={'placeholder': 'Enter your name'}))
     email = forms.EmailField(label="Email Address", widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'}))
@@ -203,22 +246,37 @@ class BookedTicketForm(forms.ModelForm):
     comments = forms.CharField(max_length=500, required=False, label="Special Instructions", widget=forms.Textarea(attrs={'placeholder': 'Optional'}))
     departure_time = forms.DateField(required=True)
     paymentproof = forms.ImageField(label="Upload Payment Screenshot (if applicable)", required=False)
-    vech_no = forms.CharField(max_length=20, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'E.g. BA 2 KHA 1234'}))  # ✅ new field
-
+    vech_no = forms.CharField(max_length=20, label="Vehicle Number", widget=forms.TextInput(attrs={'placeholder': 'E.g. BA 2 KHA 1234'}))
+    Seat_no = forms.CharField(max_length=20, label="Your Selected Seats:")
     class Meta:
-        model = BookedTicket  # Link the form to the BookedTicket model
-        fields = ['name', 'email', 'phone', 'comments', 'payment', 'departure_time', 'paymentproof', 'vech_no']  # Include all the fields for the model
-
-    def clean(self):
-        cleaned_data = super().clean()
-        return cleaned_data
+        model = BookedTicket
+        fields = ['name', 'email', 'phone', 'comments', 'payment', 'departure_time', 'paymentproof', 'vech_no', 'Seat_no']
+    
     def __init__(self, *args, **kwargs):
         vech_no = kwargs.pop('vech_no', None)
         super().__init__(*args, **kwargs)
         if vech_no:
             self.fields['vech_no'].initial = vech_no
-            
+
+    def clean(self):
+        cleaned_data = super().clean()
+        payment = cleaned_data.get('payment')
+        paymentproof = cleaned_data.get('paymentproof')
+
+        if payment == 'online payment' and not paymentproof:
+            self.add_error('paymentproof', 'Payment screenshot is required for online payments.')
+
+        return cleaned_data
+
     def save(self):
+        vech_no = self.cleaned_data["vech_no"]
+        seat_no = self.cleaned_data["Seat_no"]
+        ticket_no = f"{vech_no}-{seat_no}".replace(" ", "")  # remove spaces to keep it clean
+
+        # Ensure the Ticket_no is unique
+        if BookedTicket.objects.filter(Ticket_no=ticket_no).exists():
+            raise forms.ValidationError("This ticket number already exists. Please change seat or vehicle.")
+
         user = BookedTicket(
             name=self.cleaned_data["name"],
             phone=self.cleaned_data["phone"],
@@ -227,7 +285,9 @@ class BookedTicketForm(forms.ModelForm):
             departure_time=self.cleaned_data["departure_time"],
             paymentproof=self.cleaned_data.get("paymentproof"),
             payment=self.cleaned_data["payment"],
-            vech_no=self.cleaned_data["vech_no"],  # ✅ new field
+            vech_no=vech_no,
+            Seat_no=seat_no,
+            Ticket_no=ticket_no,
         )
         user.save()
         return user

@@ -59,10 +59,7 @@ def seat(request):
 def seat(request, vehicle_no):
     # You can use vehicle_no to query bus/seat details from DB
     return render(request, 'ticket/seats.html', {'vehicle_no': vehicle_no})
-
-def map(request):
-    return render(request, 'ticket/check.html')  # Pass seats as 20 for example
-
+from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
 
@@ -228,34 +225,75 @@ def book_ticket(request):
 #     })
 from .forms import BookedTicketForm
 
+# def book_ticket(request):
+#     year = datetime.now().year
+#     selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
+#     vech_no = request.GET.get('vech_no','')
+#     if request.method == 'POST':
+#         post_data = request.POST.copy()
+#         if 'vech_no' not in post_data:
+#             post_data['vech_no'] = request.GET.get('vech_no', '')
+#         form = BookedTicketForm(request.POST, request.FILES)  # Handle form submission
+#         if form.is_valid():
+#             ticket = form.save()
+#             ticket.selected_seats = ','.join(selected_seats)
+#             ticket.save()
+#             form.save()  # Save the form data to the database
+#             return redirect('/')  # Redirect after successful submission
+#         else:
+#             print(form.errors)  # For debugging errors
+#             # You can also pass errors to the template if you want
+#     else:
+#         form = BookedTicketForm(initial={ 'vech_no': vech_no }) 
+
+#     # Ensure form is passed in the context
+#     return render(request, 'ticket/booktkt.html', {
+#         'form': form,
+#         'selected_seats': selected_seats,
+#         'year': year,
+#         'vech_vo':vech_no,
+#     })
+
+from django.shortcuts import render, redirect, get_object_or_404
+from datetime import datetime
+from .forms import BookedTicketForm
+from .models import BookedTicket
 def book_ticket(request):
     year = datetime.now().year
-    selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
-    vech_no = request.GET.get('vech_no','')
+    selected_seats = request.GET.get('seats', '').split(',')
+    vech_no = request.GET.get('vech_no', '')
+    seat_str = request.GET.get('seats', '')  # For filling Seat_no field
+
     if request.method == 'POST':
         post_data = request.POST.copy()
-        if 'vech_no' not in post_data:
-            post_data['vech_no'] = request.GET.get('vech_no', '')
-        form = BookedTicketForm(request.POST, request.FILES)  # Handle form submission
+
+        # Auto-fill hidden/missing fields from GET if needed
+        post_data.setdefault('vech_no', vech_no)
+        post_data.setdefault('Seat_no', seat_str)
+
+        form = BookedTicketForm(post_data, request.FILES)
         if form.is_valid():
             ticket = form.save()
-            ticket.selected_seats = ','.join(selected_seats)
-            ticket.save()
-            form.save()  # Save the form data to the database
-            return redirect('/')  # Redirect after successful submission
-        else:
-            print(form.errors)  # For debugging errors
-            # You can also pass errors to the template if you want
+            return redirect('/') 
+            print(form.errors)
     else:
-        form = BookedTicketForm(initial={ 'vech_no': vech_no }) 
+        form = BookedTicketForm(initial={
+            'vech_no': vech_no,
+            'Seat_no': seat_str,
+        })
 
-    # Ensure form is passed in the context
     return render(request, 'ticket/booktkt.html', {
         'form': form,
         'selected_seats': selected_seats,
         'year': year,
-        'vech_vo':vech_no,
+        'vech_no': vech_no,
+        'Seat_no':seat_str,
     })
+
+def map(request,ticket_id):
+    ticket = get_object_or_404(BookedTicket, id=ticket_id)
+    return render(request, 'ticket/check.html',{'ticket': ticket})  # Pass seats as 20 for example
+
 
 def register_bus(request):
     today = date.today()  # Get today's date

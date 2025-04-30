@@ -94,6 +94,60 @@ class companyRegistration(models.Model):
         db_table = 'company'
 
 
+# class BusRoute(models.Model):
+#     nepal_tz = pytz.timezone('Asia/Kathmandu')
+#     nepal_time = timezone.now().astimezone(nepal_tz)
+#     vehicle_number = models.CharField(max_length=100)
+#     username = models.CharField(max_length=100)
+#     contact = models.CharField(max_length=15)
+#     origin = models.CharField(max_length=100)
+#     vehicle_type = models.CharField(max_length=50)
+#     destination = models.CharField(max_length=100)
+#     passenger_capacity = models.IntegerField()
+#     comp_name = models.CharField(max_length=100)
+#     departure_time = models.DateTimeField(default=nepal_time)
+#     def __str__(self):
+#         return f"{self.vehicle_number} - {self.origin} to {self.destination}"
+#     def save(self, *args, **kwargs):
+#         # If comp_name is not set, assign the logged-in company's name
+#         if not self.comp_name and hasattr(self, 'request'):
+#             self.comp_name = self.request.user.username  # Assuming username stores the company name
+#         super().save(*args, **kwargs)
+        
+# class Bus(models.Model):
+#     bus_id=5
+#     number = models.CharField(max_length=100, unique=True)
+#     route = models.ForeignKey(BusRoute, on_delete=models.CASCADE, related_name='buses')
+#     total_seats = models.PositiveIntegerField(default=30)
+    
+#     def __str__(self):
+#         return f"{self.number} ({self.route})"
+
+# class BookedTicket(models.Model):
+#     PAYMENT_TYPE = [
+#         ('Cash on counter', 'Cash on counter'),
+#         ('online payment', 'online payment'),
+#     ]
+
+#     payment = models.CharField(max_length=50, choices=PAYMENT_TYPE)
+#     name = models.CharField(max_length=100)
+#     email = models.EmailField()  # Removed unique=True to allow multiple bookings with same email
+#     phone = models.CharField(max_length=15)
+#     comments = models.CharField(max_length=500, blank=True, null=True)
+#     departure_time = models.DateField()
+#     vech_no = models.CharField(max_length=20)
+#     paymentproof = models.ImageField(
+#         upload_to='payment_proofs/',  # Optional: change folder name as needed
+#         max_length=255,
+#         null=True,
+#         blank=True
+#     )
+
+#     class Meta:
+#         db_table = 'ticket_bookedticket'
+
+#     def __str__(self):
+#         return f"{self.name} - {self.departure_time}"
 class BusRoute(models.Model):
     nepal_tz = pytz.timezone('Asia/Kathmandu')
     nepal_time = timezone.now().astimezone(nepal_tz)
@@ -131,13 +185,15 @@ class BookedTicket(models.Model):
 
     payment = models.CharField(max_length=50, choices=PAYMENT_TYPE)
     name = models.CharField(max_length=100)
-    email = models.EmailField()  # Removed unique=True to allow multiple bookings with same email
+    email = models.EmailField() 
     phone = models.CharField(max_length=15)
     comments = models.CharField(max_length=500, blank=True, null=True)
     departure_time = models.DateField()
     vech_no = models.CharField(max_length=20)
+    Seat_no=models.CharField(max_length=20)
+    Ticket_no = models.CharField(max_length=30, unique=True, editable=False)
     paymentproof = models.ImageField(
-        upload_to='payment_proofs/',  # Optional: change folder name as needed
+        upload_to='payment_proofs/',
         max_length=255,
         null=True,
         blank=True
@@ -146,5 +202,9 @@ class BookedTicket(models.Model):
     class Meta:
         db_table = 'ticket_bookedticket'
 
+    def save(self, *args, **kwargs):
+        if not self.Ticket_no:
+            self.Ticket_no = f"TKT-{uuid.uuid4().hex[:8].upper()}"
+        super().save(*args, **kwargs)
     def __str__(self):
         return f"{self.name} - {self.departure_time}"
