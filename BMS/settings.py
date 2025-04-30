@@ -159,3 +159,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'photolaija@gmail.com'
 EMAIL_HOST_PASSWORD = 'occn qigz pjjx qlxs'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -200,64 +200,17 @@ def book_ticket(request):
     return render(request, 'ticket/booktkt.html', {'selected_seats': selected_seats,'year': year,})
 
 
-# def booktkt(request):
-#     year = datetime.now().year
-#     selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
-#     if request.method=='POST':
-#         bus = Bus.objects.filter(total_seats__gt=0).first()
-#         if not bus:
-#             return HttpResponse("No bus available!", status=404)
-#         form=BookedTicketForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             message.success(request,"Your Ticket have been booked successfully")
-#             return redirect('/login')
-#         else:
-#             print(form.errors)
-#             message.error(request,"there was an error with your form submission, please try again")
-#     else:
-#         form=BookedTicketForm()
-   
-#     return render(request, 'ticket/booktkt.html',{
-#     'form': form,
-#     'selected_seats': selected_seats,
-#     'year':year,
-#     })
-from .forms import BookedTicketForm
-
-# def book_ticket(request):
-#     year = datetime.now().year
-#     selected_seats = request.GET.get('seats', '').split(',') if request.method == 'GET' else []
-#     vech_no = request.GET.get('vech_no','')
-#     if request.method == 'POST':
-#         post_data = request.POST.copy()
-#         if 'vech_no' not in post_data:
-#             post_data['vech_no'] = request.GET.get('vech_no', '')
-#         form = BookedTicketForm(request.POST, request.FILES)  # Handle form submission
-#         if form.is_valid():
-#             ticket = form.save()
-#             ticket.selected_seats = ','.join(selected_seats)
-#             ticket.save()
-#             form.save()  # Save the form data to the database
-#             return redirect('/')  # Redirect after successful submission
-#         else:
-#             print(form.errors)  # For debugging errors
-#             # You can also pass errors to the template if you want
-#     else:
-#         form = BookedTicketForm(initial={ 'vech_no': vech_no }) 
-
-#     # Ensure form is passed in the context
-#     return render(request, 'ticket/booktkt.html', {
-#         'form': form,
-#         'selected_seats': selected_seats,
-#         'year': year,
-#         'vech_vo':vech_no,
-#     })
 
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from .forms import BookedTicketForm
 from .models import BookedTicket
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render, redirect
+from datetime import datetime
+from .forms import BookedTicketForm
+
 def book_ticket(request):
     year = datetime.now().year
     selected_seats = request.GET.get('seats', '').split(',')
@@ -267,15 +220,42 @@ def book_ticket(request):
     if request.method == 'POST':
         post_data = request.POST.copy()
 
-        # Auto-fill hidden/missing fields from GET if needed
         post_data.setdefault('vech_no', vech_no)
         post_data.setdefault('Seat_no', seat_str)
 
         form = BookedTicketForm(post_data, request.FILES)
         if form.is_valid():
             ticket = form.save()
-            return redirect('/') 
-            print(form.errors)
+
+            # Send email after booking
+            subject = "Your Ticket Booking Confirmation - SajiloYatra"
+            message = f"""
+Dear {ticket.name},
+
+Thank you for booking your ticket with SajiloYatra.
+
+🔖 Ticket Details:
+- Ticket No: {ticket.Ticket_no}
+- Seat(s): {ticket.Seat_no}
+- Departure Date: {ticket.departure_time}
+- Vehicle No: {ticket.vech_no}
+- Payment Type: {ticket.payment}
+
+If you chose online payment, please ensure you have uploaded the payment proof.
+
+Safe travels!
+SajiloYatra Team
+"""
+            send_mail(
+                subject,
+                message,
+                'photolaija@gmail.com',  # Sender 
+                [ticket.email],               # Recipient
+                fail_silently=False,
+            )
+
+            return redirect('/')  # Redirect after booking
+
     else:
         form = BookedTicketForm(initial={
             'vech_no': vech_no,
@@ -287,12 +267,8 @@ def book_ticket(request):
         'selected_seats': selected_seats,
         'year': year,
         'vech_no': vech_no,
-        'Seat_no':seat_str,
+        'Seat_no': seat_str,
     })
-
-def map(request,ticket_id):
-    ticket = get_object_or_404(BookedTicket, id=ticket_id)
-    return render(request, 'ticket/check.html',{'ticket': ticket})  # Pass seats as 20 for example
 
 
 def register_bus(request):
@@ -350,8 +326,7 @@ def submit_contact(request):
         name = request.POST.get('name')
         contact = request.POST.get('contact')
         email = request.POST.get('email')
-        comments = request.POST.get('comments')  # Fixed field name
-
+        comments = request.POST.get('comments')  
         subject = f'Feedback to SajiloYatra by {name }'
         message = f'''
         Name: {name}

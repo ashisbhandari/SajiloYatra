@@ -54,126 +54,118 @@
     <div class="container hi">
         <h1>Book Your Ticket From<img src="{% static 'ticket/image/logoplease.png' %}" height="100px">
         <h1> </h1>
-        {% comment %} <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <div class="row mb-3">
-        <input type="hidden" name="vech_no" value="{{ vech_vo }}">
-        <div class="col-md-6">
-            <label class="form-label"><b>Passenger Name<span style="color:red;">*</span></b></label>
-            <input type="text" class="form-control" name="name" placeholder="Enter your name" required>
-            
-        </div>
-        <div class="col-md-6">
-            <label class="form-label"><b>Email Address <span style="color:red;">*</span></b></label>
-            <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
-            
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label class="form-label"><b>Contact Number <span style="color:red;">*</span></b></label>
-            <input type="tel" class="form-control" name="phone" pattern="\d{10}" maxlength="10" minlength="10" id="phone" placeholder="9800000000" required>
-           
-        </div>
-        <div class="col-md-6">
-            <label class="form-label"><b>Special Instructions</b></label>
-            <textarea class="form-control" name="comments" placeholder="Any special instructions..."></textarea>
-            
-        </div>
-    </div>
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label class="form-label"><b>Departure Time <span style="color:red;">*</span></b></label>
-            <input type="date" class="form-control" name="departure_time" id="datePicker" placeholder="mm/ddewrgf/yy" required>
-            
-        </div>
-    </div>
+  <section class="ticket-booking-form">
+    <h2>Book a Bus Ticket</h2>
 
-    <!-- Continue with the other fields -->
-
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <div class="row mb-3 gataway" id="hiddengateaway" style="display:none;">
-                <h2>Payment Options</h2>
-                <div class="payment-options">
-                    <div class="payment-option">
-                        <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa"></a>
-                        <p>Esewa</p>
-                    </div>
-                    <div class="payment-option">
-                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti"></a>
-                        <p>Khalti</p>
-                    </div>
-                    <div class="payment-option">
-                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay"></a>
-                        <p>IMEPay</p>
-                    </div>
-                </div>
-
-                <br>
-                <label for="paymentproof">Please provide Screenshot of payment which have done through Online<span style="color:red;">*</span></label>
-                <input type="file" class="form-control" name="paymentproof" id="paymentproof" accept="image/*">
-                
-            </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="name">Passenger Name:</label>
+            {{ form.name }}
         </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <button type="submit" class="btn btn-success w-100">Book Ticket</button>
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            {{ form.email }}
         </div>
-    </div>
-</form> {% endcomment %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-  
-    <!-- Include hidden vech_no -->
-    <input type="hidden" name="vech_no" value="{{ vech_no }}">
-    <input type="hidden" name="Seat_no" value="{{ Seat_no }}">
-    {% comment %} <input type="hidden" name="Ticket_no" value="{{ Ticket_vo }}"> {% endcomment %}
-    <div class="row mb-3">
-        <div class="col-md-12">
-            <div class="row mb-3 gataway"  >
-                <h2>Payment Options</h2>
-                <div class="payment-options">
-                    <div class="payment-option">
-                        <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa"></a>
-                        <p>Esewa</p>
-                    </div>
-                    <div class="payment-option">
-                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti"></a>
-                        <p>Khalti</p>
-                    </div>
-                    <div class="payment-option">
-                        <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay"></a>
-                        <p>IMEPay</p>
-                    </div>
-                </div>
 
-                <br>
-                <style>
-                    .pay-des{
-                        font-weight:bolder;
-                        text-align:center;
-                        font-size:24px;
-                        color:red;
-                    }
-                </style>
-                <label for="paymentproof" class="pay-des">
-                    Please provide a screenshot of the payment made online.<br>
-                    If you do not provide a screenshot, you will be required to pay again at the counter.
+        <div class="form-group">
+            <label for="phone">Contact Number:</label>
+            {{ form.phone }}
+        </div>
+
+        <div class="form-group">
+            <label for="comments">Special Instructions (Optional):</label>
+            {{ form.comments }}
+        </div>
+
+        <div class="form-group">
+            <label for="departure_time">Departure Date:</label>
+            {{ form.departure_time }}
+        </div>
+
+        <div class="form-group">
+            <label for="payment">Payment Type:</label>
+            {{ form.payment }}
+        </div>
+
+        <div class="form-group" id="payment-proof-section" {% if form.payment.data != 'online payment' %}style="display:none;"{% endif %}>
+            <label for="paymentproof">Upload Payment Screenshot (if online payment):</label>
+            {{ form.paymentproof }}
+        </div>
+
+        <div class="form-group">
+            <label for="vech_no">Vehicle Number:</label>
+            {{ form.vech_no }}
+        </div>
+
+        <div class="form-group">
+            <label for="Seat_no">Your Selected Seats:</label>
+            {{ form.Seat_no }}
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <div class="row mb-3 gataway"  >
+                    <h2>Payment Options</h2>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <img src="{% static 'ticket/image/esewaqr.png' %}" alt="Esewa"></a>
+                            <p>Esewa</p>
+                        </div>
+                        <div class="payment-option">
+                            <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="Khalti"></a>
+                            <p>Khalti</p>
+                        </div>
+                        <div class="payment-option">
+                            <a href="#"><img src="{% static 'ticket/image/esewaqr.png' %}" alt="IMEPay"></a>
+                            <p>IMEPay</p>
+                        </div>
+                    </div>
+    
                     <br>
-                    कृपया अनलाइन गरिएको भुक्तानीको स्क्रिनसट प्रदान गर्नुहोस्।<br>
-यदि तपाईंले स्क्रिनसट प्रदान गर्नुभएन भने, तपाईंले काउन्टरमा फेरि भुक्तानी गर्नुपर्नेछ।
-                </label>{% comment %} <input type="file" class="form-control" name="paymentproof" id="paymentproof" accept="image/*"> {% endcomment %}
-                
+                    <style>
+                        .pay-des{
+                            font-weight:bolder;
+                            text-align:center;
+                            font-size:24px;
+                            color:red;
+                        }
+                    </style>
+                    <label for="paymentproof" class="pay-des">
+                        Please provide a screenshot of the payment made online.<br>
+                        If you do not provide a screenshot, you will be required to pay again at the counter.
+                        <br>
+                        कृपया अनलाइन गरिएको भुक्तानीको स्क्रिनसट प्रदान गर्नुहोस्।<br>
+    यदि तपाईंले स्क्रिनसट प्रदान गर्नुभएन भने, तपाईंले काउन्टरमा फेरि भुक्तानी गर्नुपर्नेछ।
+                    </label>
+                </div>
             </div>
         </div>
-    </div>
-    <button type="submit">Submit</button>
-  </form>
+        <div class="form-group">
+            <button type="submit">Submit Booking</button>
+        </div>
+    </form>
+</section>
+
+<script>
+    // Show payment proof field only if the payment is online
+    const paymentField = document.getElementById('id_payment');
+    const paymentProofSection = document.getElementById('payment-proof-section');
+    
+    paymentField.addEventListener('change', function() {
+        if (paymentField.value === 'online payment') {
+            paymentProofSection.style.display = 'block';
+        } else {
+            paymentProofSection.style.display = 'none';
+        }
+    });
+
+    // Initial check in case the user has already selected online payment
+    if (paymentField.value === 'online payment') {
+        paymentProofSection.style.display = 'block';
+    }
+</script>
     </div>
 
     {% include 'ticket/footer.html' %}
