@@ -11,15 +11,13 @@ from django.contrib.auth.models import User
 from .models import companyRegistration,BusRoute
 from django.core.paginator import Paginator
 from datetime import date,datetime
-from ticket.models import UserRegistration, companyRegistration,BookedTicket,Bus  # Import models
-
-# Create your views here.
+from ticket.models import UserRegistration, companyRegistration,BookedTicket,Bus 
 
 def home(request):
     origin = request.GET.get('from', '')
     destination = request.GET.get('to', '')
 
-    if not origin or not destination:  # If either from or to is empty, return empty results
+    if not origin or not destination:  # from ra to empty xa vane empty return garxa
         page_obj = []
     else:
         # Prepare SQL query to filter bus routes based on 'from' and 'to'
@@ -27,15 +25,13 @@ def home(request):
                  FROM ticket_busroute 
                  WHERE origin LIKE %s AND destination LIKE %s"""
         
-        # Parameters to prevent SQL injection
+        #  SQL injection prevent garna laii
         params = [f"%{origin}%", f"%{destination}%"]
 
         try:
             with connection.cursor() as cur:
                 cur.execute(qry, params)
                 route_data = cur.fetchall()
-
-                # Paginate the results
                 paginator = Paginator(route_data, 5)
                 page_no = request.GET.get('page')
                 page_obj = paginator.get_page(page_no)
@@ -78,13 +74,13 @@ def login(request):
 
         if user is not None:
             auth_login(request, user)
-            # Convert last_login to ISO format before storing it in session
-            request.session['last_login'] = user.last_login.isoformat()  # Store as string
-            request.session['username'] = user.username  #storing username in session
-            if isinstance(user, UserRegistration):  # Correct the model name here
+            # last login lai isoformat ma covert gareko
+            request.session['last_login'] = user.last_login.isoformat()  # string jasari store garxa
+            request.session['username'] = user.username  #username store
+            if isinstance(user, UserRegistration):  # model correct xa vane return garxa
                 return redirect('/dashboard')  # Redirect as a user
             # request.session['username'] = user.username  #storing username in session
-            elif isinstance(user, companyRegistration):  # Correct the model name here
+            elif isinstance(user, companyRegistration):  
                 return redirect('/comp_dash')  # Redirect as a company
         else:
             messages.error(request, "Invalid username or password.")
