@@ -29,36 +29,26 @@
         {% include "ticket/navbar.html" %}
     </nav>
     <div class="container hi">
-        <h1>For cancellation of ticket please fill the form below</h1>
-         <form action="{% url 'cancel_ticket' %}" method="POST">
-            {% csrf_token %}
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label"><b>Ticket Number</b></label>
-                    <input type="text" class="form-control" name="ticketnumber" placeholder="Enter your ticket number" required>
+        <h3>
+            Please cancel your ticket at least one hour before the departure time, or contact us via email.<br>
+            <a href="/#contact" style="color: red;"> click here</a>
+        </h3>
+        <div class="d-flex justify-content-center mt-4">
+            <form method="get" class="text-center">
+                <div class="mb-2">
+                    <label for="Ticket_no" class="form-label" style="font-size: 20px; font-weight:bolder;">
+                        Please input your Ticket number:
+                    </label>
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label"><b>Passenger Name</b></label>
-                    <input type="text" class="form-control" name="username" placeholder="Enter your name" required>
+                <div class="d-flex justify-content-center gap-2">
+                    <input type="text" name="ticket_no" id="Ticket_no" class="form-control" style="width: 150px;" required>
+                    <button type="submit" class="btn btn-success">Submit</button>
                 </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label"><b>Contact Number</b></label>
-                    <input type="tel" class="form-control" name="contact" placeholder="9800000000" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label"><b>Email Address</b></label>
-                    <input type="email" class="form-control" name="email" placeholder="you@example.com" required>
-                </div>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-primary w-50">Cancel Ticket</button><br>
-            </div>
+            </form>
+        </div>
         </form>
         <div class="container mt-5">
-            <h2 class="mb-4 text-center">Vehicle Information Dashboard</h2>
+            <h3 class="mb-4 text-center">Your Ticket Details:</h3>
             <div class="card shadow-lg">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -73,6 +63,7 @@
                                     <th>Payments_type</th>
                                     <th>Ticket Number</th>
                                     <th>Dept Date</th>
+                                    <th>Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -86,6 +77,7 @@
                                     <td>{{ cmp.5 }}<br>{{ cmp.8 }}</td> 
                                     <td>{{ cmp.6 }}</td> 
                                     <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
+                                    <td><button class="btn btn-danger" onclick="deleteTicket(event, '{{ cmp.7 }}')">Delete</button></td>
                                 </tr>
                                 {% empty %}
                                 <tr>
@@ -95,7 +87,29 @@
                             </tbody>
                         </table>
                     </div>
-        
+                    <script>
+                        function deleteTicket(event, ticketId) {
+                            event.preventDefault();
+                            
+                            // Prompt user to enter seat numbers or leave blank to delete the entire ticket
+                            const seatNumbers = prompt("Please enter seat numbers to delete (comma separated) or leave blank to delete the entire ticket:");
+                    
+                            if (seatNumbers === null) {
+                                // User canceled the prompt
+                                return;
+                            }
+                    
+                            if (seatNumbers === "") {
+                                // If no seat numbers entered, show alert for deleting the entire ticket
+                                alert("You chose to delete the entire ticket!");
+                            } else {
+                                // If seat numbers are entered, show alert for deleting specific seats
+                                const seatList = seatNumbers.split(",").map(seat => seat.trim());
+                                alert("You chose to delete the following seats: " + seatList.join(", "));
+                            }
+                        }
+                    </script>
+                    
                     <!-- Pagination controls -->
                     <div class="d-flex justify-content-between mt-3">
                         <div class="step-links">
@@ -120,6 +134,9 @@
             </div>
         </div>
     <br>
+    <style>
+       
+    </style>
     <footer>
         {% include "ticket/footer.html" %}
     </footer>

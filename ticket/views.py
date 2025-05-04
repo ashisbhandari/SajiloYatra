@@ -392,14 +392,24 @@ def submit_contact(request):
 
 
 def cancel(request):
+    ticket_no = request.GET.get('ticket_no')
     try:
         with connection.cursor() as curs:
-            curs.execute("""SELECT vech_no,name,phone,email,seat_no,payment,ticket_no, departure_time,paymentproof FROM ticket_bookedticket """)
-            route_data=curs.fetchall()
-        paginator=Paginator(route_data,10)
-        pageno=request.GET.get('page')
-        pageobj=paginator.get_page(pageno)
+            curs.execute("""
+                SELECT vech_no, name, phone, email, seat_no, payment, ticket_no, departure_time, paymentproof 
+                FROM ticket_bookedticket 
+                WHERE ticket_no = %s
+            """, [ticket_no])
+            route_data = curs.fetchall()
+
+        paginator = Paginator(route_data, 10)
+        pageno = request.GET.get('page')
+        pageobj = paginator.get_page(pageno)
     except Exception as ex:
-        print("Error occur:",ex)
-        pageobj=[]
-    return render(request,'ticket/cancel_ticket.html',{'page_obj':pageobj})
+        print("Error occurred:", ex)
+        pageobj = []
+
+    return render(request, 'ticket/cancel_ticket.html', {
+        'page_obj': pageobj,
+        'ticket_no': ticket_no
+    })
