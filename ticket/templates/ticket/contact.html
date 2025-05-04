@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancel Ticket-SajiloYatra</title>
+    <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #e0f7fa, #e1bee7);
+            font-family: 'Arial', sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        .hi {
+            padding-top: 50px;
+            text-align: center;
+        }
+        .ok{
+            margin-top:50px;
+            text-align:center;
+            align-items:center;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav>
+        {% include "ticket/navbar.html" %}
+    </nav>
+   <div class="container ok">
+    <div class="container mt-5">
+        <h2 class="mb-4 text-center">Vehicle Information Dashboard</h2>
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <style>
+                            .small{
+                                margin:5px;
+
+                            }
+                            
+                        </style>
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Bus Number</th>
+                                <th>From<span class="small">(देखि)</span></th>
+                                <th>To<span class="small">(सम्म)</span></th>
+                                
+                                <th>contact Number</th>
+                                <th>Vehicle Type</th>
+                                <th>Total Capacity</th>
+                                <th>Driver Name</th>
+                                <th>Dept Date</th>
+                            </tr>
+                        </thead>
+                        <style>
+                            .a{
+                                color:red;
+                            }
+                        </style>
+                        <tbody>
+                            {% for cmp in page_obj %}
+                            <tr>
+                                <td>{{ cmp.0 }}</td>
+                                <td><strong class="a">{{ cmp.5 }} <Strong></td> 
+                                <td> <strong class="a">{{ cmp.6 }} <Strong></td>  
+                                <td>{{ cmp.2 }}</td> 
+                                <td><strong class="a">{{ cmp.3 }}<Strong></td> 
+                                <td>{{ cmp.4 }} </td>
+                                <td>{{ cmp.1 }}</td>
+                                <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1" class="btn btn-outline-success">&laquo; First</a>
+                            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">Previous</a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="current">
+                        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </div>
+                    
+                    <div class="step-links">
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">Next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">Last &raquo;</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   </div>
+    <footer>
+        {% include "ticket/footer.html" %}
+    </footer>
+</body>
+</html>

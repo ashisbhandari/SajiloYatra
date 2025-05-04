@@ -21,4 +21,5 @@ urlpatterns = [
     # path('con/',views.contctt, name="vech_contact"),,
     # path('bus-info/', views.bus_info_dashboard, name='bus_info_dashboard'),
     path('submit_contact/', views.submit_contact, name='submit_contact'),
+    path('contact/', views.contact, name='contact'),
 ]

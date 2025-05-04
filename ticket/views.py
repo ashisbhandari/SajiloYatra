@@ -409,3 +409,18 @@ def cancel(request):
         'page_obj': pageobj,
         'ticket_no': ticket_no
     })
+
+def contact(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT vehicle_number, username, contact, vehicle_type, passenger_capacity, origin, destination,departure_time FROM ticket_busroute""")
+            data = cursor.fetchall()
+
+        paginator = Paginator(data, 10)  # Show 10 results per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+    except Exception as e:
+        print("Error executing query:", e)
+        page_obj = []
+    return render(request,'ticket/contact.html',{'page_obj': page_obj})
