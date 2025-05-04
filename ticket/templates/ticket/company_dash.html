@@ -189,7 +189,92 @@
             </div>
         </div>
     </div>
-
+    <br>
+    <div class="d-flex justify-content-center mt-4">
+        <form method="get" class="text-center">
+            <div class="mb-2">
+                <label for="vehicle_number" class="form-label fw-bold">
+                    Please input your vehicle number to view list of passengers:
+                </label>
+            </div>
+            <div class="d-flex justify-content-center gap-2">
+                <input type="text" name="vehicle_number" id="vehicle_number" class="form-control" style="width: 150px;" required>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
+    </div>
+    
+    
+    
+    
+    
+    <div class="container">
+        <h2 class="text-center">Vehicle Information Dashboard</h2>
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if vehicle_number %}
+                        <div class="alert alert-info text-center mt-3">
+                            <strong>Total Tickets for Vehicle Number  "{{ vehicle_number }}" is : {{ total_tickets }} </strong>
+                        </div>
+                    {% endif %}
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Bus Number</th>
+                                <th>Passenger Name</th>
+                                <th>Number</th>
+                                <th>Email ID</th>
+                                <th>Seat no</th>
+                                <th>Payments_type</th>
+                                <th>Ticket Number</th>
+                                <th>Dept Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cmp in page_obj1 %}
+                            <tr>
+                                <td>{{ cmp.0 }}</td> 
+                                <td>{{ cmp.1 }}</td> 
+                                <td>{{ cmp.2 }}</td> 
+                                <td>{{ cmp.3 }}</td> 
+                                <td>{{ cmp.4 }}</td> 
+                                <td>{{ cmp.5 }}<br>{{ cmp.8 }}</td> 
+                                <td>{{ cmp.6 }}</td> 
+                                <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">No data available</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+    
+                <!-- Pagination controls -->
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="step-links">
+                        {% if page_obj1.has_previous %}
+                            <a href="?page=1" class="btn btn-outline-success">&laquo; First</a>
+                            <a href="?page={{ page_obj1.previous_page_number }}" class="btn btn-outline-success">Previous</a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="current">
+                        <span>Page {{ page_obj1.number }} of {{ page_obj1.paginator.num_pages }}</span>
+                    </div>
+                    
+                    <div class="step-links">
+                        {% if page_obj1.has_next %}
+                            <a href="?page={{ page_obj1.next_page_number }}" class="btn btn-outline-success">Next</a>
+                            <a href="?page={{ page_obj1.paginator.num_pages }}" class="btn btn-outline-success">Last &raquo;</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% include "ticket/footer.html" %}
 
     <!-- Bootstrap JS -->

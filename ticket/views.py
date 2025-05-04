@@ -52,8 +52,7 @@ def reservation(request):
 # url for payment
 def payment(request):
     return render(request, 'ticket/payment.html')
-def cancel(request):
-    return render(request, 'ticket/cancel_ticket.html')
+
 def seat(request):
     return render(request, 'ticket/seats.html')
 def seat(request, vehicle_no):
@@ -146,19 +145,57 @@ def company_register(request):
 # # @login_required
 
 
-def company_dashboard(request):
-    try:
-        with connection.cursor() as curs:
-            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity FROM ticket_busroute where comp_name=%s""", [request.user.username])
-            route_data=curs.fetchall()
-        paginator=Paginator(route_data,5)
-        pageno=request.GET.get('page')
-        pageobj=paginator.get_page(pageno)
-    except Exception as ex:
-        print("Error occur:",ex)
-        pageobj=[]
-    return render(request, 'ticket/company_dash.html',{'page_obj':pageobj})
+from django.db import connection
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
+def company_dashboard(request):
+    vehicle_number = request.GET.get('vehicle_number')
+    try:
+        # Route data for the logged-in company
+        with connection.cursor() as curs:
+            curs.execute("""
+                SELECT vehicle_number, username, contact, origin, vehicle_type, destination, passenger_capacity
+                FROM ticket_busroute
+                WHERE comp_name = %s
+            """, [request.user.username])
+            route_data = curs.fetchall()
+
+        # Ticket data for the searched vehicle number
+        data = []
+        total_tickets = 0
+        if vehicle_number:
+            with connection.cursor() as c:
+                c.execute("""
+                    SELECT vech_no, name, phone, email, seat_no, payment, ticket_no, departure_time, paymentproof
+                    FROM ticket_bookedticket
+                    WHERE vech_no = %s
+                """, [vehicle_number])
+                data = c.fetchall()
+
+                # Total ticket count for that vehicle
+                c.execute("SELECT COUNT(ticket_no) FROM ticket_bookedticket WHERE vech_no = %s", [vehicle_number])
+                total_tickets = c.fetchone()[0]
+
+        # Pagination setup
+        pageno = request.GET.get('page')
+        route_paginator = Paginator(route_data, 5)
+        ticket_paginator = Paginator(data, 5)
+        pageobj = route_paginator.get_page(pageno)
+        pageobjs = ticket_paginator.get_page(pageno)
+
+    except Exception as ex:
+        print("Error occurred:", ex)
+        pageobj = []
+        pageobjs = []
+        total_tickets = 0
+
+    return render(request, 'ticket/company_dash.html', {
+        'page_obj': pageobj,
+        'page_obj1': pageobjs,
+        'total_tickets': total_tickets,
+        'vehicle_number': vehicle_number
+    })
 
 def dashboard(request):
     try:
@@ -352,3 +389,17 @@ def submit_contact(request):
         return redirect('/')
 
     return render(request, 'ticket/main.html')
+
+
+def cancel(request):
+    try:
+        with connection.cursor() as curs:
+            curs.execute("""SELECT vech_no,name,phone,email,seat_no,payment,ticket_no, departure_time,paymentproof FROM ticket_bookedticket """)
+            route_data=curs.fetchall()
+        paginator=Paginator(route_data,10)
+        pageno=request.GET.get('page')
+        pageobj=paginator.get_page(pageno)
+    except Exception as ex:
+        print("Error occur:",ex)
+        pageobj=[]
+    return render(request,'ticket/cancel_ticket.html',{'page_obj':pageobj})
