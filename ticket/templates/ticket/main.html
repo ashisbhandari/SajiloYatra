@@ -100,7 +100,15 @@
         <form method="GET" action="/#bus_ticket" class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">From</label>
-                <input type="text" class="form-control" name="from" placeholder="City or Bus stop" value="{{ request.GET.from }}">
+                <input type="text" class="form-control" name="from" list="city-options" placeholder="City or Bus stop" value="{{ request.GET.from }}">
+                <datalist id="city-options">
+                    <option value="Kathmandu">
+                    <option value="Pokhara">
+                    <option value="Chitwan">
+                    <option value="Biratnagar">
+                    <option value="Butwal">
+                    <option value="Jhapa">
+                </datalist>
             </div>
 
             <div class="col-md-1 text-center exchange-icon">
@@ -109,7 +117,15 @@
 
             <div class="col-md-4">
                 <label class="form-label">To</label>
-                <input type="text" class="form-control" name="to" placeholder="City or Bus stop" value="{{ request.GET.to }}">
+                <input type="text" class="form-control" name="to" list="city-options" placeholder="City or Bus stop" value="{{ request.GET.to }}">
+                <datalist id="city-options">
+                    <option value="Kathmandu">
+                    <option value="Pokhara">
+                    <option value="Chitwan">
+                    <option value="Biratnagar">
+                    <option value="Butwal">
+                    <option value="Jhapa">
+                </datalist>
             </div>
 
             <div class="col-md-3 d-flex align-items-end">
