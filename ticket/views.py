@@ -65,37 +65,43 @@ def custom_datetime_serialization(data):
     raise TypeError("Type not serializable")
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import check_password
+from django.contrib import messages
+from django.contrib.auth import login as auth_login
+from .models import UserRegistration, companyRegistration
+
 def login(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+        #authenticating as a normal user
+        try:
+            user = UserRegistration.objects.get(username=username)
+            if check_password(password, user.password):
+                # Successful login
+                request.session['user_type'] = 'user'
+                request.session['username'] = user.username
+                return redirect('/dashboard')
+        except UserRegistration.DoesNotExist:
+            pass  # Continue to check for company
 
-        if user is not None:
-            auth_login(request, user)
-            # last login lai isoformat ma covert gareko
-            request.session['last_login'] = user.last_login.isoformat()  # string jasari store garxa
-            request.session['username'] = user.username  #username store
-            if isinstance(user, UserRegistration):  # model correct xa vane return garxa
-                return redirect('/dashboard')  # Redirect as a user
-            # request.session['username'] = user.username  #storing username in session
-            elif isinstance(user, companyRegistration):  
-                return redirect('/comp_dash')  # Redirect as a company
-        else:
-            messages.error(request, "Invalid username or password.")
-            return redirect('/login')
-    return render(request, 'ticket/login.html')            
-    #         # Print executed SQL queries to check the database
-    #         for query in connection.queries:
-    #             print(query)
+        # authenticating as a company
+        try:
+            company = companyRegistration.objects.get(username=username)
+            if check_password(password, company.password):
+                # Successful login
+                request.session['user_type'] = 'company'
+                request.session['username'] = company.username
+                return redirect('/comp_dash')
+        except companyRegistration.DoesNotExist:
+            pass
 
-    #         return redirect('dashboard')
-    #     else:
-    #         messages.error(request, "Invalid username or password.")
-    #         return redirect('login')
-    # else:
-    #     return render(request, 'ticket/login.html')
+        # If no match
+        messages.error(request, 'Invalid username or password.')
+
+    return render(request, 'ticket/login.html')
 
 def user_register(request):
     if request.method == 'POST':

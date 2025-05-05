@@ -56,8 +56,9 @@ class SignupForm(forms.Form):
             contact=self.cleaned_data["contact"],
             passenger_type=self.cleaned_data["passenger_type"],
             # student_image=self.cleaned_data.get("student_image"),  # student_image is optional
-            password = self.cleaned_data["password"],  # Store the hashed password
+            # password = self.cleaned_data["password"],  # Store the hashed password
         )
+        user.set_password(self.cleaned_data["password"])  # hashes password securely
         user.save()
         return user
     
@@ -131,7 +132,7 @@ class companyEntry(forms.Form):
             origin=self.cleaned_data["origin"],
             destination=self.cleaned_data["destination"],
             passenger_capacity=self.cleaned_data["passenger_capacity"],
-            password=self.cleaned_data["password"],  # Store the hashed password
+            password=make_password(self.cleaned_data["password"]),  # Store the hashed password
         )
         user.save()
         return user

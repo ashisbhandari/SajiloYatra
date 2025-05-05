@@ -17,7 +17,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(username, email, password, **extra_fields)
-
+import hashlib
 class UserRegistration(AbstractBaseUser, PermissionsMixin):
     PASSENGER_TYPE_CHOICES = [
         ('children', 'Children (0-10)'),
