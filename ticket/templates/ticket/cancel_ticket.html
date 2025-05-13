@@ -39,16 +39,21 @@
             <form method="get" class="text-center">
                 <div class="mb-2">
                     <label for="Ticket_no" class="form-label" style="font-size: 20px; font-weight:bolder;">
-                        Please input your Ticket number:
+                        Please input your Ticket number provided in Email else contact us:
                     </label>
                 </div>
                 <div class="d-flex justify-content-center gap-2">
                     <input type="text" name="ticket_no" id="Ticket_no" class="form-control" style="width: 150px;" required>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success" onclick="customAlert()">Submit</button>
                 </div>
             </form>
         </div>
         </form>
+        <script>
+            function customAlert() {
+                alert("Please screenshot provided details for future reference.\nभविष्यकोलागि कृपया दिइएको विवरणहरूको स्क्रिनसट हेर्नुहोस्।\n\n यात्रा गर्दा यो टिकट विवरण आवश्यक पर्दछ।");
+            }
+        </script>
         <style>
             .qrcode-wrapper {
                 display: flex;

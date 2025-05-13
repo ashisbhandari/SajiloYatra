@@ -320,8 +320,8 @@ SajiloYatra Team
                 [ticket.email],               # Recipient
                 fail_silently=False,
             )
-
-            return redirect('/')  # Redirect after successful booking
+            
+            return redirect('/cancel_ticket')  # Redirect after successful booking
 
     else:
         form = BookedTicketForm(initial={
