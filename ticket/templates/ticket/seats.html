@@ -51,6 +51,17 @@
                 Please select a seat before proceeding.
             </div>
             <h2>Seats for Vehicle: {{ vehicle_no }}</h2>
+            <h3 style="color: red;">Booked seat: 
+                {% for cmp in page_obj %}
+                <tr>
+                    <td>{{ cmp.0}}{{cmp.1}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">No data available</td>
+                </tr>
+                {% endfor %}
+            <h3>
             <div class="cabin">
                 <div class="seat-line">
                     <div class="a"><br><br><p><b><i>Door</i></b></p></div>
@@ -63,22 +74,22 @@
             {% for row in "ABCDEFGH" %}
             <div class="seat-line">
                 <div class="a">
-                    <button class="btn btn-outline-success selected-seat" id="{{ row }}1">{{ row }}1</button>
-                    <button class="btn btn-outline-success selected-seat" id="{{ row }}2">{{ row }}2</button>
+                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}1">{{ row }}1</button>
+                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}2">{{ row }}2</button>
                 </div>
                 <div class="b">
-                    <button class="btn btn-outline-success selected-seat" id="{{ row }}3">{{ row }}3</button>
-                    <button class="btn btn-outline-success selected-seat" id="{{ row }}4">{{ row }}4</button>
+                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}3">{{ row }}3</button>
+                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}4">{{ row }}4</button>
                 </div>
             </div>
             {% endfor %}
 
             <div class="last-line">
-                <button class="btn btn-outline-success selected-seat" id="L1">L1</button>
-                <button class="btn btn-outline-success selected-seat" id="L2">L2</button>
-                <button class="btn btn-outline-success selected-seat" id="L3">L3</button>
-                <button class="btn btn-outline-success selected-seat" id="L4">L4</button>
-                <button class="btn btn-outline-success selected-seat" id="L5">L5</button>
+                <button class="btn btn-outline-success selected-seat booked" id="L1">L1</button>
+                <button class="btn btn-outline-success selected-seat booked" id="L2">L2</button>
+                <button class="btn btn-outline-success selected-seat booked" id="L3">L3</button>
+                <button class="btn btn-outline-success selected-seat booked" id="L4">L4</button>
+                <button class="btn btn-outline-success selected-seat booked" id="L5">L5</button>
             </div>
 
             <div class="payment-container">
@@ -97,7 +108,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const buttons = document.querySelectorAll(".selected-seat");
-            const vehicleNo = "{{ vehicle_no }}";  // Injected from Django
+            const vehicleNo = "{{ vehicle_no }}"; 
             const proceedButton = document.getElementById("proceedButton");
             const seatMessage = document.getElementById("seatMessage");
             let selectedSeats = [];

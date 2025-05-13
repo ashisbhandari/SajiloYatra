@@ -51,9 +51,37 @@ def payment(request):
 
 def seat(request):
     return render(request, 'ticket/seats.html')
+
 def seat(request, vehicle_no):
-    # You can use vehicle_no to query bus/seat details from DB
-    return render(request, 'ticket/seats.html', {'vehicle_no': vehicle_no})
+    booked_seats =vehicle_no
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT Seat_no FROM ticket_bookedticket WHERE vech_no = %s""", [vehicle_no])
+            data = cursor.fetchall()
+            
+            # Flatten the list of tuples and split each seat by comma and space
+            seats = []
+            for row in data:
+                seat_values = row[0].replace(' ', ',').split(',')  # Replace spaces with commas and split by commas
+                seats.extend(seat_values)  # Add each seat to the list
+
+        paginator = Paginator(seats, 10) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+    except Exception as e:
+        print("Error executing query:", e)
+        page_obj = []
+
+    return render(request, 'ticket/seats.html', {
+        'page_obj': page_obj,
+        'booked_seats': booked_seats,
+        'vehicle_no': vehicle_no
+    })
+
+# def seat(request, vehicle_no):
+#     # You can use vehicle_no to query bus/seat details from DB
+#     return render(request, 'ticket/seats.html', {'vehicle_no': vehicle_no})
 from django.shortcuts import get_object_or_404
 
 logger = logging.getLogger(__name__)
