@@ -3,45 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SajiloYatra-Seat</title>
-    
+    <title>SajiloYatra - Seat</title>
     <link rel="icon" href="{% static 'ticket/image/logoplease.png' %}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
-        .seat {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-top: 20px;
-            flex-direction: column;
-        }
-        .seat-line {
-            display: flex;
-            justify-content: center;
-            gap: 80px;
-            margin-bottom: 10px;
-        }
-        .last-line {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .seat-line button, .last-line button {
-            width: 50px;
-        }
-        .payment-container {
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-            flex-direction: column;
-            align-items: center;
-        }
-        .btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
+        .seat { display: flex; justify-content: center; align-items: center; padding-top: 20px; flex-direction: column; }
+        .seat-line { display: flex; justify-content: center; gap: 80px; margin-bottom: 10px; }
+        .last-line { display: flex; justify-content: center; gap: 10px; }
+        .seat-line button, .last-line button { width: 50px; }
+        .payment-container { display: flex; justify-content: center; padding: 10px; flex-direction: column; align-items: center; }
+        .btn:focus { outline: none; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); }
     </style>
 </head>
 <body>
@@ -51,45 +22,59 @@
                 Please select a seat before proceeding.
             </div>
             <h2>Seats for Vehicle: {{ vehicle_no }}</h2>
-            <h3 style="color: red;">Booked seat: 
-                {% for cmp in page_obj %}
-                <tr>
-                    <td>{{ cmp.0}}{{cmp.1}}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">No data available</td>
-                </tr>
-                {% endfor %}
-            <h3>
+            
+
             <div class="cabin">
                 <div class="seat-line">
-                    <div class="a"><br><br><p><b><i>Door</i></b></p></div>
+                    <style>
+                        .available {
+                            display: inline-block;
+                            height: 20px;
+                            width: 30px;
+                            border: 2px solid green;
+                            border-radius: 4px;
+                            background-color: transparent;
+                        }
+                        .booked {
+                            display: inline-block;
+                            height: 20px;
+                            width: 30px;
+                            border: 2px solid red;
+                            border-radius: 4px;
+                            background-color: transparent;
+                        }
+                    </style>
+                    
+                    <div class="a">
+                        <br><br>
+                        <p><b><i>Door</i></b></p>
+                        <p>Available=<span class="available"></span></p>
+                        <p>Booked=<span class="booked"></span></p>
+                    </div>
+                    
                     <div class="b" style="padding-left: 60px;">
                         <img src="{% static 'ticket/image/driver.png' %}" alt="Driver" height="100px" width="100px">
                     </div>
                 </div>
             </div><br>
 
-            {% for row in "ABCDEFGH" %}
+            {% for row in seat_rows %}
             <div class="seat-line">
                 <div class="a">
-                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}1">{{ row }}1</button>
-                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}2">{{ row }}2</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}1">{{ row }}1</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}2">{{ row }}2</button>
                 </div>
                 <div class="b">
-                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}3">{{ row }}3</button>
-                    <button class="btn btn-outline-success selected-seat booked" id="{{ row }}4">{{ row }}4</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}3">{{ row }}3</button>
+                    <button class="btn btn-outline-success selected-seat" id="{{ row }}4">{{ row }}4</button>
                 </div>
             </div>
             {% endfor %}
 
             <div class="last-line">
-                <button class="btn btn-outline-success selected-seat booked" id="L1">L1</button>
-                <button class="btn btn-outline-success selected-seat booked" id="L2">L2</button>
-                <button class="btn btn-outline-success selected-seat booked" id="L3">L3</button>
-                <button class="btn btn-outline-success selected-seat booked" id="L4">L4</button>
-                <button class="btn btn-outline-success selected-seat booked" id="L5">L5</button>
+                {% for l in "12345" %}
+                <button class="btn btn-outline-success selected-seat" id="L{{ l }}">L{{ l }}</button>
+                {% endfor %}
             </div>
 
             <div class="payment-container">
@@ -103,19 +88,25 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            const bookedSeats = {{ booked_seats|safe }};  // List of booked seats from view
             const buttons = document.querySelectorAll(".selected-seat");
-            const vehicleNo = "{{ vehicle_no }}"; 
+            const vehicleNo = "{{ vehicle_no }}";
             const proceedButton = document.getElementById("proceedButton");
             const seatMessage = document.getElementById("seatMessage");
             let selectedSeats = [];
 
             buttons.forEach((btn) => {
+                const seatId = btn.id;
+
+                if (bookedSeats.includes(seatId)) {
+                    btn.classList.add("btn-outline-danger");
+                    btn.disabled = true;
+                    return;
+                }
+
                 btn.addEventListener("click", function () {
-                    const seatId = this.id;
                     if (this.classList.contains("btn-success")) {
                         this.classList.remove("btn-success");
                         this.classList.add("btn-outline-success");
@@ -132,20 +123,9 @@
 
                     proceedButton.disabled = selectedSeats.length === 0;
                     updateSelectedSeatsDisplay();
-
-                    // ✅ Update URL with seats + vehicle number
-                    const proceedLink = document.getElementById("proceedLink");
-                    proceedLink.href = `/Book_ticket?seats=${selectedSeats.join(",")}&vech_no=${vehicleNo}`;
-
+                    document.getElementById("proceedLink").href = `/Book_ticket?seats=${selectedSeats.join(",")}&vech_no=${vehicleNo}`;
                     seatMessage.style.display = selectedSeats.length === 0 ? 'block' : 'none';
                 });
-            });
-
-            proceedButton.addEventListener("click", function(event) {
-                if (selectedSeats.length === 0) {
-                    event.preventDefault();
-                    alert("Please select seats before proceeding.");
-                }
             });
 
             function updateSelectedSeatsDisplay() {
