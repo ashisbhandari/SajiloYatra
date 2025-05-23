@@ -207,7 +207,7 @@
                 </div>
                 <div class="row mb-3">
                     <!-- Passenger Capacity -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Passenger Capacity</label>
                         <input type="number" class="form-control" maxlength="2" minlength="1" name="passenger_capacity" id="passenger_capacity" placeholder="Passenger Capacity" required>
                     </div>
@@ -225,9 +225,13 @@
                             }
                         });
                       </script>
+                    <div class="col-md-4">
+                        <label class="form-label">Price per Seat in NRS: </label>
+                        <input type="number" class="form-control" name="price" id="price" required>
+                    </div>
 
                     <!-- bus registration -->
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label">Departure Date</label>
                         <input type="date" class="form-control" name="departure_date" id="datePicker" required>
                     </div>

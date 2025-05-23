@@ -279,6 +279,22 @@ from datetime import datetime
 from .forms import BookedTicketForm
 
 def book_ticket(request):
+    vehicle_no = request.GET.get('vech_no', '')
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT price FROM ticket_busroute WHERE vehicle_number = %s
+            """, [vehicle_no])
+            data = cursor.fetchall()
+
+        paginator = Paginator(data, 10)  # paginate 10 rows per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)  # ✅ This must be a number
+
+    except Exception as e:
+        print("Error executing query:", e)
+        page_obj = []
+        
     year = datetime.now().year
     selected_seats = request.GET.get('seats', '').split(',')
     vech_no = request.GET.get('vech_no', '')
@@ -335,6 +351,7 @@ SajiloYatra Team
         'year': year,
         'vech_no': vech_no,
         'Seat_no': seat_str,
+        'page_obj': page_obj,
     })
 
 

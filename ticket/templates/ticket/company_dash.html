@@ -155,7 +155,7 @@
                                 <td>{{ cmp.4 }}</td> 
                                 <td>{{ cmp.5 }}</td> 
                                 <td>{{ cmp.6 }}</td> 
-                                <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
+                                <td>{{ cmp.7 }}</td>  
                             </tr>
                             {% empty %}
                             <tr>
@@ -229,6 +229,7 @@
                                 <th>Payments_type</th>
                                 <th>Ticket Number</th>
                                 <th>Dept Date</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -242,6 +243,14 @@
                                 <td>{{ cmp.5 }}<br>{{ cmp.8 }}</td> 
                                 <td>{{ cmp.6 }}</td> 
                                 <td>{{ cmp.7 }}</td>  <!-- departure_date {{ cmp.7 }} -->
+                                <td>
+                                    <select id="ticketOptions" onchange="navigateToPage()">
+                                        <option selected>--None--</option>
+                                        <option id="Remarks" value = "/cancel_ticket/?ticket_no=`{{cmp.6}}`">Delete</option>
+                                        <option id="Remarks" vlaue="/cancel_ticket/?ticket_no=`{{cmp.0}}`">View Details</button></option>
+                                        <option id="Remarks" value="/#bus_ticket">Search Vehicle</option>
+                                    </select>
+                                </td>  <!-- departure_date {{ cmp.7 }} -->
                             </tr>
                             {% empty %}
                             <tr>
@@ -251,7 +260,17 @@
                         </tbody>
                     </table>
                 </div>
-    
+                <script>
+                    function navigateToPage() {
+                        let select = document.getElementById("Remarks");
+                        let value = select.value;
+
+                        if (value !== "--None--") {
+                            window.location.href = value;
+                        }
+
+                    }
+                </script>
                 <!-- Pagination controls -->
                 <div class="d-flex justify-content-between mt-3">
                     <div class="step-links">

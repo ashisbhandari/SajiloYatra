@@ -159,6 +159,7 @@ class BusRoute(models.Model):
     destination = models.CharField(max_length=100)
     passenger_capacity = models.IntegerField()
     comp_name = models.CharField(max_length=100)
+    price = models.CharField(max_length=100)
     departure_time = models.DateTimeField(default=nepal_time)
     def __str__(self):
         return f"{self.vehicle_number} - {self.origin} to {self.destination}"

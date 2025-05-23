@@ -154,11 +154,24 @@
             <label for="departure_time" class="form-label">Departure Date:</label>
             {{ form.departure_time }}
         </div>
+        {% comment %} <div class="form-group">
+            <label for="Paymeny Amount" class="form-label">Total Amount:</label>
+            <input type="number" value={{ form.email }} disabled>
+        </div> {% endcomment %}
 
         <div class="form-group">
             <label for="payment" class="form-label">Payment Type:</label>
             {{ form.payment }}
         </div>
+        {% for bus in page_obj %}
+       <div class="form-group">
+        <label class="form-label">Total Amount to Pay</label>
+        <div id="price-breakdown" style="font-weight: bold; color: green;">0 * {{ bus.0 }} = 0</div>
+        <input type="hidden" id="price-per-seat" value="{{ bus.0 }}">
+    </div>
+{% empty %}
+    <p>No bus routes available.</p>
+{% endfor %}
 
         <div class="form-group" id="payment-proof-section" {% if form.payment.data != 'online payment' %}style="display:none;"{% endif %}>
             <label for="paymentproof" class="form-label">Upload Payment Screenshot (if online payment):</label>
@@ -174,6 +187,28 @@
             <label for="Seat_no" class="form-label">Your Selected Seats:</label>
             {{ form.Seat_no }}
         </div>
+        
+    
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const seatInput = document.getElementById("id_Seat_no");  // Input for selected seats
+    const pricePerSeat = parseFloat(document.getElementById("price-per-seat")?.value || "0");
+    const priceBreakdown = document.getElementById("price-breakdown");
+
+    function updatePriceBreakdown() {
+        const seats = seatInput.value.split(",").map(s => s.trim()).filter(s => s !== "");
+        const count = seats.length;
+        const total = count * pricePerSeat;
+        priceBreakdown.textContent = `${count} * ${pricePerSeat} = ${total}`;
+    }
+
+    if (seatInput && priceBreakdown) {
+        seatInput.addEventListener("input", updatePriceBreakdown);
+        updatePriceBreakdown();  // Run on load
+    }
+});
+</script>
+
         <div class="form-group">
             <label for="comments" class="form-label">Special Instructions (Optional):</label>
             {{ form.comments }}

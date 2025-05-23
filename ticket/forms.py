@@ -169,12 +169,13 @@ class BusRouteForm(forms.ModelForm):
     vehicle_type = forms.ChoiceField(choices=VEHICLE_TYPE_CHOICES, required=True)
     username = forms.CharField(max_length=100, required=True)
     contact = forms.CharField(max_length=15, required=True)
-    passenger_capacity = forms.IntegerField(min_value=1, required=True)
+    passenger_capacity = forms.CharField(max_length=10, required=True)
+    price = forms.CharField(max_length=10, required=True)
     departure_date = forms.DateField(required=True)
 
     class Meta:
         model = BusRoute
-        fields = ['origin', 'destination', 'vehicle_number', 'vehicle_type', 'username', 'contact', 'passenger_capacity', 'departure_date']
+        fields = ['origin', 'destination', 'vehicle_number', 'vehicle_type', 'username', 'contact', 'passenger_capacity', 'departure_date','price']
 
     def clean(self):
         cleaned_data = super().clean()
