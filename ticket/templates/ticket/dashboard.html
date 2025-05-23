@@ -375,14 +375,16 @@
                             </div>
                         </div>
                         <div class="col-6 text-end">
-                            <span class="Drivername">Driver Name: <b>:{{ cmp.0 }}</b></span>
+                            <span class="Drivername">Driver Name: <b>:{{ cmp.1 }}</b></span><br>
+                            <span class="Drivername">Vehicle number: <b>:{{ cmp.2 }}</b></span><br>
+                            <span class="Drivername">Driver Contact: <b>:{{ cmp.3 }}</b></span>
                         </div>
                     </div>
                     <div class="col-12 col-md-4 border-left-md mt-3 mt-md-0">
                         <div class="text-nowrap">
                             <div class="d-flex flex-column">
-                                <span class="trip-fare">Rs.{{ cmp.2 }}</span>
-                                <span class="trip-seatsavail">Seats Available: {{ cmp.2 }}</span> 
+                                <span class="trip-fare">Rs.{{ cmp.8 }}</span>
+                                <span class="trip-seatsavail">Seats Available: {{ cmp.6 }}</span> 
                             </div>
                             <div class="mt-2">
                                 <button onclick="toggleSeatx('seatDiv{{ forloop.counter }}', 'busRow{{ forloop.counter }}')" 

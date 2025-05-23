@@ -21,7 +21,7 @@ def home(request):
         page_obj = []
     else:
         # Prepare SQL query to filter bus routes based on 'from' and 'to'
-        qry = """SELECT username, vehicle_number,vehicle_type, passenger_capacity, origin, destination,comp_name,contact 
+        qry = """SELECT username, vehicle_number,vehicle_type, passenger_capacity, origin, destination,comp_name,contact,price
                  FROM ticket_busroute 
                  WHERE origin LIKE %s AND destination LIKE %s"""
         
@@ -231,7 +231,7 @@ def company_dashboard(request):
 def dashboard(request):
     try:
         with connection.cursor() as curs:
-            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_time FROM ticket_busroute """)
+            curs.execute("""SELECT vehicle_number,username,contact,origin,vehicle_type,destination,passenger_capacity,departure_time,price FROM ticket_busroute """)
             route_data=curs.fetchall()
         paginator=Paginator(route_data,10)
         pageno=request.GET.get('page')
